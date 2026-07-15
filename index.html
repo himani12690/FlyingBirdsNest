@@ -36,12 +36,23 @@
     .upi-pay-box { background:var(--accent-soft); border:2px solid var(--accent); border-radius:16px; padding:18px 16px; margin:4px 0 16px; box-shadow:0 6px 18px rgba(99,102,241,0.15); }
     .upi-pay-box .upb-title { font-size:12px; font-weight:800; color:var(--accent-dark); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; }
     .upi-pay-box .upb-amt { font-size:30px; font-weight:900; color:var(--ink); margin-bottom:14px; }
-    .upi-pay-box .upb-btn { display:block; width:100%; background:var(--accent); color:#fff; border:none; border-radius:12px; padding:16px; font-size:17px; font-weight:800; cursor:pointer; text-decoration:none; letter-spacing:0.2px; box-shadow:0 4px 12px rgba(99,102,241,0.3); }
-    .upi-pay-box .upb-or { font-size:11px; color:var(--muted); font-weight:600; margin:16px 0 10px; }
-    .upi-pay-box .upb-qr { margin:0 auto; width:176px; height:176px; background:#fff; border-radius:12px; padding:10px; border:1.5px solid var(--line); }
+    .upi-pay-box .upb-qr { margin:0 auto; width:180px; height:180px; background:#fff; border-radius:14px; padding:10px; border:1.5px solid var(--line); }
     .upi-pay-box .upb-qr img { width:100%; height:100%; }
-    .upi-pay-box .upb-vpa { font-size:12.5px; font-weight:700; color:var(--ink); background:#fff; border-radius:8px; padding:9px 14px; display:inline-block; margin-top:12px; letter-spacing:0.3px; }
-    .upi-pay-box .upb-note { font-size:11px; color:var(--muted); margin-top:14px; line-height:1.5; }
+    .upi-pay-box .upb-scan { font-size:12px; color:var(--muted); font-weight:700; margin-top:10px; }
+    .upi-pay-box .upb-vpa { display:flex; align-items:center; justify-content:center; gap:8px; font-size:13.5px; font-weight:800; color:var(--ink); background:#fff; border:1.5px solid var(--line); border-radius:11px; padding:12px; margin-top:12px; cursor:pointer; letter-spacing:0.3px; }
+    .upi-pay-box .upb-vpa span { font-size:10.5px; font-weight:800; color:var(--accent-dark); background:var(--accent-soft); border-radius:7px; padding:4px 8px; }
+    .upi-pay-box .upb-apps { display:flex; gap:7px; margin-top:11px; }
+    .upi-pay-box .upb-apps a { flex:1; background:#fff; border:1.5px solid var(--line); border-radius:10px; padding:10px 4px; font-size:11.5px; font-weight:800; color:var(--accent-dark); text-decoration:none; }
+    .upi-pay-box .upb-ref { font-size:10.5px; color:var(--muted); margin-top:10px; letter-spacing:0.3px; }
+    .upi-pay-box .upb-link { display:inline-block; margin-top:12px; font-size:12.5px; font-weight:800; color:var(--accent-dark); text-decoration:none; }
+    .upi-pay-box .upb-note { font-size:11px; color:var(--muted); margin-top:12px; line-height:1.5; }
+    #topBar { position:fixed; top:0; left:0; right:0; height:3px; background:transparent; z-index:999; pointer-events:none; }
+    #topBar.on::after { content:''; position:absolute; left:0; top:0; height:100%; width:38%; background:linear-gradient(90deg,var(--accent),var(--accent-dark)); border-radius:0 3px 3px 0; animation:tb 1s infinite ease-in-out; }
+    @keyframes tb { 0%{left:-38%;} 100%{left:100%;} }
+    .spin { display:inline-block; width:13px; height:13px; border:2px solid rgba(255,255,255,0.45); border-top-color:#fff; border-radius:50%; animation:sp .7s linear infinite; vertical-align:-2px; }
+    button.is-busy { opacity:0.75; cursor:progress; }
+    button.is-busy .spin { border-color:rgba(0,0,0,0.18); border-top-color:currentColor; }
+    @keyframes sp { to{ transform:rotate(360deg); } }
     .paid-badge { background:var(--okbg); color:var(--ok); font-size:9.5px; font-weight:800; padding:2px 8px; border-radius:9px; }
     .or-re { border:1.5px solid var(--line); background:var(--card); border-radius:9px; width:34px; height:34px; font-size:15px; cursor:pointer; flex-shrink:0; }
     .info-strip { display:flex; align-items:center; gap:8px; background:var(--accent-soft); border:1.5px solid var(--line); border-radius:11px; padding:9px 12px; font-size:11px; color:var(--accent-dark); font-weight:700; margin-bottom:10px; line-height:1.4; }
@@ -79,6 +90,70 @@
     .lp-step { flex:1; background:var(--card); border:1.5px solid var(--line); border-radius:12px; padding:11px 8px; text-align:center; }
     .lp-step span { display:inline-flex; width:22px; height:22px; border-radius:50%; background:var(--accent); color:#fff; font-size:11px; font-weight:900; align-items:center; justify-content:center; }
     .lp-step p { font-size:10px; color:var(--ink); font-weight:600; margin-top:6px; line-height:1.4; }
+    /* Public landing */
+    .mode-cards { display:flex; gap:10px; margin-top:16px; }
+    .mode-card { flex:1; border:2px solid var(--line); background:var(--card); border-radius:15px; padding:16px 8px; cursor:pointer; }
+    .mode-card:active, .mode-card.on { border-color:var(--accent); background:var(--accent-soft); }
+    .mode-card .mc-i { font-size:26px; }
+    .mode-card .mc-t { font-size:13.5px; font-weight:900; color:var(--ink); margin-top:5px; }
+    .mode-card .mc-s { font-size:10px; color:var(--muted); margin-top:2px; }
+    .mode-chip { display:flex; align-items:center; gap:9px; background:var(--card); border:1.5px solid var(--line); border-radius:13px; padding:11px 13px; margin-bottom:12px; }
+    .mode-chip .mch-i { font-size:17px; }
+    .mode-chip .mch-x { flex:1; min-width:0; }
+    .mode-chip .mch-t { font-size:12.5px; font-weight:800; color:var(--ink); }
+    .mode-chip .mch-s { font-size:10.5px; color:var(--muted); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .mode-chip .mch-c { font-size:11px; font-weight:800; color:var(--accent-dark); cursor:pointer; white-space:nowrap; }
+    .dtype-lbl { font-size:12.5px; font-weight:800; color:var(--ink); display:block; margin-bottom:7px; }
+    .dtype { display:flex; gap:9px; margin-bottom:14px; }
+    .dt { flex:1; border:2px solid var(--line); background:var(--card); border-radius:14px; padding:12px 8px; text-align:center; cursor:pointer; }
+    .dt.on { border-color:var(--accent); background:var(--accent-soft); }
+    .dt-i { font-size:21px; }
+    .dt-t { font-size:12.5px; font-weight:900; margin-top:3px; color:var(--ink); }
+    .dt.on .dt-t { color:var(--accent-dark); }
+    .dt-s { font-size:9.5px; color:var(--muted); margin-top:2px; }
+    .fld-hint { font-size:10.5px; color:var(--muted); margin-top:5px; line-height:1.45; }
+    .cfg-chk { display:flex; align-items:center; gap:9px; background:var(--card); border:1.5px solid var(--line); border-radius:11px; padding:11px 13px; font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:8px; cursor:pointer; }
+    .cfg-chk input { width:17px; height:17px; accent-color:var(--accent); }
+    .pub-tb { display:flex; align-items:center; justify-content:space-between; padding:11px 14px; background:var(--card); border-bottom:1.5px solid var(--line); }
+    .pub-br { font-size:14px; font-weight:900; color:var(--ink); }
+    .pub-tr { display:flex; gap:7px; align-items:center; }
+    .pub-tr select { border:1.5px solid var(--line); border-radius:8px; padding:5px 6px; font-size:10.5px; font-weight:700; background:var(--card); }
+    .pub-login { font-size:11.5px; font-weight:800; color:var(--accent-dark); border:1.5px solid var(--accent); border-radius:18px; padding:6px 13px; cursor:pointer; background:var(--card); }
+    .pub-hero { background:linear-gradient(150deg,var(--accent),var(--accent-dark)); padding:24px 18px 26px; color:#fff; text-align:center; }
+    .pub-logo { font-size:42px; }
+    .pub-hero h1 { font-size:23px; font-weight:900; margin-top:2px; }
+    .pub-hero p { font-size:12.5px; opacity:0.92; margin-top:6px; line-height:1.5; }
+    .pub-cta { margin-top:16px; background:#fff; color:var(--accent-dark); border:none; border-radius:14px; padding:13px 34px; font-size:15px; font-weight:900; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,0.18); }
+    .pub-sub { font-size:10.5px; opacity:0.85; margin-top:10px; }
+    .pub-hook { text-align:center; padding:6px 2px 4px; }
+    .pub-hook .ph-ic { font-size:32px; }
+    .pub-hook .ph-q { font-size:19px; font-weight:900; line-height:1.35; color:var(--ink); margin-top:8px; }
+    .pub-hook .ph-q em { font-style:normal; color:var(--accent-dark); }
+    .pub-hook .ph-a { font-size:12.5px; color:var(--muted); margin-top:11px; line-height:1.6; }
+    .pub-hook .ph-a b { color:var(--ink); font-weight:800; }
+    .cmp { background:var(--card); border:1.5px solid var(--line); border-radius:18px; overflow:hidden; margin-top:18px; }
+    .cmp-head { display:grid; grid-template-columns:1fr 1fr; }
+    .cmp-head > div { padding:13px 8px; text-align:center; }
+    .cmp-head .ch-us { background:var(--accent-soft); }
+    .cmp-head .ch-th { background:var(--bg); }
+    .cmp-ic { width:34px; height:34px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; font-size:17px; }
+    .cmp-ic.usi { background:var(--accent); color:#fff; }
+    .cmp-ic.thi { background:#c9ced6; color:#fff; }
+    .cmp-ic + .cmp-ic { margin-left:4px; }
+    .cmp-nm { font-size:11.5px; font-weight:900; margin-top:6px; }
+    .ch-us .cmp-nm { color:var(--accent-dark); }
+    .ch-th .cmp-nm { color:var(--muted); }
+    .cmp-row { display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--line); }
+    .cmp-row > div { padding:13px 12px; font-size:12px; line-height:1.4; }
+    .cmp-row .cr-u { background:rgba(99,102,241,0.05); color:var(--ink); font-weight:800; border-right:1px solid var(--line); }
+    .cmp-row .cr-t { color:var(--muted); font-weight:600; }
+    .pub-close { margin-top:18px; text-align:center; }
+    .pub-close b { font-size:16px; font-weight:900; color:var(--ink); display:block; }
+    .pub-close p { font-size:12px; color:var(--muted); margin-top:7px; line-height:1.6; }
+    .pub-chip { display:inline-block; margin-top:11px; background:var(--okbg); color:#166534; font-size:11px; font-weight:800; border-radius:20px; padding:7px 14px; }
+    .pub-sticky { position:fixed; bottom:0; left:0; right:0; background:var(--card); border-top:1.5px solid var(--line); padding:10px 14px; display:flex; gap:9px; align-items:center; max-width:480px; margin:0 auto; z-index:30; }
+    .pub-sticky .ps-txt { flex:1; font-size:10.5px; color:var(--muted); font-weight:700; line-height:1.35; }
+    .pub-sticky button { background:var(--accent); color:#fff; border:none; border-radius:12px; padding:12px 20px; font-size:13.5px; font-weight:900; cursor:pointer; }
     .lp-pos { background:linear-gradient(135deg,#1e2233,#2c3357); border-radius:16px; padding:16px 15px; color:#fff; }
     .lp-pos-t { font-size:15.5px; font-weight:900; letter-spacing:0.2px; }
     .lp-pos-s { font-size:11px; opacity:0.85; margin:4px 0 11px; line-height:1.5; }
@@ -535,8 +610,63 @@
 
 
   <!-- ══════ AUTH ══════ -->
+  <!-- ══════ PUBLIC LANDING (before login) ══════ -->
+  <div id="pubView" class="hidden">
+    <div class="pub-tb">
+      <div class="pub-br">🍱 Flying Birds</div>
+      <div class="pub-tr">
+        <select id="langSelPub" onchange="setLang(this.value)"></select>
+        <button class="pub-login" onclick="showAuth()" data-i="pubLogin"></button>
+      </div>
+    </div>
+    <div class="pub-hero">
+      <div class="pub-logo">🍱</div>
+      <h1>Flying Birds Tiffin</h1>
+      <p data-i="lpTagline"></p>
+      <button class="pub-cta" onclick="showAuth()" data-i="pubCta"></button>
+      <div class="pub-sub">📍 Godrej Garden City <span class="fssai-line" style="font-size:10px;"></span></div>
+    </div>
+    <div class="section">
+      <div class="pub-hook">
+        <div class="ph-ic">⏱️</div>
+        <div class="ph-q" data-i-html="pubHookQ"></div>
+        <div class="ph-a" data-i-html="pubHookA"></div>
+      </div>
+      <div class="cmp">
+        <div class="cmp-head">
+          <div class="ch-us"><span class="cmp-ic usi">🍱</span><div class="cmp-nm" data-i="cmpUs"></div></div>
+          <div class="ch-th"><span class="cmp-ic thi">🛵</span><span class="cmp-ic thi">📱</span><div class="cmp-nm" data-i="cmpThem"></div></div>
+        </div>
+        <div class="cmp-row"><div class="cr-u" data-i="cmpU1"></div><div class="cr-t" data-i="cmpT1"></div></div>
+        <div class="cmp-row"><div class="cr-u" data-i="cmpU2"></div><div class="cr-t" data-i="cmpT2"></div></div>
+        <div class="cmp-row"><div class="cr-u" data-i="cmpU3"></div><div class="cr-t" data-i="cmpT3"></div></div>
+        <div class="cmp-row"><div class="cr-u" data-i="cmpU4"></div><div class="cr-t" data-i="cmpT4"></div></div>
+        <div class="cmp-row"><div class="cr-u" data-i="cmpU5"></div><div class="cr-t" data-i="cmpT5"></div></div>
+        <div class="cmp-row"><div class="cr-u" data-i="cmpU6"></div><div class="cr-t" data-i="cmpT6"></div></div>
+        <div class="cmp-row"><div class="cr-u" data-i="cmpU7"></div><div class="cr-t" data-i="cmpT7"></div></div>
+      </div>
+      <div class="pub-close">
+        <b data-i="cmpQualT"></b>
+        <p data-i="cmpQualS"></p>
+        <span class="pub-chip" data-i="cmpChip"></span>
+      </div>
+      <div class="lp-sec-t" data-i="lpHow"></div>
+      <div class="lp-steps">
+        <div class="lp-step"><span>1</span><p data-i="lpH1"></p></div>
+        <div class="lp-step"><span>2</span><p data-i="lpH2"></p></div>
+        <div class="lp-step"><span>3</span><p data-i="lpH3"></p></div>
+      </div>
+      <div class="footer" style="border-radius:14px;margin-top:18px;">Flying Birds Tiffin Services · 📞 99249 37939<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
+    </div>
+    <div class="pub-sticky">
+      <div class="ps-txt" data-i="pubCutoffLine"></div>
+      <button onclick="showAuth()" data-i="lpOrderNow"></button>
+    </div>
+  </div>
+
   <div id="authPage" class="hidden">
     <div class="hero">
+      <span class="back-link" style="position:absolute;left:14px;top:14px;color:#fff;" onclick="showPublic()" data-i="pubBack"></span>
       <div class="lang-switch"><select id="langSelAuth" onchange="setLang(this.value)"></select></div>
       <div class="logo">🍱</div>
       <h1>Flying Birds Tiffin</h1>
@@ -640,7 +770,7 @@
       </div>
 
     </div>
-    <div class="footer"><div class="f-line1">Flying Birds Tiffin Services · Godrej Garden City</div><div class="f-links"><span class="admin-link" onclick="showAboutPage()">About &amp; Contact</span><span class="admin-link" onclick="showAdminLogin()">Admin</span></div></div>
+    <div class="footer"><div class="f-line1">Flying Birds Tiffin Services · Godrej Garden City</div><div class="f-links"><span class="admin-link" onclick="showAboutPage()" data-i="navAbout"></span><span class="admin-link" onclick="showAdminLogin()">Admin</span></div></div>
   </div>
 
   <!-- ══════ HOME LANDING ══════ -->
@@ -654,15 +784,8 @@
       <div class="lp-loc">📍 Godrej Garden City <span class="fssai-line" style="font-size:10px;"></span></div>
     </div>
     <div class="section" style="padding-top:16px;">
+      <div id="modeChip"></div>
       <div id="homePromo"></div>
-      <div class="lp-pos">
-        <div class="lp-pos-t" data-i="lpPosT"></div>
-        <div class="lp-pos-s" data-i="lpPosS"></div>
-        <div class="lp-pos-row"><span>🕐</span><p data-i="lpPos1"></p></div>
-        <div class="lp-pos-row"><span>🍲</span><p data-i="lpPos2"></p></div>
-        <div class="lp-pos-row"><span>💰</span><p data-i="lpPos3"></p></div>
-        <div class="lp-pos-row"><span>🤝</span><p data-i="lpPos4"></p></div>
-      </div>
       <div class="lp-sec-t" data-i="lpWhy"></div>
       <div class="lp-usps">
         <div class="lp-usp"><span>🍳</span><div><b data-i="lpU1t"></b><p data-i="lpU1s"></p></div></div>
@@ -810,8 +933,8 @@
     </div>
     <div class="section" style="padding-top:6px;">
       <div class="section-title" data-i="contactInfoTitle"></div>
-      <div class="cust-row"><span>📍 <span data-i="contactAddrLbl"></span></span><span style="font-weight:800;text-align:right;">Godrej Garden City,<br>Ahmedabad</span></div>
-      <div class="cust-row"><span>🏘️ <span data-i="contactAreaLbl"></span></span><span style="font-weight:800;">Vrindavan · Eden</span></div>
+      <div class="cust-row"><span>📍 <span data-i="contactAddrLbl"></span></span><span style="font-weight:800;text-align:right;" id="ctAddr"></span></div>
+      <div class="cust-row"><span>🏘️ <span data-i="contactAreaLbl"></span></span><span style="font-weight:800;" id="ctArea"></span></div>
       <div class="cust-row"><span>🕐 <span data-i="contactHoursLbl"></span></span><span style="font-weight:800;text-align:right;">🌅 7–10 AM · ☀️ 12–2 PM · 🌙 7–9 PM</span></div>
     </div>
     <div class="footer">Flying Birds Tiffin Services · Godrej Garden City · 📞 99249 37939<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
@@ -838,6 +961,31 @@
       <div class="summary-card" id="summaryCard"></div>
       <div class="saved-note" id="savedNote" data-i="autofillNote"></div>
 
+      <div id="dtypeWrap" class="hidden">
+        <div class="mode-chip" style="margin-bottom:14px;">
+          <span class="mch-i" id="ckModeIc">🏠</span>
+          <span class="mch-x"><span class="mch-t" id="ckModeT"></span><div class="mch-s" id="ckModeS"></div></span>
+          <span class="mch-c" onclick="openModeModal(true)" data-i="modeChange"></span>
+        </div>
+      </div>
+
+      <!-- OFFICE FIELDS -->
+      <div id="officeFields" class="hidden">
+        <div class="form-group">
+          <label><span data-i="companyLbl"></span> <span style="color:var(--danger)">*</span></label>
+          <select id="company" onchange="validateCompany(); if(!document.getElementById('page2').classList.contains('hidden')){renderSummary(); document.getElementById('barTotal2').textContent='₹'+cartTotalDisplay();}"></select>
+          <div class="field-error" id="err-company" data-i="errCompany"></div>
+          <div class="fld-hint" data-i="companyHint"></div>
+        </div>
+        <div class="form-group">
+          <label><span data-i="empIdLbl"></span> <span style="color:var(--danger)">*</span></label>
+          <input type="text" id="empId" placeholder="MP-10432" maxlength="20" oninput="clearErr('empId','err-empId')" onblur="validateEmpId()">
+          <div class="field-error" id="err-empId" data-i="errEmpId"></div>
+        </div>
+      </div>
+
+      <!-- HOME FIELDS -->
+      <div id="homeFields">
       <div class="form-group">
         <label data-i="township"></label>
         <input type="text" id="township" readonly>
@@ -852,6 +1000,7 @@
         <input type="text" id="flatNo" placeholder="D-706" maxlength="10" oninput="clearErr('flatNo','err-flatNo')" onblur="validateFlat()">
         <div class="field-error" id="err-flatNo" data-i="errFlat"></div>
       </div>
+      </div><!-- /homeFields -->
       <div class="form-group">
         <label><span data-i="fullName"></span> <span style="color:var(--danger)">*</span></label>
         <input type="text" id="customerName" maxlength="40" oninput="clearErr('customerName','err-name')" onblur="validateName()" data-ph="namePh">
@@ -1002,6 +1151,15 @@
         <div class="section-title" style="margin-top:8px;">🏘️ Societies <span style="font-size:11px;color:#999;font-weight:600;">(one per line)</span></div>
         <textarea id="cfg-societies" rows="4" placeholder="Vrindavan&#10;Eden"></textarea>
 
+        <div class="section-title" style="margin-top:20px;">🚚 Delivery Modes</div>
+        <div style="font-size:11.5px;color:#999;margin-bottom:8px;">Kaunsa delivery mode customer ko dikhe. Dono ON honge to checkout pe Home/Office ka toggle aayega.</div>
+        <label class="cfg-chk"><input type="checkbox" id="cfg-homeEnabled" checked> 🏠 Home delivery (Society / Flat)</label>
+        <label class="cfg-chk"><input type="checkbox" id="cfg-officeEnabled"> 🏢 Office delivery (Company / Employee ID)</label>
+
+        <div class="section-title" style="margin-top:20px;">🏢 Companies <span style="font-size:11px;color:#999;font-weight:600;">(office delivery)</span></div>
+        <div style="font-size:11.5px;color:#999;margin-bottom:8px;">Har line: <b>Company name | Building (optional) | Delivery fee ₹</b><br>Jaise: <code>MoneyPlant Fintech | Tower B | 20</code><br>Employee ID har office order pe zaroori hoti hai.</div>
+        <textarea id="cfg-companies" rows="4" placeholder="MoneyPlant Fintech | Tower B | 20&#10;Zydus Corporate Park | Wing 2 | 20"></textarea>
+
         <div class="section-title" style="margin-top:20px;">💳 Online UPI Payment</div>
         <div style="font-size:11.5px;color:#999;margin-bottom:8px;">Apni UPI ID daalo (jaise 9924937939@ybl). Customer ko success screen pe "Pay Now via UPI" button milega. Khaali chhodo to online pay option nahi dikhega.</div>
         <input type="text" class="search-box" id="cfg-upiId" placeholder="yourname@bank / 9999999999@ybl" style="margin-bottom:8px;">
@@ -1081,7 +1239,42 @@
     <button class="nob-btn" onclick="dismissNewOrder()">✓ Dismiss &amp; View Orders</button>
   </div>
 </div>
-<div class="toast" id="toast"></div>
+<div id="topBar"></div>
+  <!-- ══════ DELIVERY MODE CHOOSER (order se pehle) ══════ -->
+  <div class="sheet-overlay hidden" id="modeModal">
+    <div class="sheet" style="max-width:400px;">
+      <div style="padding:24px 20px 20px;text-align:center;">
+        <div style="font-size:36px;">📍</div>
+        <h3 style="font-size:18px;font-weight:900;margin-top:6px;" data-i="modeTitle"></h3>
+        <p style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;" data-i="modeSub"></p>
+        <div class="mode-cards">
+          <div class="mode-card" id="mc-home" onclick="chooseMode('home')">
+            <div class="mc-i">🏠</div>
+            <div class="mc-t" data-i="dtHome"></div>
+            <div class="mc-s" data-i="dtHomeSub"></div>
+          </div>
+          <div class="mode-card" id="mc-office" onclick="chooseMode('office')">
+            <div class="mc-i">🏢</div>
+            <div class="mc-t" data-i="dtOffice"></div>
+            <div class="mc-s" data-i="dtOfficeSub"></div>
+          </div>
+        </div>
+        <div id="modeClose" class="hidden" style="margin-top:12px;"><button class="add-cart-btn" style="background:var(--card);color:var(--ink);border:1.5px solid var(--line);" onclick="closeModeModal()" data-i="limitClose"></button></div>
+      </div>
+    </div>
+  </div>
+  <div class="sheet-overlay hidden" id="limitModal" onclick="if(event.target===this)closeLimitPopup()">
+    <div class="sheet" style="max-width:400px;">
+      <div style="padding:26px 20px 20px;text-align:center;">
+        <div style="font-size:40px;">🍱</div>
+        <h3 style="font-size:17px;font-weight:900;margin-top:8px;" data-i="limitTitle"></h3>
+        <p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:8px;" data-i="limitBody"></p>
+        <button class="add-cart-btn" style="margin-top:16px;" onclick="contactKitchen()" data-i="limitCta"></button>
+        <button class="add-cart-btn" style="margin-top:8px;background:var(--card);color:var(--ink);border:1.5px solid var(--line);" onclick="closeLimitPopup()" data-i="limitClose"></button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
 
 <script>
   // ═══════ CONFIG ═══════
@@ -1129,6 +1322,7 @@
   const LANGS = { en:'English', hinglish:'Hinglish', hi:'हिन्दी', gu:'ગુજરાતી' };
   const T = {
     en: {
+      errNetwork:'❌ Network error. Please check your connection and try again.', sessionExpired:'⚠️ Your session has expired — please sign in again.', completeFields:'⚠️ Please complete all required fields.', orderFailed:'❌ Your order could not be placed. Please try again.', selectDate:'⚠️ Please select a date first.', orderCancelled:'✅ Your order has been cancelled.', resetLinkBad:'❌ This reset link is invalid or has expired.', confirmCancel:'Cancel this order?', welcomeUser:'🎉 Welcome,', errLogin:'Please sign in to continue.',
       tagline:'Fresh • Homemade • Doorstep Delivery', secureLogin:'🔐 Secure Login', signInTitle:'Welcome Back', emailLabel:'Email', passwordLabel:'Password', passwordPh:'Apna password daalein', passwordPh6:'Kam se kam 6 characters', confirmPwLabel:'Password Confirm Karein', confirmPwPh:'Password dobara daalein', errEmail:'Valid email address daalein.', errPassword:'Apna password daalein.', errPassword6:'Password kam se kam 6 characters ka ho.', errConfirmPw:'Password match nahi ho raha.', forgotPw:'Password Bhool Gaye?', signInBtn:'Sign In', signUpTitle:'Account Banayein', signUpSub:'Roz ka tiffin order karne ke liye sign up karein.', phoneDeliveryHint:'Delivery contact ke liye use hoga.', createAccountBtn:'Account Banayein', switchToSignUp:'Account nahi hai? <b onclick="showAuthMode(\'signup\')">Sign Up</b>', switchToSignIn:'Pehle se account hai? <b onclick="showAuthMode(\'signin\')">Sign In</b>', backToSignIn:'← Sign In par wapas', forgotTitle:'Password Reset Karein', forgotSub:'Apna email daalein, hum reset link bhej denge.', sendResetBtn:'Reset Link Bhejein', resetTitle:'Naya Password Set Karein', resetSub:'Apne account ke liye naya password chunein.', newPasswordLabel:'Naya Password', resetBtn:'Password Reset Karein', orDivider:'ya', resetLinkSent:'Agar ye email registered hai, reset link bhej diya gaya hai.', passwordResetDone:'Password update ho gaya — ab sign in kar sakte hain.', signInTitle:'Welcome Back', emailLabel:'Email', passwordLabel:'Password', passwordPh:'Enter your password', passwordPh6:'At least 6 characters', confirmPwLabel:'Confirm Password', confirmPwPh:'Re-enter your password', errEmail:'Please enter a valid email address.', errPassword:'Please enter your password.', errPassword6:'Password must be at least 6 characters.', errConfirmPw:'Passwords do not match.', forgotPw:'Forgot Password?', signInBtn:'Sign In', signUpTitle:'Create an Account', signUpSub:'Sign up to start ordering your daily tiffin.', phoneDeliveryHint:'Used for delivery contact.', createAccountBtn:'Create Account', switchToSignUp:'Don\'t have an account? <b onclick="showAuthMode(\'signup\')">Sign Up</b>', switchToSignIn:'Already have an account? <b onclick="showAuthMode(\'signin\')">Sign In</b>', backToSignIn:'← Back to Sign In', forgotTitle:'Reset Password', forgotSub:'Enter your email and we will send you a reset link.', sendResetBtn:'Send Reset Link', resetTitle:'Set New Password', resetSub:'Choose a new password for your account.', newPasswordLabel:'New Password', resetBtn:'Reset Password', orDivider:'or', resetLinkSent:'If that email is registered, a reset link has been sent.', passwordResetDone:'Password updated — you can sign in now.',
       loginTitle:'Login or Sign Up', mobileLabel:'Mobile Number', mobilePh:'Enter 10-digit mobile number',
       continueBtn2:'Continue', loginHint:'Choose from your Google accounts.', phoneFirstHint:'Needed only the first time — for delivery contact.', completeSignup:'✓ Complete Sign Up',
@@ -1146,8 +1340,8 @@
       fullName:'👤 Full Name', verifiedMobile:'📱 Mobile Number (verified ✓)', payMethod:'💰 Payment Method',
       payCOD:'💵 Cash on Delivery', payCODsub:'Pay when you receive', payUPI:'📲 UPI on Delivery', payUPIsub:'Scan & pay on delivery',
       errSociety:'Please select your society.', errFlat:'Please enter your block and flat number, e.g. D-706.',
-      placeOrder:'📤 Place Order', successTitle:'Order Confirmed', promoHave:'Have a coupon? Enter code', promoApply:'Apply', promoApplied:'applied', discountLbl:'Discount', promoFirstDateNote:'(applies to the first delivery date)', promoEditNote:'Discounted orders cannot be edited — please cancel and place a new order.', promoUseAtCheckout:'Tap a code in your cart to apply', promoNewTag:'new customers', policyTitle:'Cancellation & Refund Policy', policyBody:'• Orders can be cancelled or edited until 10:00 PM on the night before delivery. Orders placed after this window can be cancelled within 30 minutes of placing them.<br>• If you paid online via UPI and your order is cancelled — by you within the allowed window, or by us for any reason — the full amount is refunded to the same UPI account within 24 hours.<br>• Orders placed with a discount coupon cannot be edited; please cancel and place a fresh order instead.<br>• Any issue with your meal? WhatsApp us a photo within 2 hours of delivery — we will arrange a replacement or a full refund.<br>• Support: 📞 +91 99249 37939 (WhatsApp available).', waFallback:'Share order details on WhatsApp (optional) →', newOrder:'Place Another Order', trackOrderBtn:'Track Your Order', successConfirmNote:'Your order has been confirmed. You can view and track it anytime in the My Orders section.',
-      addToCart:'🛒 Add to Cart', addToCart2:'ADD', payNowUpi:'Pay Online via UPI', subtotalLbl:'Subtotal', deliveryLbl:'Delivery', infoStripText:'Order timings — Breakfast: by 10 PM previous night · Lunch: by 9 AM · Dinner: by 3 PM', subPushLine:'Order daily? Set up a subscription', reorderBtn:'Reorder', reorderDone:'Items added to your cart', reorderNoSlot:'These meals are not available in the next 3 days', lpTagline:'Fresh, homemade meals — delivered to your doorstep, every day.', lpOrderNow:'Order Now', lpTodays:'Today&#39;s Meals', lpOpen:'Open', lpClosed:'Closed', lpWhy:'Why Flying Birds', lpU1t:'Fresh Daily Batches', lpU1s:'Cooked in small batches every day — never stored or frozen.', lpU2t:'Home-Style Ingredients', lpU2s:'Freshly ground masalas — no packet mixes, no shortcuts.', lpU3t:'Safe, Hygienic Packaging', lpU3s:'Certified food-grade containers for every single meal.', lpSubT:'Daily Tiffin Subscription', lpSubS:'Set once — your tiffin arrives every day automatically.', lpHow:'How It Works', lpH1:'Pick your meal & customise it', lpH2:'Choose delivery date & time slot', lpH3:'Pay online or at delivery', lpPosT:'This Is Not a Quick-Delivery App', lpPosS:'It is your everyday kitchen — planned, fresh and always on time.', lpPos1:'Delivery in fixed time slots — no 10-minute race, no rush.', lpPos2:'Light, nourishing home-style food — not heavy restaurant fare.', lpPos3:'Simple fixed prices — no surge, no hidden or platform charges.', lpPos4:'One trusted kitchen every day — the same care in every tiffin.', navMenuShort:'Menu', navProfileShort:'Profile', pfTitle:'👤 My Profile', pfAddr:'Saved Delivery Address', pfFlatLbl:'Flat / Block No.', pfSave:'Save Address', addrSaved:'Address saved', pfQuick:'Quick Links', pfLang:'Language', payWithUpiBtn:'Pay Now', orScan:'or scan the QR code', upiPayNote:'🔒 Secure payment via UPI. Amount is pre-filled — just approve in your UPI app.', copied:'UPI ID copied', updateCart:'✓ Update in Cart', addedToCart:'added to cart', customizable:'customizable', chooseSize:'Choose Size', sizeRequired:'Required · Select any 1 option', addOns:'Add-ons', dahiShort:'Dahi', extraSabziShort:'Extra Sabzi', freshCookedDesc:'Prepared fresh in small daily batches — never stored, never frozen.', selectSabzi:'Select sabzi', rotiType:'Roti type', plain:'Plain', butter:'Butter', deliveryTime:'⏰ Delivery Time', tiffinType:'🍱 Choose Your Tiffin', miniTiffin:'Mini Tiffin', fullTiffin:'Full Tiffin',
+      placeOrder:'📤 Place Order', successTitle:'Order Confirmed', promoHave:'Have a coupon? Enter code', promoApply:'Apply', promoApplied:'applied', discountLbl:'Discount', promoFirstDateNote:'(applies to the first delivery date)', promoEditNote:'Discounted orders cannot be edited — please cancel and place a new order.', promoUseAtCheckout:'Tap a code in your cart to apply', promoNewTag:'new customers', policyTitle:'Cancellation & Refund Policy', policyBody:'• Orders can be cancelled until 10:00 PM on the night before delivery. Orders placed after this window can be cancelled within 30 minutes of placing them. Orders cannot be edited — please cancel and place a fresh order instead.<br>• If you paid online via UPI and your order is cancelled — by you within the allowed window, or by us for any reason — the full amount is refunded to the same UPI account within 24 hours.<br>• Orders placed with a discount coupon cannot be edited; please cancel and place a fresh order instead.<br>• Any issue with your meal? WhatsApp us a photo within 2 hours of delivery — we will arrange a replacement or a full refund.<br>• Support: 📞 +91 99249 37939 (WhatsApp available).', waFallback:'Share order details on WhatsApp (optional) →', newOrder:'Place Another Order', trackOrderBtn:'Track Your Order', successConfirmNote:'Your order has been confirmed. You can view and track it anytime in the My Orders section.',
+      addToCart:'🛒 Add to Cart', addToCart2:'ADD', payNowUpi:'PAY ONLINE', payRefLbl:'Payment reference', scanToPay:'Scan the QR with any UPI app', copyId:'COPY', pleaseWait:'Please wait…', cancelWindowOver:'The cancellation window for this order has closed. For any help, please contact the kitchen.', limitTitle:'One Tiffin Per Meal', limitBody:'Each customer can order 1 breakfast, 1 lunch and 1 dinner per day. For a larger quantity, please connect with our kitchen — we will be happy to arrange it.', limitCta:'Connect to Kitchen', limitClose:'Got it', subtotalLbl:'Subtotal', deliveryLbl:'Delivery', infoStripText:'Order timings — Breakfast: by 10 PM previous night · Lunch: by 9 AM · Dinner: by 3 PM', subPushLine:'Order daily? Set up a subscription', reorderBtn:'Reorder', reorderDone:'Items added to your cart', reorderNoSlot:'These meals are not available in the next 3 days', lpTagline:'Fresh, homemade meals — delivered to your doorstep, every day.', lpOrderNow:'Order Now', lpTodays:'Today&#39;s Meals', lpOpen:'Open', lpClosed:'Closed', lpWhy:'Why Flying Birds', lpU1t:'Fresh Daily Batches', lpU1s:'Cooked in small batches every day — never stored or frozen.', lpU2t:'Home-Style Ingredients', lpU2s:'Freshly ground masalas — no packet mixes, no shortcuts.', lpU3t:'Safe, Hygienic Packaging', lpU3s:'Certified food-grade containers for every single meal.', lpSubT:'Daily Tiffin Subscription', lpSubS:'Set once — your tiffin arrives every day automatically.', lpHow:'How It Works', lpH1:'Pick your meal & customise it', lpH2:'Choose delivery date & time slot', lpH3:'Pay online or at delivery', pubLogin:'Login', pubBack:'← Back', dtypeQ:'Where should we deliver?', modeTitle:'Where would you like your tiffin?', modeSub:'Choose once — you can change it any time.', modeChange:'Change', dtHome:'Home', dtHomeSub:'Society / Flat', dtOffice:'Office', dtOfficeSub:'Company / Employee', companyLbl:'Select Your Company', companyHint:'Company not listed? Contact the kitchen — we will add it.', empIdLbl:'Employee ID', errCompany:'Please select your company', errEmpId:'Please enter your Employee ID', pubCta:'See Menu & Order', pubCutoffLine:'Lunch closes at <b>9:00 AM</b> · Dinner at <b>3:00 PM</b>', pubHookQ:'Can healthy food really be cooked in a <em>20-minute delivery</em>?', pubHookA:'It can\'t. Food that fast was <b>cooked long before you ordered</b> — reheated, and rushed.', cmpUs:'Our Kitchen', cmpThem:'Delivery Apps', cmpU1:'Freshly ground masala', cmpT1:'Bulk packet masala', cmpU2:'Fresh oil, every day', cmpT2:'Oil reused all day', cmpU3:'Limited orders daily', cmpT3:'Unlimited, mass-cooked', cmpU4:'Same cook, same taste', cmpT4:'A new kitchen each time', cmpU5:'Fixed price, no extras', cmpT5:'Surge + platform fees', cmpU6:'Light, everyday food', cmpT6:'Heavy restaurant fare', cmpU7:'A kitchen you can visit', cmpT7:'A kitchen you\'ll never see', cmpQualT:'Quality, not quantity.', cmpQualS:'We cap our orders and serve one township — so every tiffin gets the time it deserves.', cmpChip:'📍 Only for Godrej Garden City', lpPosT:'This Is Not a Quick-Delivery App', lpPosS:'It is your everyday kitchen — planned, fresh and always on time.', lpPos1:'Delivery in fixed time slots — no 10-minute race, no rush.', lpPos2:'Light, nourishing home-style food — not heavy restaurant fare.', lpPos3:'Simple fixed prices — no surge, no hidden or platform charges.', lpPos4:'One trusted kitchen every day — the same care in every tiffin.', navMenuShort:'Menu', navProfileShort:'Profile', pfTitle:'👤 My Profile', pfAddr:'Saved Delivery Address', pfFlatLbl:'Flat / Block No.', pfSave:'Save Address', addrSaved:'Address saved', pfQuick:'Quick Links', pfLang:'Language', payWithUpiBtn:'Pay Now', orScan:'or scan the QR code', upiPayNote:'🔒 Secure payment via UPI. Amount is pre-filled — just approve in your UPI app.', copied:'UPI ID copied', updateCart:'✓ Update in Cart', addedToCart:'added to cart', customizable:'customizable', chooseSize:'Choose Size', sizeRequired:'Required · Select any 1 option', addOns:'Add-ons', dahiShort:'Dahi', extraSabziShort:'Extra Sabzi', freshCookedDesc:'Prepared fresh in small daily batches — never stored, never frozen.', selectSabzi:'Select sabzi', rotiType:'Roti type', plain:'Plain', butter:'Butter', deliveryTime:'⏰ Delivery Time', tiffinType:'🍱 Choose Your Tiffin', miniTiffin:'Mini Tiffin', fullTiffin:'Full Tiffin',
       extraRoti:'Extra Roti', addDahi:'Add Curd', extraSabzi:'Extra Sabzi portion', howMany:'How many tiffins?', unitPrice:'Unit price',
       perTiffin:'/ tiffin', specialInstr:'📝 Special instructions (optional)', notePh:'e.g. Less spicy, no onion...',
       backApp:'← Back to App', remove:'Remove', cancelOrder:'✖ Cancel', editOrder:'Edit', editLoaded:'Order loaded — make changes & checkout',
@@ -1162,6 +1356,29 @@
       aboutContact:'📞 Questions? We\'re just a call away.'
     },
     hinglish: {
+      errNetwork:'❌ Network error. Connection check karke dobara try karein.', sessionExpired:'⚠️ Session expire ho gaya — kripya dobara sign in karein.', completeFields:'⚠️ Kripya saari zaroori details bharein.', orderFailed:'❌ Order place nahi ho paya. Kripya dobara try karein.', selectDate:'⚠️ Pehle ek date chunein.', orderCancelled:'✅ Aapka order cancel ho gaya.', resetLinkBad:'❌ Ye reset link invalid ya expire ho chuka hai.', confirmCancel:'Ye order cancel karein?', welcomeUser:'🎉 Swagat hai,', errLogin:'Aage badhne ke liye sign in karein.',
+      // ── Auth (sign in / sign up / password reset) ──
+      signInTitle:'Wapas Aapka Swagat Hai', signInBtn:'Sign In', signUpTitle:'Naya Account Banayein', signUpSub:'Roz ka tiffin order karne ke liye sign up karein.',
+      createAccountBtn:'Account Banayein', emailLabel:'Email', passwordLabel:'Password', passwordPh:'Apna password daalein', passwordPh6:'Kam se kam 6 characters',
+      confirmPwLabel:'Password Confirm Karein', confirmPwPh:'Password dobara daalein', newPasswordLabel:'Naya Password',
+      errEmail:'Kripya sahi email address daalein.', errPassword:'Kripya apna password daalein.', errPassword6:'Password kam se kam 6 characters ka hona chahiye.', errConfirmPw:'Dono password match nahi ho rahe.',
+      orDivider:'ya', forgotPw:'Password bhool gaye?', forgotTitle:'Password Reset Karein', forgotSub:'Apna email daalein — hum reset link bhej denge.',
+      sendResetBtn:'Reset Link Bhejein', resetLinkSent:'Agar ye email registered hai to reset link bhej diya gaya hai.',
+      resetTitle:'Naya Password Set Karein', resetSub:'Apne account ke liye naya password chunein.', resetBtn:'Password Reset Karein', passwordResetDone:'Password update ho gaya — ab sign in kar sakte hain.',
+      backToSignIn:'← Sign In par wapas', switchToSignIn:'Pehle se account hai? <b onclick="showAuthMode(\'signin\')">Sign In</b>', switchToSignUp:'Account nahi hai? <b onclick="showAuthMode(\'signup\')">Sign Up</b>',
+      phoneDeliveryHint:'Delivery ke liye isi number par sampark karenge.',
+      // ── Bottom nav ──
+      navHomeShort:'Home', navCartShort:'Cart', navOrdersShort:'Orders', navSub:'Subscription', navSubShort:'Subscribe',
+      // ── Subscription ──
+      subTitle:'🔁 Subscription', subActive:'Active Plan', subPickMeals:'Meals chunein', subPickDays:'Din chunein',
+      subWeekdays:'Som–Shukra', subAllDays:'Saaton din', subClear:'Clear', subAnySabzi:'Chef ki pasand',
+      subStart:'Shuru', subEnd:'Khatam', subStart2:'Subscription Shuru Karein', subUpdate:'Plan Update Karein', subCancelBtn:'Plan Cancel Karein',
+      subCancelConfirm:'Subscription cancel karein?', subCancelled:'Subscription cancel ho gaya', subSaved:'Subscription save ho gaya.',
+      subSkipBtn:'Ek din skip karein', subPickSkipDate:'Skip karne ke liye date chunein', subSkipDone:'Din skip ho gaya', subUnskipDone:'Skip hata diya', subSkipped:'Skipped',
+      subDateRange:'Date range', subDaysWeek:'din/hafta', subDelivery:'Delivery', subEditNote:'Neeche edit karke Update dabayein — plan badal jayega', subEndAfter:'End date, start ke baad honi chahiye', subStartInfo:'Kal se shuru',
+      // ── Contact ──
+      navContact:'Contact Karein', contactTitle:'📞 Contact Karein', contactSub:'Aapki baat sunna hamesha achha lagta hai',
+      contactInfoTitle:'ℹ️ Jaankari', contactAddrLbl:'Location', contactAreaLbl:'Delivery Area', contactHoursLbl:'Delivery Time',
       tagline:'Fresh • Homemade • Doorstep Delivery', secureLogin:'🔐 Secure Login',
       loginTitle:'Login ya Sign Up', mobileLabel:'Mobile Number', mobilePh:'10-digit mobile number daalein',
       continueBtn2:'Aage Badhein', loginHint:'Apna Google account chunein.', phoneFirstHint:'Sirf pehli baar zaroori — delivery contact ke liye.', completeSignup:'✓ Sign Up Poora Karein',
@@ -1179,8 +1396,8 @@
       fullName:'👤 Pura Naam', verifiedMobile:'📱 Mobile Number (verified ✓)', payMethod:'💰 Payment Method',
       payCOD:'💵 Cash on Delivery', payCODsub:'Milne par cash', payUPI:'📲 UPI on Delivery', payUPIsub:'Delivery par scan karein',
       errSociety:'Apni society select karein.', errFlat:'Apna block aur flat number daalein, e.g. D-706.',
-      placeOrder:'📤 Place Order', successTitle:'Order Confirm Ho Gaya', promoHave:'Coupon code hai? Yahan daalein', promoApply:'Apply', promoApplied:'apply ho gaya', discountLbl:'Discount', promoFirstDateNote:'(pehli delivery date par lagta hai)', promoEditNote:'Discount wale orders edit nahi ho sakte — cancel karke naya order karein.', promoUseAtCheckout:'Cart me code par tap karke apply karein', promoNewTag:'naye customers', policyTitle:'Cancellation & Refund Policy', policyBody:'• Order delivery se ek raat pehle 10:00 PM tak cancel ya edit ho sakta hai. Uske baad place kiye gaye orders, place karne ke 30 minute ke andar cancel ho sakte hain.<br>• Agar aapne UPI se online payment kiya hai aur order cancel hota hai — chahe aapne allowed window me kiya ho ya humne kisi wajah se — poora amount 24 ghante ke andar usi UPI account me refund kar diya jaata hai.<br>• Coupon discount wale orders edit nahi ho sakte; kripya cancel karke naya order place karein.<br>• Khaane me koi bhi problem ho? Delivery ke 2 ghante ke andar photo ke saath WhatsApp karein — hum replacement ya poora refund arrange karenge.<br>• Support: 📞 +91 99249 37939 (WhatsApp par available).', subSub:'Ek baar set karein — aapka daily tiffin apne aap order ho jayega.', subSaved:'Subscription successfully save ho gaya.', waFallback:'Order details WhatsApp par share karein (optional) →', newOrder:'Naya Order Place Karein', trackOrderBtn:'Order Track Karein', successConfirmNote:'Aapka order confirm ho chuka hai. Aap ise kabhi bhi My Orders section mein dekh aur track kar sakte hain.',
-      addToCart:'🛒 Cart mein daalein', addToCart2:'ADD', payNowUpi:'UPI se Online Payment', subtotalLbl:'Subtotal', deliveryLbl:'Delivery', infoStripText:'Order timing — Breakfast: ek raat pehle 10 PM tak · Lunch: 9 AM tak · Dinner: 3 PM tak', subPushLine:'Roz order karte hain? Subscription set karein', reorderBtn:'Reorder', reorderDone:'Items aapke cart mein add ho gaye', reorderNoSlot:'Ye meals agle 3 din available nahi hain', lpTagline:'Roz taaza, ghar jaisa khana — seedha aapke doorstep tak.', lpOrderNow:'Order Karein', lpTodays:'Aaj ke Meals', lpOpen:'Open', lpClosed:'Band', lpWhy:'Flying Birds Hi Kyun', lpU1t:'Roz Taaze Batches', lpU1s:'Har din chhote batches mein banta hai — kabhi store ya frozen nahi.', lpU2t:'Ghar Jaise Ingredients', lpU2s:'Taaze pise masale — koi packet mix nahi.', lpU3t:'Safe, Hygienic Packaging', lpU3s:'Har meal certified food-grade container mein.', lpSubT:'Daily Tiffin Subscription', lpSubS:'Ek baar set karein — tiffin roz apne aap aayega.', lpHow:'Kaise Kaam Karta Hai', lpH1:'Meal chunein aur customise karein', lpH2:'Delivery date aur time slot chunein', lpH3:'Online ya delivery par pay karein', lpPosT:'Ye Fatafat-Delivery App Nahi Hai', lpPosS:'Ye aapka roz ka kitchen hai — planned, taaza aur hamesha time par.', lpPos1:'Fixed time slots par delivery — 10-minute wali race nahi.', lpPos2:'Halka, poshan-bhara ghar jaisa khana — restaurant ka bhaari tel-masala nahi.', lpPos3:'Seedhe fixed daam — na surge, na hidden ya platform charges.', lpPos4:'Roz ek hi bharosemand kitchen — har tiffin mein wahi apnapan.', navMenuShort:'Menu', navProfileShort:'Profile', pfTitle:'👤 Meri Profile', pfAddr:'Saved Delivery Address', pfFlatLbl:'Flat / Block No.', pfSave:'Address Save Karein', addrSaved:'Address save ho gaya', pfQuick:'Quick Links', pfLang:'Language', payWithUpiBtn:'Payment Karein', orScan:'ya QR code scan karein', upiPayNote:'🔒 UPI se secure payment. Amount pehle se bhara hai — bas apne UPI app mein approve karein.', copied:'UPI ID copy ho gayi', updateCart:'✓ Cart update karein', addedToCart:'cart mein add hua', customizable:'customizable', chooseSize:'Size Chunein', sizeRequired:'Zaroori · Koi 1 chunein', addOns:'Add-ons', dahiShort:'Dahi', extraSabziShort:'Extra Sabzi', freshCookedDesc:'Roz chhote batches mein taaza banta hai — kabhi store ya frozen nahi.', selectSabzi:'Sabzi chunein', rotiType:'Roti type', plain:'Plain', butter:'Butter', deliveryTime:'⏰ Delivery Time', tiffinType:'🍱 Apna Tiffin Chunein', miniTiffin:'Mini Tiffin', fullTiffin:'Full Tiffin',
+      placeOrder:'📤 Place Order', successTitle:'Order Confirm Ho Gaya', promoHave:'Coupon code hai? Yahan daalein', promoApply:'Apply', promoApplied:'apply ho gaya', discountLbl:'Discount', promoFirstDateNote:'(pehli delivery date par lagta hai)', promoEditNote:'Discount wale orders edit nahi ho sakte — cancel karke naya order karein.', promoUseAtCheckout:'Cart me code par tap karke apply karein', promoNewTag:'naye customers', policyTitle:'Cancellation & Refund Policy', policyBody:'• Order delivery se ek raat pehle 10:00 PM tak cancel ho sakta hai. Uske baad place kiye gaye orders, place karne ke 30 minute ke andar cancel ho sakte hain. Order edit nahi ho sakta — cancel karke naya order place karein.<br>• Agar aapne UPI se online payment kiya hai aur order cancel hota hai — chahe aapne allowed window me kiya ho ya humne kisi wajah se — poora amount 24 ghante ke andar usi UPI account me refund kar diya jaata hai.<br>• Coupon discount wale orders edit nahi ho sakte; kripya cancel karke naya order place karein.<br>• Khaane me koi bhi problem ho? Delivery ke 2 ghante ke andar photo ke saath WhatsApp karein — hum replacement ya poora refund arrange karenge.<br>• Support: 📞 +91 99249 37939 (WhatsApp par available).', subSub:'Ek baar set karein — aapka daily tiffin apne aap order ho jayega.', subSaved:'Subscription successfully save ho gaya.', waFallback:'Order details WhatsApp par share karein (optional) →', newOrder:'Naya Order Place Karein', trackOrderBtn:'Order Track Karein', successConfirmNote:'Aapka order confirm ho chuka hai. Aap ise kabhi bhi My Orders section mein dekh aur track kar sakte hain.',
+      addToCart:'🛒 Cart mein daalein', addToCart2:'ADD', payNowUpi:'ONLINE PAYMENT', payRefLbl:'Payment reference', scanToPay:'Kisi bhi UPI app se QR scan karein', copyId:'COPY', pleaseWait:'Ek moment…', cancelWindowOver:'Is order ka cancellation window band ho chuka hai. Kisi bhi madad ke liye kitchen se sampark karein.', limitTitle:'Ek Meal Ka Ek Tiffin', limitBody:'Har customer ek din me 1 breakfast, 1 lunch aur 1 dinner order kar sakta hai. Zyada quantity ke liye kripya kitchen se sampark karein — hum khushi se arrange kar denge.', limitCta:'Kitchen Se Sampark Karein', limitClose:'Theek hai', subtotalLbl:'Subtotal', deliveryLbl:'Delivery', infoStripText:'Order timing — Breakfast: ek raat pehle 10 PM tak · Lunch: 9 AM tak · Dinner: 3 PM tak', subPushLine:'Roz order karte hain? Subscription set karein', reorderBtn:'Reorder', reorderDone:'Items aapke cart mein add ho gaye', reorderNoSlot:'Ye meals agle 3 din available nahi hain', lpTagline:'Roz taaza, ghar jaisa khana — seedha aapke doorstep tak.', lpOrderNow:'Order Karein', lpTodays:'Aaj ke Meals', lpOpen:'Open', lpClosed:'Band', lpWhy:'Flying Birds Hi Kyun', lpU1t:'Roz Taaze Batches', lpU1s:'Har din chhote batches mein banta hai — kabhi store ya frozen nahi.', lpU2t:'Ghar Jaise Ingredients', lpU2s:'Taaze pise masale — koi packet mix nahi.', lpU3t:'Safe, Hygienic Packaging', lpU3s:'Har meal certified food-grade container mein.', lpSubT:'Daily Tiffin Subscription', lpSubS:'Ek baar set karein — tiffin roz apne aap aayega.', lpHow:'Kaise Kaam Karta Hai', lpH1:'Meal chunein aur customise karein', lpH2:'Delivery date aur time slot chunein', lpH3:'Online ya delivery par pay karein', pubLogin:'Login', pubBack:'← Wapas', dtypeQ:'Delivery kahan chahiye?', modeTitle:'Tiffin kahan chahiye?', modeSub:'Ek baar chunein — kabhi bhi badal sakte hain.', modeChange:'Badlein', dtHome:'Home', dtHomeSub:'Society / Flat', dtOffice:'Office', dtOfficeSub:'Company / Employee', companyLbl:'Apni Company Chunein', companyHint:'Company list me nahi? Kitchen se sampark karein — hum add kar denge.', empIdLbl:'Employee ID', errCompany:'Kripya apni company chunein', errEmpId:'Kripya Employee ID daalein', pubCta:'Menu Dekhein & Order Karein', pubCutoffLine:'Lunch band <b>9:00 AM</b> · Dinner <b>3:00 PM</b>', pubHookQ:'Kya healthy khana sach me <em>20-minute delivery</em> me ban sakta hai?', pubHookA:'Nahi ban sakta. Itni jaldi aane wala khana <b>aapke order se pehle hi bana hota hai</b> — dobara garam karke bheja jaata hai.', cmpUs:'Hamara Kitchen', cmpThem:'Delivery Apps', cmpU1:'Ghar pe pise taaze masale', cmpT1:'Bulk packet masala', cmpU2:'Roz naya tel', cmpT2:'Wahi tel din bhar', cmpU3:'Roz limited orders', cmpT3:'Unlimited, bulk cooking', cmpU4:'Wahi cook, wahi swaad', cmpT4:'Har baar alag kitchen', cmpU5:'Fixed daam, koi extra nahi', cmpT5:'Surge + platform fees', cmpU6:'Halka, roz ka khana', cmpT6:'Bhaari restaurant food', cmpU7:'Kitchen jo aap dekh sakte hain', cmpT7:'Kitchen jo kabhi nahi dikhega', cmpQualT:'Quality, quantity nahi.', cmpQualS:'Hum roz ke orders limited rakhte hain aur sirf ek township serve karte hain — taaki har tiffin ko poora time mile.', cmpChip:'📍 Sirf Godrej Garden City ke liye', lpPosT:'Ye Fatafat-Delivery App Nahi Hai', lpPosS:'Ye aapka roz ka kitchen hai — planned, taaza aur hamesha time par.', lpPos1:'Fixed time slots par delivery — 10-minute wali race nahi.', lpPos2:'Halka, poshan-bhara ghar jaisa khana — restaurant ka bhaari tel-masala nahi.', lpPos3:'Seedhe fixed daam — na surge, na hidden ya platform charges.', lpPos4:'Roz ek hi bharosemand kitchen — har tiffin mein wahi apnapan.', navMenuShort:'Menu', navProfileShort:'Profile', pfTitle:'👤 Meri Profile', pfAddr:'Saved Delivery Address', pfFlatLbl:'Flat / Block No.', pfSave:'Address Save Karein', addrSaved:'Address save ho gaya', pfQuick:'Quick Links', pfLang:'Language', payWithUpiBtn:'Payment Karein', orScan:'ya QR code scan karein', upiPayNote:'🔒 UPI se secure payment. Amount pehle se bhara hai — bas apne UPI app mein approve karein.', copied:'UPI ID copy ho gayi', updateCart:'✓ Cart update karein', addedToCart:'cart mein add hua', customizable:'customizable', chooseSize:'Size Chunein', sizeRequired:'Zaroori · Koi 1 chunein', addOns:'Add-ons', dahiShort:'Dahi', extraSabziShort:'Extra Sabzi', freshCookedDesc:'Roz chhote batches mein taaza banta hai — kabhi store ya frozen nahi.', selectSabzi:'Sabzi chunein', rotiType:'Roti type', plain:'Plain', butter:'Butter', deliveryTime:'⏰ Delivery Time', tiffinType:'🍱 Apna Tiffin Chunein', miniTiffin:'Mini Tiffin', fullTiffin:'Full Tiffin',
       extraRoti:'Extra Roti', addDahi:'Dahi add karein', extraSabzi:'Extra Sabzi', howMany:'Kitne tiffin?', unitPrice:'Unit price',
       perTiffin:'/ tiffin', specialInstr:'📝 Special instructions (optional)', notePh:'e.g. Kam mirchi, no onion...',
       backApp:'← App par wapas', remove:'Hatayein', cancelOrder:'✖ Cancel', editOrder:'Edit', editLoaded:'Order load ho gaya — badlav karke checkout karein',
@@ -1195,6 +1412,7 @@
       aboutContact:'📞 Koi sawaal ho to humein call karein.'
     },
     hi: {
+      errNetwork:'❌ नेटवर्क त्रुटि। कनेक्शन जाँचकर दोबारा प्रयास करें।', sessionExpired:'⚠️ आपका सेशन समाप्त हो गया — कृपया दोबारा साइन इन करें।', completeFields:'⚠️ कृपया सभी आवश्यक जानकारी भरें।', orderFailed:'❌ ऑर्डर प्लेस नहीं हो सका। कृपया दोबारा प्रयास करें।', selectDate:'⚠️ कृपया पहले एक तारीख़ चुनें।', orderCancelled:'✅ आपका ऑर्डर कैंसल हो गया।', resetLinkBad:'❌ यह रीसेट लिंक अमान्य या समाप्त हो चुका है।', confirmCancel:'क्या यह ऑर्डर कैंसल करें?', welcomeUser:'🎉 स्वागत है,', errLogin:'आगे बढ़ने के लिए साइन इन करें।',
       tagline:'ताज़ा • घर का बना • डोरस्टेप डिलीवरी', secureLogin:'🔐 सुरक्षित लॉगिन', signInTitle:'वापसी पर स्वागत है', emailLabel:'ईमेल', passwordLabel:'पासवर्ड', passwordPh:'अपना पासवर्ड डालें', passwordPh6:'कम से कम 6 अक्षर', confirmPwLabel:'पासवर्ड की पुष्टि करें', confirmPwPh:'पासवर्ड दोबारा डालें', errEmail:'सही ईमेल एड्रेस डालें।', errPassword:'अपना पासवर्ड डालें।', errPassword6:'पासवर्ड कम से कम 6 अक्षर का हो।', errConfirmPw:'पासवर्ड मैच नहीं हो रहा।', forgotPw:'पासवर्ड भूल गए?', signInBtn:'साइन इन करें', signUpTitle:'अकाउंट बनाएं', signUpSub:'रोज़ का टिफ़िन ऑर्डर करने के लिए साइन अप करें।', phoneDeliveryHint:'डिलीवरी संपर्क के लिए इस्तेमाल होगा।', createAccountBtn:'अकाउंट बनाएं', switchToSignUp:'अकाउंट नहीं है? <b onclick="showAuthMode(\'signup\')">साइन अप करें</b>', switchToSignIn:'पहले से अकाउंट है? <b onclick="showAuthMode(\'signin\')">साइन इन करें</b>', backToSignIn:'← साइन इन पर वापस', forgotTitle:'पासवर्ड रीसेट करें', forgotSub:'अपना ईमेल डालें, हम रीसेट लिंक भेज देंगे।', sendResetBtn:'रीसेट लिंक भेजें', resetTitle:'नया पासवर्ड सेट करें', resetSub:'अपने अकाउंट के लिए नया पासवर्ड चुनें।', newPasswordLabel:'नया पासवर्ड', resetBtn:'पासवर्ड रीसेट करें', orDivider:'या', resetLinkSent:'अगर ये ईमेल रजिस्टर्ड है, रीसेट लिंक भेज दिया गया है।', passwordResetDone:'पासवर्ड अपडेट हो गया — अब साइन इन कर सकते हैं।',
       loginTitle:'लॉगिन या साइन अप', mobileLabel:'मोबाइल नंबर', mobilePh:'10 अंकों का मोबाइल नंबर डालें',
       continueBtn2:'आगे बढ़ें', loginHint:'अपना Google अकाउंट चुनें।', phoneFirstHint:'सिर्फ़ पहली बार ज़रूरी — डिलीवरी संपर्क के लिए।', completeSignup:'✓ साइन अप पूरा करें',
@@ -1212,8 +1430,8 @@
       fullName:'👤 पूरा नाम', verifiedMobile:'📱 मोबाइल नंबर (वेरिफ़ाइड ✓)', payMethod:'💰 भुगतान का तरीका',
       payCOD:'💵 कैश ऑन डिलीवरी', payCODsub:'मिलने पर भुगतान', payUPI:'📲 UPI ऑन डिलीवरी', payUPIsub:'डिलीवरी पर स्कैन करें',
       errSociety:'अपनी सोसायटी चुनें।', errFlat:'कृपया ब्लॉक और फ़्लैट नंबर डालें, जैसे D-706।',
-      placeOrder:'📤 ऑर्डर करें', successTitle:'ऑर्डर कन्फर्म हो गया', promoHave:'कूपन कोड है? यहाँ डालें', promoApply:'लगाएँ', promoApplied:'लागू हुआ', discountLbl:'छूट', promoFirstDateNote:'(पहली डिलीवरी तारीख़ पर लागू)', promoEditNote:'छूट वाले ऑर्डर एडिट नहीं हो सकते — कैंसल करके नया ऑर्डर करें।', promoUseAtCheckout:'कार्ट में कोड पर टैप करके लागू करें', promoNewTag:'नए ग्राहक', policyTitle:'कैंसलेशन और रिफ़ंड नीति', policyBody:'• ऑर्डर डिलीवरी से एक रात पहले 10:00 PM तक कैंसल या एडिट किया जा सकता है। इसके बाद किए गए ऑर्डर, ऑर्डर करने के 30 मिनट के भीतर कैंसल किए जा सकते हैं।<br>• यदि आपने UPI से ऑनलाइन भुगतान किया है और ऑर्डर कैंसल होता है — चाहे आपने अनुमत समय में किया हो या हमने किसी कारण से — पूरी राशि 24 घंटे के भीतर उसी UPI खाते में रिफ़ंड कर दी जाती है।<br>• कूपन छूट वाले ऑर्डर एडिट नहीं हो सकते; कृपया कैंसल करके नया ऑर्डर करें।<br>• खाने में कोई समस्या हो? डिलीवरी के 2 घंटे के भीतर फ़ोटो के साथ WhatsApp करें — हम रिप्लेसमेंट या पूरा रिफ़ंड देंगे।<br>• सहायता: 📞 +91 99249 37939 (WhatsApp उपलब्ध)।', waFallback:'ऑर्डर WhatsApp पर साझा करें (optional) →', newOrder:'नया ऑर्डर करें', trackOrderBtn:'ऑर्डर ट्रैक करें', successConfirmNote:'आपका ऑर्डर कन्फर्म हो चुका है। आप इसे कभी भी My Orders सेक्शन में देख और ट्रैक कर सकते हैं।',
-      addToCart:'🛒 कार्ट में जोड़ें', addToCart2:'जोड़ें', payNowUpi:'UPI से ऑनलाइन भुगतान', subtotalLbl:'सबटोटल', deliveryLbl:'डिलीवरी', infoStripText:'ऑर्डर समय — नाश्ता: एक रात पहले 10 PM तक · लंच: 9 AM तक · डिनर: 3 PM तक', subPushLine:'रोज़ ऑर्डर करते हैं? सब्सक्रिप्शन सेट करें', reorderBtn:'फिर ऑर्डर करें', reorderDone:'आइटम आपके कार्ट में जुड़ गए', reorderNoSlot:'ये मील अगले 3 दिन उपलब्ध नहीं हैं', lpTagline:'रोज़ ताज़ा, घर जैसा खाना — सीधे आपके doorstep तक।', lpOrderNow:'ऑर्डर करें', lpTodays:'आज के मील', lpOpen:'उपलब्ध', lpClosed:'बंद', lpWhy:'Flying Birds ही क्यों', lpU1t:'रोज़ ताज़े बैच', lpU1s:'हर दिन छोटे बैच में बनता है — कभी स्टोर या फ़्रोज़न नहीं।', lpU2t:'घर जैसी सामग्री', lpU2s:'ताज़े पिसे मसाले — कोई पैकेट मिक्स नहीं।', lpU3t:'सुरक्षित पैकेजिंग', lpU3s:'हर मील सर्टिफ़ाइड फ़ूड-ग्रेड कंटेनर में।', lpSubT:'डेली टिफ़िन सब्सक्रिप्शन', lpSubS:'एक बार सेट करें — टिफ़िन रोज़ अपने आप आएगा।', lpHow:'कैसे काम करता है', lpH1:'मील चुनें और कस्टमाइज़ करें', lpH2:'डिलीवरी की तारीख़ और समय चुनें', lpH3:'ऑनलाइन या डिलीवरी पर भुगतान करें', lpPosT:'यह फटाफट-डिलीवरी ऐप नहीं है', lpPosS:'यह आपका रोज़ का किचन है — planned, ताज़ा और हमेशा समय पर।', lpPos1:'Fixed time slots पर डिलीवरी — 10-मिनट वाली रेस नहीं।', lpPos2:'हल्का, पोषण-भरा घर जैसा खाना — रेस्टोरेंट का भारी तेल-मसाला नहीं।', lpPos3:'सीधे fixed दाम — ना surge, ना hidden या platform charges।', lpPos4:'रोज़ एक ही भरोसेमंद किचन — हर टिफ़िन में वही अपनापन।', navMenuShort:'मेनू', navProfileShort:'प्रोफ़ाइल', pfTitle:'👤 मेरी प्रोफ़ाइल', pfAddr:'सेव किया गया पता', pfFlatLbl:'फ़्लैट / ब्लॉक नं.', pfSave:'पता सेव करें', addrSaved:'पता सेव हो गया', pfQuick:'क्विक लिंक', pfLang:'भाषा', payWithUpiBtn:'भुगतान करें', orScan:'या QR कोड स्कैन करें', upiPayNote:'🔒 UPI से सुरक्षित भुगतान। राशि पहले से भरी है — बस अपने UPI ऐप में अप्रूव करें।', copied:'UPI ID कॉपी हो गई', updateCart:'✓ कार्ट अपडेट करें', addedToCart:'कार्ट में जुड़ा', customizable:'कस्टमाइज़ेबल', chooseSize:'साइज़ चुनें', sizeRequired:'ज़रूरी · कोई 1 चुनें', addOns:'ऐड-ऑन', dahiShort:'दही', extraSabziShort:'एक्स्ट्रा सब्ज़ी', freshCookedDesc:'रोज़ छोटे बैच में ताज़ा बनता है — कभी स्टोर या फ़्रोज़न नहीं।', selectSabzi:'सब्ज़ी चुनें', rotiType:'रोटी टाइप', plain:'प्लेन', butter:'बटर', deliveryTime:'⏰ डिलीवरी समय', tiffinType:'🍱 अपना टिफ़िन चुनें', miniTiffin:'मिनी टिफ़िन', fullTiffin:'फ़ुल टिफ़िन',
+      placeOrder:'📤 ऑर्डर करें', successTitle:'ऑर्डर कन्फर्म हो गया', promoHave:'कूपन कोड है? यहाँ डालें', promoApply:'लगाएँ', promoApplied:'लागू हुआ', discountLbl:'छूट', promoFirstDateNote:'(पहली डिलीवरी तारीख़ पर लागू)', promoEditNote:'छूट वाले ऑर्डर एडिट नहीं हो सकते — कैंसल करके नया ऑर्डर करें।', promoUseAtCheckout:'कार्ट में कोड पर टैप करके लागू करें', promoNewTag:'नए ग्राहक', policyTitle:'कैंसलेशन और रिफ़ंड नीति', policyBody:'• ऑर्डर डिलीवरी से एक रात पहले 10:00 PM तक कैंसल किया जा सकता है। इसके बाद किए गए ऑर्डर, ऑर्डर करने के 30 मिनट के भीतर कैंसल किए जा सकते हैं। ऑर्डर एडिट नहीं हो सकता — कृपया कैंसल करके नया ऑर्डर करें।<br>• यदि आपने UPI से ऑनलाइन भुगतान किया है और ऑर्डर कैंसल होता है — चाहे आपने अनुमत समय में किया हो या हमने किसी कारण से — पूरी राशि 24 घंटे के भीतर उसी UPI खाते में रिफ़ंड कर दी जाती है।<br>• कूपन छूट वाले ऑर्डर एडिट नहीं हो सकते; कृपया कैंसल करके नया ऑर्डर करें।<br>• खाने में कोई समस्या हो? डिलीवरी के 2 घंटे के भीतर फ़ोटो के साथ WhatsApp करें — हम रिप्लेसमेंट या पूरा रिफ़ंड देंगे।<br>• सहायता: 📞 +91 99249 37939 (WhatsApp उपलब्ध)।', waFallback:'ऑर्डर WhatsApp पर साझा करें (optional) →', newOrder:'नया ऑर्डर करें', trackOrderBtn:'ऑर्डर ट्रैक करें', successConfirmNote:'आपका ऑर्डर कन्फर्म हो चुका है। आप इसे कभी भी My Orders सेक्शन में देख और ट्रैक कर सकते हैं।',
+      addToCart:'🛒 कार्ट में जोड़ें', addToCart2:'जोड़ें', payNowUpi:'ऑनलाइन भुगतान', payRefLbl:'पेमेंट रेफ़रेंस', scanToPay:'किसी भी UPI ऐप से QR स्कैन करें', copyId:'कॉपी', pleaseWait:'एक क्षण…', cancelWindowOver:'इस ऑर्डर का कैंसलेशन विंडो बंद हो चुका है। किसी भी मदद के लिए किचन से संपर्क करें।', limitTitle:'एक मील का एक टिफ़िन', limitBody:'हर ग्राहक एक दिन में 1 नाश्ता, 1 लंच और 1 डिनर ऑर्डर कर सकता है। ज़्यादा मात्रा के लिए कृपया किचन से संपर्क करें — हम खुशी से व्यवस्था कर देंगे।', limitCta:'किचन से संपर्क करें', limitClose:'ठीक है', subtotalLbl:'सबटोटल', deliveryLbl:'डिलीवरी', infoStripText:'ऑर्डर समय — नाश्ता: एक रात पहले 10 PM तक · लंच: 9 AM तक · डिनर: 3 PM तक', subPushLine:'रोज़ ऑर्डर करते हैं? सब्सक्रिप्शन सेट करें', reorderBtn:'फिर ऑर्डर करें', reorderDone:'आइटम आपके कार्ट में जुड़ गए', reorderNoSlot:'ये मील अगले 3 दिन उपलब्ध नहीं हैं', lpTagline:'रोज़ ताज़ा, घर जैसा खाना — सीधे आपके doorstep तक।', lpOrderNow:'ऑर्डर करें', lpTodays:'आज के मील', lpOpen:'उपलब्ध', lpClosed:'बंद', lpWhy:'Flying Birds ही क्यों', lpU1t:'रोज़ ताज़े बैच', lpU1s:'हर दिन छोटे बैच में बनता है — कभी स्टोर या फ़्रोज़न नहीं।', lpU2t:'घर जैसी सामग्री', lpU2s:'ताज़े पिसे मसाले — कोई पैकेट मिक्स नहीं।', lpU3t:'सुरक्षित पैकेजिंग', lpU3s:'हर मील सर्टिफ़ाइड फ़ूड-ग्रेड कंटेनर में।', lpSubT:'डेली टिफ़िन सब्सक्रिप्शन', lpSubS:'एक बार सेट करें — टिफ़िन रोज़ अपने आप आएगा।', lpHow:'कैसे काम करता है', lpH1:'मील चुनें और कस्टमाइज़ करें', lpH2:'डिलीवरी की तारीख़ और समय चुनें', lpH3:'ऑनलाइन या डिलीवरी पर भुगतान करें', pubLogin:'लॉगिन', pubBack:'← वापस', dtypeQ:'डिलीवरी कहाँ चाहिए?', modeTitle:'टिफ़िन कहाँ चाहिए?', modeSub:'एक बार चुनें — कभी भी बदल सकते हैं।', modeChange:'बदलें', dtHome:'घर', dtHomeSub:'सोसाइटी / फ़्लैट', dtOffice:'ऑफ़िस', dtOfficeSub:'कंपनी / एम्प्लॉई', companyLbl:'अपनी कंपनी चुनें', companyHint:'कंपनी लिस्ट में नहीं? किचन से संपर्क करें — हम जोड़ देंगे।', empIdLbl:'एम्प्लॉई ID', errCompany:'कृपया अपनी कंपनी चुनें', errEmpId:'कृपया एम्प्लॉई ID डालें', pubCta:'मेन्यू देखें और ऑर्डर करें', pubCutoffLine:'लंच बंद <b>9:00 AM</b> · डिनर <b>3:00 PM</b>', pubHookQ:'क्या हेल्दी खाना सच में <em>20-मिनट डिलीवरी</em> में बन सकता है?', pubHookA:'नहीं बन सकता। इतनी जल्दी आने वाला खाना <b>आपके ऑर्डर से पहले ही बना होता है</b> — दोबारा गरम करके भेजा जाता है।', cmpUs:'हमारा किचन', cmpThem:'डिलीवरी ऐप्स', cmpU1:'घर पर पिसे ताज़े मसाले', cmpT1:'बल्क पैकेट मसाला', cmpU2:'रोज़ नया तेल', cmpT2:'वही तेल दिन भर', cmpU3:'रोज़ सीमित ऑर्डर', cmpT3:'अनलिमिटेड, बल्क कुकिंग', cmpU4:'वही रसोइया, वही स्वाद', cmpT4:'हर बार अलग किचन', cmpU5:'फ़िक्स्ड दाम, कोई एक्स्ट्रा नहीं', cmpT5:'सर्ज + प्लेटफ़ॉर्म फ़ीस', cmpU6:'हल्का, रोज़ का खाना', cmpT6:'भारी रेस्टोरेंट फ़ूड', cmpU7:'किचन जो आप देख सकते हैं', cmpT7:'किचन जो कभी नहीं दिखेगा', cmpQualT:'क्वालिटी, क्वांटिटी नहीं।', cmpQualS:'हम रोज़ के ऑर्डर सीमित रखते हैं और सिर्फ़ एक टाउनशिप सर्व करते हैं — ताकि हर टिफ़िन को पूरा समय मिले।', cmpChip:'📍 सिर्फ़ Godrej Garden City के लिए', lpPosT:'यह फटाफट-डिलीवरी ऐप नहीं है', lpPosS:'यह आपका रोज़ का किचन है — planned, ताज़ा और हमेशा समय पर।', lpPos1:'Fixed time slots पर डिलीवरी — 10-मिनट वाली रेस नहीं।', lpPos2:'हल्का, पोषण-भरा घर जैसा खाना — रेस्टोरेंट का भारी तेल-मसाला नहीं।', lpPos3:'सीधे fixed दाम — ना surge, ना hidden या platform charges।', lpPos4:'रोज़ एक ही भरोसेमंद किचन — हर टिफ़िन में वही अपनापन।', navMenuShort:'मेनू', navProfileShort:'प्रोफ़ाइल', pfTitle:'👤 मेरी प्रोफ़ाइल', pfAddr:'सेव किया गया पता', pfFlatLbl:'फ़्लैट / ब्लॉक नं.', pfSave:'पता सेव करें', addrSaved:'पता सेव हो गया', pfQuick:'क्विक लिंक', pfLang:'भाषा', payWithUpiBtn:'भुगतान करें', orScan:'या QR कोड स्कैन करें', upiPayNote:'🔒 UPI से सुरक्षित भुगतान। राशि पहले से भरी है — बस अपने UPI ऐप में अप्रूव करें।', copied:'UPI ID कॉपी हो गई', updateCart:'✓ कार्ट अपडेट करें', addedToCart:'कार्ट में जुड़ा', customizable:'कस्टमाइज़ेबल', chooseSize:'साइज़ चुनें', sizeRequired:'ज़रूरी · कोई 1 चुनें', addOns:'ऐड-ऑन', dahiShort:'दही', extraSabziShort:'एक्स्ट्रा सब्ज़ी', freshCookedDesc:'रोज़ छोटे बैच में ताज़ा बनता है — कभी स्टोर या फ़्रोज़न नहीं।', selectSabzi:'सब्ज़ी चुनें', rotiType:'रोटी टाइप', plain:'प्लेन', butter:'बटर', deliveryTime:'⏰ डिलीवरी समय', tiffinType:'🍱 अपना टिफ़िन चुनें', miniTiffin:'मिनी टिफ़िन', fullTiffin:'फ़ुल टिफ़िन',
       extraRoti:'एक्स्ट्रा रोटी', addDahi:'दही जोड़ें', extraSabzi:'एक्स्ट्रा सब्ज़ी', howMany:'कितने टिफ़िन?', unitPrice:'यूनिट प्राइस',
       perTiffin:'/ टिफ़िन', specialInstr:'📝 विशेष निर्देश (वैकल्पिक)', notePh:'जैसे कम मिर्च, बिना प्याज़...',
       backApp:'← ऐप पर वापस', remove:'हटाएँ', cancelOrder:'✖ कैंसिल', editOrder:'बदलें', editLoaded:'ऑर्डर लोड हुआ — बदलाव करके चेकआउट करें',
@@ -1228,6 +1446,7 @@
       aboutContact:'📞 कोई सवाल? हम एक कॉल दूर हैं।'
     },
     gu: {
+      errNetwork:'❌ નેટવર્ક ભૂલ. કનેક્શન તપાસીને ફરી પ્રયાસ કરો.', sessionExpired:'⚠️ તમારું સેશન સમાપ્ત થયું — કૃપા કરીને ફરી સાઇન ઇન કરો.', completeFields:'⚠️ કૃપા કરીને બધી જરૂરી માહિતી ભરો.', orderFailed:'❌ ઓર્ડર પ્લેસ થઈ શક્યો નથી. કૃપા કરીને ફરી પ્રયાસ કરો.', selectDate:'⚠️ કૃપા કરીને પહેલા તારીખ પસંદ કરો.', orderCancelled:'✅ તમારો ઓર્ડર કૅન્સલ થઈ ગયો.', resetLinkBad:'❌ આ રીસેટ લિંક અમાન્ય અથવા સમાપ્ત થઈ ગઈ છે.', confirmCancel:'આ ઓર્ડર કૅન્સલ કરવો છે?', welcomeUser:'🎉 સ્વાગત છે,', errLogin:'આગળ વધવા માટે સાઇન ઇન કરો.',
       tagline:'તાજું • ઘરનું બનાવેલું • ડોરસ્ટેપ ડિલિવરી', secureLogin:'🔐 સુરક્ષિત લોગિન', signInTitle:'ફરી સ્વાગત છે', emailLabel:'ઈમેલ', passwordLabel:'પાસવર્ડ', passwordPh:'તમારો પાસવર્ડ દાખલ કરો', passwordPh6:'ઓછામાં ઓછા 6 અક્ષર', confirmPwLabel:'પાસવર્ડ કન્ફર્મ કરો', confirmPwPh:'પાસવર્ડ ફરીથી દાખલ કરો', errEmail:'સાચું ઈમેલ સરનામું દાખલ કરો.', errPassword:'તમારો પાસવર્ડ દાખલ કરો.', errPassword6:'પાસવર્ડ ઓછામાં ઓછા 6 અક્ષરનો હોવો જોઈએ.', errConfirmPw:'પાસવર્ડ મેચ થતો નથી.', forgotPw:'પાસવર્ડ ભૂલી ગયા?', signInBtn:'સાઇન ઇન કરો', signUpTitle:'એકાઉન્ટ બનાવો', signUpSub:'રોજનું ટિફિન ઓર્ડર કરવા સાઇન અપ કરો.', phoneDeliveryHint:'ડિલિવરી સંપર્ક માટે વપરાશે.', createAccountBtn:'એકાઉન્ટ બનાવો', switchToSignUp:'એકાઉન્ટ નથી? <b onclick="showAuthMode(\'signup\')">સાઇન અપ કરો</b>', switchToSignIn:'પહેલેથી એકાઉન્ટ છે? <b onclick="showAuthMode(\'signin\')">સાઇન ઇન કરો</b>', backToSignIn:'← સાઇન ઇન પર પાછા', forgotTitle:'પાસવર્ડ રીસેટ કરો', forgotSub:'તમારું ઈમેલ દાખલ કરો, અમે રીસેટ લિંક મોકલીશું.', sendResetBtn:'રીસેટ લિંક મોકલો', resetTitle:'નવો પાસવર્ડ સેટ કરો', resetSub:'તમારા એકાઉન્ટ માટે નવો પાસવર્ડ પસંદ કરો.', newPasswordLabel:'નવો પાસવર્ડ', resetBtn:'પાસવર્ડ રીસેટ કરો', orDivider:'અથવા', resetLinkSent:'જો આ ઈમેલ રજિસ્ટર્ડ છે, રીસેટ લિંક મોકલી દેવાઈ છે.', passwordResetDone:'પાસવર્ડ અપડેટ થયો — હવે સાઇન ઇન કરી શકો છો.',
       loginTitle:'લોગિન અથવા સાઇન અપ', mobileLabel:'મોબાઇલ નંબર', mobilePh:'10 અંકનો મોબાઇલ નંબર દાખલ કરો',
       continueBtn2:'આગળ વધો', loginHint:'તમારું Google એકાઉન્ટ પસંદ કરો.', phoneFirstHint:'ફક્ત પહેલી વાર જરૂરી — ડિલિવરી સંપર્ક માટે.', completeSignup:'✓ સાઇન અપ પૂર્ણ કરો',
@@ -1245,8 +1464,8 @@
       fullName:'👤 પૂરું નામ', verifiedMobile:'📱 મોબાઇલ નંબર (વેરિફાઇડ ✓)', payMethod:'💰 ચુકવણી પદ્ધતિ',
       payCOD:'💵 કેશ ઓન ડિલિવરી', payCODsub:'મળે ત્યારે ચૂકવો', payUPI:'📲 UPI ઓન ડિલિવરી', payUPIsub:'ડિલિવરી પર સ્કેન કરો',
       errSociety:'તમારી સોસાયટી પસંદ કરો.', errFlat:'કૃપા કરીને બ્લોક અને ફ્લેટ નંબર દાખલ કરો, દા.ત. D-706.',
-      placeOrder:'📤 ઓર્ડર કરો', successTitle:'ઓર્ડર કન્ફર્મ થયો', promoHave:'કૂપન કોડ છે? અહીં દાખલ કરો', promoApply:'લાગુ કરો', promoApplied:'લાગુ થયો', discountLbl:'ડિસ્કાઉન્ટ', promoFirstDateNote:'(પ્રથમ ડિલિવરી તારીખ પર લાગુ)', promoEditNote:'ડિસ્કાઉન્ટવાળા ઓર્ડર એડિટ થઈ શકતા નથી — કૅન્સલ કરીને નવો ઓર્ડર કરો.', promoUseAtCheckout:'કાર્ટમાં કોડ પર ટૅપ કરીને લાગુ કરો', promoNewTag:'નવા ગ્રાહકો', policyTitle:'કૅન્સલેશન અને રિફંડ નીતિ', policyBody:'• ઓર્ડર ડિલિવરીની આગલી રાત્રે 10:00 PM સુધી કૅન્સલ કે એડિટ થઈ શકે છે. તે પછી કરેલા ઓર્ડર, ઓર્ડર કર્યાની 30 મિનિટમાં કૅન્સલ થઈ શકે છે.<br>• જો તમે UPI થી ઓનલાઇન ચુકવણી કરી હોય અને ઓર્ડર કૅન્સલ થાય — ભલે તમે માન્ય સમયમાં કર્યો હોય કે અમે કોઈ કારણસર — પૂરી રકમ 24 કલાકમાં એ જ UPI ખાતામાં રિફંડ થાય છે.<br>• કૂપન ડિસ્કાઉન્ટવાળા ઓર્ડર એડિટ થઈ શકતા નથી; કૃપા કરીને કૅન્સલ કરીને નવો ઓર્ડર કરો.<br>• ભોજનમાં કોઈ સમસ્યા? ડિલિવરીના 2 કલાકમાં ફોટા સાથે WhatsApp કરો — અમે રિપ્લેસમેન્ટ કે પૂરો રિફંડ આપીશું.<br>• સપોર્ટ: 📞 +91 99249 37939 (WhatsApp ઉપલબ્ધ).', waFallback:'ઓર્ડર WhatsApp પર શેર કરો (optional) →', newOrder:'નવો ઓર્ડર કરો', trackOrderBtn:'ઓર્ડર ટ્રૅક કરો', successConfirmNote:'તમારો ઓર્ડર કન્ફર્મ થઈ ગયો છે. તમે તેને ગમે ત્યારે My Orders સેક્શનમાં જોઈ અને ટ્રૅક કરી શકો છો.',
-      addToCart:'🛒 કાર્ટમાં ઉમેરો', addToCart2:'ઉમેરો', payNowUpi:'UPI થી ઓનલાઇન ચુકવણી', subtotalLbl:'સબટોટલ', deliveryLbl:'ડિલિવરી', infoStripText:'ઓર્ડર સમય — નાસ્તો: આગલી રાત્રે 10 PM સુધી · લંચ: 9 AM સુધી · ડિનર: 3 PM સુધી', subPushLine:'રોજ ઓર્ડર કરો છો? સબ્સ્ક્રિપ્શન સેટ કરો', reorderBtn:'ફરી ઓર્ડર કરો', reorderDone:'આઇટમ તમારા કાર્ટમાં ઉમેરાયા', reorderNoSlot:'આ મીલ આગામી 3 દિવસ ઉપલબ્ધ નથી', lpTagline:'રોજ તાજું, ઘર જેવું ભોજન — સીધું તમારા ડોરસ્ટેપ સુધી.', lpOrderNow:'ઓર્ડર કરો', lpTodays:'આજના મીલ', lpOpen:'ઉપલબ્ધ', lpClosed:'બંધ', lpWhy:'Flying Birds જ કેમ', lpU1t:'રોજ તાજા બેચ', lpU1s:'દરરોજ નાના બેચમાં બને છે — ક્યારેય સ્ટોર કે ફ્રોઝન નહીં.', lpU2t:'ઘર જેવી સામગ્રી', lpU2s:'તાજા દળેલા મસાલા — કોઈ પેકેટ મિક્સ નહીં.', lpU3t:'સુરક્ષિત પેકેજિંગ', lpU3s:'દરેક મીલ સર્ટિફાઇડ ફૂડ-ગ્રેડ કન્ટેનરમાં.', lpSubT:'ડેઇલી ટિફિન સબ્સ્ક્રિપ્શન', lpSubS:'એક વાર સેટ કરો — ટિફિન રોજ આપોઆપ આવશે.', lpHow:'કેવી રીતે કામ કરે છે', lpH1:'મીલ પસંદ કરો અને કસ્ટમાઇઝ કરો', lpH2:'ડિલિવરી તારીખ અને સમય પસંદ કરો', lpH3:'ઓનલાઇન અથવા ડિલિવરી પર ચૂકવો', lpPosT:'આ ફટાફટ-ડિલિવરી એપ નથી', lpPosS:'આ તમારું રોજનું કિચન છે — planned, તાજું અને હંમેશા સમયસર.', lpPos1:'Fixed time slots પર ડિલિવરી — 10-મિનિટવાળી રેસ નહીં.', lpPos2:'હલકું, પોષણભર્યું ઘર જેવું ભોજન — રેસ્ટોરન્ટનું ભારે તેલ-મસાલા નહીં.', lpPos3:'સીધા fixed ભાવ — ના surge, ના hidden કે platform charges.', lpPos4:'રોજ એક જ ભરોસાપાત્ર કિચન — દરેક ટિફિનમાં એ જ અપનાપણ.', navMenuShort:'મેનૂ', navProfileShort:'પ્રોફાઇલ', pfTitle:'👤 મારી પ્રોફાઇલ', pfAddr:'સેવ કરેલું સરનામું', pfFlatLbl:'ફ્લેટ / બ્લોક નં.', pfSave:'સરનામું સેવ કરો', addrSaved:'સરનામું સેવ થયું', pfQuick:'ક્વિક લિંક', pfLang:'ભાષા', payWithUpiBtn:'ચુકવણી કરો', orScan:'અથવા QR કોડ સ્કૅન કરો', upiPayNote:'🔒 UPI થી સુરક્ષિત ચુકવણી. રકમ પહેલેથી ભરેલી છે — બસ તમારી UPI એપમાં અપ્રૂવ કરો.', copied:'UPI ID કૉપિ થઈ', updateCart:'✓ કાર્ટ અપડેટ કરો', addedToCart:'કાર્ટમાં ઉમેરાયું', customizable:'કસ્ટમાઇઝેબલ', chooseSize:'સાઇઝ પસંદ કરો', sizeRequired:'જરૂરી · કોઈ 1 પસંદ કરો', addOns:'એડ-ઓન', dahiShort:'દહીં', extraSabziShort:'એક્સ્ટ્રા શાક', freshCookedDesc:'રોજ નાના બેચમાં તાજું બને છે — ક્યારેય સ્ટોર કે ફ્રોઝન નહીં.', selectSabzi:'શાક પસંદ કરો', rotiType:'રોટી પ્રકાર', plain:'પ્લેન', butter:'બટર', deliveryTime:'⏰ ડિલિવરી સમય', tiffinType:'🍱 તમારું ટિફિન પસંદ કરો', miniTiffin:'મિની ટિફિન', fullTiffin:'ફુલ ટિફિન',
+      placeOrder:'📤 ઓર્ડર કરો', successTitle:'ઓર્ડર કન્ફર્મ થયો', promoHave:'કૂપન કોડ છે? અહીં દાખલ કરો', promoApply:'લાગુ કરો', promoApplied:'લાગુ થયો', discountLbl:'ડિસ્કાઉન્ટ', promoFirstDateNote:'(પ્રથમ ડિલિવરી તારીખ પર લાગુ)', promoEditNote:'ડિસ્કાઉન્ટવાળા ઓર્ડર એડિટ થઈ શકતા નથી — કૅન્સલ કરીને નવો ઓર્ડર કરો.', promoUseAtCheckout:'કાર્ટમાં કોડ પર ટૅપ કરીને લાગુ કરો', promoNewTag:'નવા ગ્રાહકો', policyTitle:'કૅન્સલેશન અને રિફંડ નીતિ', policyBody:'• ઓર્ડર ડિલિવરીની આગલી રાત્રે 10:00 PM સુધી કૅન્સલ થઈ શકે છે. તે પછી કરેલા ઓર્ડર, ઓર્ડર કર્યાની 30 મિનિટમાં કૅન્સલ થઈ શકે છે. ઓર્ડર એડિટ થઈ શકતો નથી — કૅન્સલ કરીને નવો ઓર્ડર કરો.<br>• જો તમે UPI થી ઓનલાઇન ચુકવણી કરી હોય અને ઓર્ડર કૅન્સલ થાય — ભલે તમે માન્ય સમયમાં કર્યો હોય કે અમે કોઈ કારણસર — પૂરી રકમ 24 કલાકમાં એ જ UPI ખાતામાં રિફંડ થાય છે.<br>• કૂપન ડિસ્કાઉન્ટવાળા ઓર્ડર એડિટ થઈ શકતા નથી; કૃપા કરીને કૅન્સલ કરીને નવો ઓર્ડર કરો.<br>• ભોજનમાં કોઈ સમસ્યા? ડિલિવરીના 2 કલાકમાં ફોટા સાથે WhatsApp કરો — અમે રિપ્લેસમેન્ટ કે પૂરો રિફંડ આપીશું.<br>• સપોર્ટ: 📞 +91 99249 37939 (WhatsApp ઉપલબ્ધ).', waFallback:'ઓર્ડર WhatsApp પર શેર કરો (optional) →', newOrder:'નવો ઓર્ડર કરો', trackOrderBtn:'ઓર્ડર ટ્રૅક કરો', successConfirmNote:'તમારો ઓર્ડર કન્ફર્મ થઈ ગયો છે. તમે તેને ગમે ત્યારે My Orders સેક્શનમાં જોઈ અને ટ્રૅક કરી શકો છો.',
+      addToCart:'🛒 કાર્ટમાં ઉમેરો', addToCart2:'ઉમેરો', payNowUpi:'ઓનલાઇન ચુકવણી', payRefLbl:'પેમેન્ટ રેફરન્સ', scanToPay:'કોઈપણ UPI એપથી QR સ્કૅન કરો', copyId:'કૉપિ', pleaseWait:'એક ક્ષણ…', cancelWindowOver:'આ ઓર્ડરની કેન્સલેશન વિન્ડો બંધ થઈ ગઈ છે. કોઈપણ મદદ માટે કિચનનો સંપર્ક કરો.', limitTitle:'એક મીલનું એક ટિફિન', limitBody:'દરેક ગ્રાહક એક દિવસમાં 1 નાસ્તો, 1 લંચ અને 1 ડિનર ઓર્ડર કરી શકે છે. વધુ જથ્થા માટે કૃપા કરીને કિચનનો સંપર્ક કરો — અમે ખુશીથી ગોઠવી આપીશું.', limitCta:'કિચનનો સંપર્ક કરો', limitClose:'સમજાયું', subtotalLbl:'સબટોટલ', deliveryLbl:'ડિલિવરી', infoStripText:'ઓર્ડર સમય — નાસ્તો: આગલી રાત્રે 10 PM સુધી · લંચ: 9 AM સુધી · ડિનર: 3 PM સુધી', subPushLine:'રોજ ઓર્ડર કરો છો? સબ્સ્ક્રિપ્શન સેટ કરો', reorderBtn:'ફરી ઓર્ડર કરો', reorderDone:'આઇટમ તમારા કાર્ટમાં ઉમેરાયા', reorderNoSlot:'આ મીલ આગામી 3 દિવસ ઉપલબ્ધ નથી', lpTagline:'રોજ તાજું, ઘર જેવું ભોજન — સીધું તમારા ડોરસ્ટેપ સુધી.', lpOrderNow:'ઓર્ડર કરો', lpTodays:'આજના મીલ', lpOpen:'ઉપલબ્ધ', lpClosed:'બંધ', lpWhy:'Flying Birds જ કેમ', lpU1t:'રોજ તાજા બેચ', lpU1s:'દરરોજ નાના બેચમાં બને છે — ક્યારેય સ્ટોર કે ફ્રોઝન નહીં.', lpU2t:'ઘર જેવી સામગ્રી', lpU2s:'તાજા દળેલા મસાલા — કોઈ પેકેટ મિક્સ નહીં.', lpU3t:'સુરક્ષિત પેકેજિંગ', lpU3s:'દરેક મીલ સર્ટિફાઇડ ફૂડ-ગ્રેડ કન્ટેનરમાં.', lpSubT:'ડેઇલી ટિફિન સબ્સ્ક્રિપ્શન', lpSubS:'એક વાર સેટ કરો — ટિફિન રોજ આપોઆપ આવશે.', lpHow:'કેવી રીતે કામ કરે છે', lpH1:'મીલ પસંદ કરો અને કસ્ટમાઇઝ કરો', lpH2:'ડિલિવરી તારીખ અને સમય પસંદ કરો', lpH3:'ઓનલાઇન અથવા ડિલિવરી પર ચૂકવો', pubLogin:'લૉગિન', pubBack:'← પાછા', dtypeQ:'ડિલિવરી ક્યાં જોઈએ?', modeTitle:'ટિફિન ક્યાં જોઈએ?', modeSub:'એક વાર પસંદ કરો — ગમે ત્યારે બદલી શકો છો.', modeChange:'બદલો', dtHome:'ઘર', dtHomeSub:'સોસાયટી / ફ્લેટ', dtOffice:'ઓફિસ', dtOfficeSub:'કંપની / એમ્પ્લોયી', companyLbl:'તમારી કંપની પસંદ કરો', companyHint:'કંપની લિસ્ટમાં નથી? કિચનનો સંપર્ક કરો — અમે ઉમેરી દઈશું.', empIdLbl:'એમ્પ્લોયી ID', errCompany:'કૃપા કરીને તમારી કંપની પસંદ કરો', errEmpId:'કૃપા કરીને એમ્પ્લોયી ID દાખલ કરો', pubCta:'મેનૂ જુઓ અને ઓર્ડર કરો', pubCutoffLine:'લંચ બંધ <b>9:00 AM</b> · ડિનર <b>3:00 PM</b>', pubHookQ:'શું હેલ્ધી ભોજન ખરેખર <em>20-મિનિટ ડિલિવરી</em>માં બની શકે?', pubHookA:'ના બની શકે. આટલું ઝડપી આવતું ભોજન <b>તમારા ઓર્ડર પહેલાં જ બનેલું હોય છે</b> — ફરી ગરમ કરીને મોકલાય છે.', cmpUs:'અમારું કિચન', cmpThem:'ડિલિવરી એપ્સ', cmpU1:'ઘરે દળેલા તાજા મસાલા', cmpT1:'બલ્ક પેકેટ મસાલા', cmpU2:'રોજ નવું તેલ', cmpT2:'એ જ તેલ આખો દિવસ', cmpU3:'રોજ મર્યાદિત ઓર્ડર', cmpT3:'અનલિમિટેડ, બલ્ક કુકિંગ', cmpU4:'એ જ રસોઇયો, એ જ સ્વાદ', cmpT4:'દર વખતે અલગ કિચન', cmpU5:'ફિક્સ ભાવ, કોઈ એક્સ્ટ્રા નહીં', cmpT5:'સર્જ + પ્લેટફોર્મ ફી', cmpU6:'હલકું, રોજનું ભોજન', cmpT6:'ભારે રેસ્ટોરન્ટ ફૂડ', cmpU7:'કિચન જે તમે જોઈ શકો', cmpT7:'કિચન જે ક્યારેય નહીં દેખાય', cmpQualT:'ક્વોલિટી, ક્વોન્ટિટી નહીં.', cmpQualS:'અમે રોજના ઓર્ડર મર્યાદિત રાખીએ છીએ અને માત્ર એક ટાઉનશિપ સર્વ કરીએ છીએ — જેથી દરેક ટિફિનને પૂરો સમય મળે.', cmpChip:'📍 માત્ર Godrej Garden City માટે', lpPosT:'આ ફટાફટ-ડિલિવરી એપ નથી', lpPosS:'આ તમારું રોજનું કિચન છે — planned, તાજું અને હંમેશા સમયસર.', lpPos1:'Fixed time slots પર ડિલિવરી — 10-મિનિટવાળી રેસ નહીં.', lpPos2:'હલકું, પોષણભર્યું ઘર જેવું ભોજન — રેસ્ટોરન્ટનું ભારે તેલ-મસાલા નહીં.', lpPos3:'સીધા fixed ભાવ — ના surge, ના hidden કે platform charges.', lpPos4:'રોજ એક જ ભરોસાપાત્ર કિચન — દરેક ટિફિનમાં એ જ અપનાપણ.', navMenuShort:'મેનૂ', navProfileShort:'પ્રોફાઇલ', pfTitle:'👤 મારી પ્રોફાઇલ', pfAddr:'સેવ કરેલું સરનામું', pfFlatLbl:'ફ્લેટ / બ્લોક નં.', pfSave:'સરનામું સેવ કરો', addrSaved:'સરનામું સેવ થયું', pfQuick:'ક્વિક લિંક', pfLang:'ભાષા', payWithUpiBtn:'ચુકવણી કરો', orScan:'અથવા QR કોડ સ્કૅન કરો', upiPayNote:'🔒 UPI થી સુરક્ષિત ચુકવણી. રકમ પહેલેથી ભરેલી છે — બસ તમારી UPI એપમાં અપ્રૂવ કરો.', copied:'UPI ID કૉપિ થઈ', updateCart:'✓ કાર્ટ અપડેટ કરો', addedToCart:'કાર્ટમાં ઉમેરાયું', customizable:'કસ્ટમાઇઝેબલ', chooseSize:'સાઇઝ પસંદ કરો', sizeRequired:'જરૂરી · કોઈ 1 પસંદ કરો', addOns:'એડ-ઓન', dahiShort:'દહીં', extraSabziShort:'એક્સ્ટ્રા શાક', freshCookedDesc:'રોજ નાના બેચમાં તાજું બને છે — ક્યારેય સ્ટોર કે ફ્રોઝન નહીં.', selectSabzi:'શાક પસંદ કરો', rotiType:'રોટી પ્રકાર', plain:'પ્લેન', butter:'બટર', deliveryTime:'⏰ ડિલિવરી સમય', tiffinType:'🍱 તમારું ટિફિન પસંદ કરો', miniTiffin:'મિની ટિફિન', fullTiffin:'ફુલ ટિફિન',
       extraRoti:'એક્સ્ટ્રા રોટી', addDahi:'દહીં ઉમેરો', extraSabzi:'એક્સ્ટ્રા શાક', howMany:'કેટલા ટિફિન?', unitPrice:'યુનિટ ભાવ',
       perTiffin:'/ ટિફિન', specialInstr:'📝 ખાસ સૂચનાઓ (વૈકલ્પિક)', notePh:'દા.ત. ઓછું તીખું, ડુંગળી વગર...',
       backApp:'← એપ પર પાછા', remove:'દૂર કરો', cancelOrder:'✖ રદ કરો', editOrder:'બદલો', editLoaded:'ઓર્ડર લોડ થયો — ફેરફાર કરીને ચેકઆઉટ કરો',
@@ -1302,6 +1521,8 @@
     box.innerHTML=slides.map((s,i)=>`<div class="about-slide" style="background:${ABOUT_BG[i%ABOUT_BG.length]}">
       <div class="as-icon">${s.icon}</div><h3>${s.title}</h3><p>${s.body}</p>
     </div>`).join('');
+    const ca=document.getElementById('ctAddr'); if(ca) ca.innerHTML=(CFG.township||'Godrej Garden City')+',<br>Ahmedabad';
+    const cr=document.getElementById('ctArea'); if(cr) cr.textContent=(CFG.societies||[]).join(' · ');
     const pb=document.getElementById('policyBox');
     if(pb) pb.innerHTML=`<div class="policy-t">📄 ${t('policyTitle')}</div><div class="policy-b">${t('policyBody')}</div>`;
   }
@@ -1452,8 +1673,28 @@
   function isLoggedIn(){ return !!(SESSION && SESSION.token && SESSION.phone); }
 
   // ═══════ HELPERS ═══════
-  function showToast(msg,type=''){ const el=document.getElementById('toast'); el.textContent=msg; el.className='toast '+type; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),3800); }
+  let __toastT=null;
+  function showToast(msg,type=''){
+    const el=document.getElementById('toast');
+    el.textContent=msg; el.className='toast '+type; el.classList.add('show');
+    if(__toastT) clearTimeout(__toastT);                    // purana timer cancel (warna naya toast jaldi gayab hota tha)
+    __toastT=setTimeout(()=>{ el.classList.remove('show'); __toastT=null; },3800);
+  }
   function onlyNumbers(el){ el.value=el.value.replace(/\D/g,''); }
+  // ═══ GLOBAL LOADING BAR — har request pe apne aap ═══
+  let __busy=0;
+  function busyStart(){ __busy++; const b=document.getElementById('topBar'); if(b) b.classList.add('on'); }
+  function busyEnd(){ __busy=Math.max(0,__busy-1); if(!__busy){ const b=document.getElementById('topBar'); if(b) b.classList.remove('on'); } }
+  (function(){
+    const of=window.fetch;
+    window.fetch=function(){ busyStart(); return of.apply(this,arguments).finally(busyEnd); };
+  })();
+  // Button ko turant "working" dikhao (double-tap bhi rukta hai)
+  function btnBusy(el, on, label){
+    if(!el)return;
+    if(on){ el.dataset.old=el.innerHTML; el.disabled=true; el.classList.add('is-busy'); el.innerHTML='<span class="spin"></span> '+(label||t('pleaseWait')); }
+    else { el.disabled=false; el.classList.remove('is-busy'); if(el.dataset.old!==undefined) el.innerHTML=el.dataset.old; }
+  }
   function apiPost(p){ return fetch(GOOGLE_SCRIPT_URL,{method:'POST',body:JSON.stringify(p)}).then(r=>r.json()); }
 
   function unitPrice(meal, cfg) {
@@ -1467,8 +1708,64 @@
     return p;
   }
   function builderUnitPrice(m) { return unitPrice({ meal:m, ...builder[m] }); }
+  let deliveryType='home';
+  // ── Delivery mode: order se PEHLE poocha jaata hai, phir poore app me wahi chalta hai ──
+  function modesAvailable(){ return { home:(CFG.homeEnabled!==false), office:(CFG.officeEnabled===true)&&((CFG.companies||[]).length>0) }; }
+  function openModeModal(dismissable){
+    const m=modesAvailable();
+    document.getElementById('mc-home').style.display=m.home?'block':'none';
+    document.getElementById('mc-office').style.display=m.office?'block':'none';
+    document.getElementById('mc-home').classList.toggle('on',deliveryType==='home');
+    document.getElementById('mc-office').classList.toggle('on',deliveryType==='office');
+    document.getElementById('modeClose').classList.toggle('hidden', !dismissable);
+    document.getElementById('modeModal').classList.remove('hidden');
+  }
+  function closeModeModal(){ document.getElementById('modeModal').classList.add('hidden'); }
+  function chooseMode(mode){
+    setDeliveryType(mode);
+    const a=storeGet('fbt_addr')||{}; a.deliveryType=mode; storeSet('fbt_addr',a);
+    closeModeModal(); renderModeChip();
+    if(cart.length && !document.getElementById('page2').classList.contains('hidden')) renderSummary();
+  }
+  function modeReady(){
+    const m=modesAvailable();
+    if(!m.office) return true;                 // sirf home => pooch-na zaroori nahi
+    if(!m.home) { setDeliveryType('office'); return true; }
+    const a=storeGet('fbt_addr')||{};
+    if(a.deliveryType==='home'||a.deliveryType==='office'){ setDeliveryType(a.deliveryType); return true; }
+    return false;                              // dono on hain aur user ne chuna nahi
+  }
+  function ensureMode(){ if(!modeReady()) openModeModal(false); }
+  function renderModeChip(){
+    const box=document.getElementById('modeChip'); if(!box)return;
+    const m=modesAvailable();
+    if(!(m.home&&m.office)){ box.innerHTML=''; return; }   // ek hi mode => chip ka matlab nahi
+    const a=storeGet('fbt_addr')||{};
+    const isOff=(deliveryType==='office');
+    const line=isOff ? ((a.company||'')+(a.empId?(' · '+a.empId):'')) : ((a.society||'')+(a.flatNo?(' · '+a.flatNo):''));
+    box.innerHTML=`<div class="mode-chip">
+      <span class="mch-i">${isOff?'🏢':'🏠'}</span>
+      <span class="mch-x"><span class="mch-t">${isOff?t('dtOffice'):t('dtHome')}</span><div class="mch-s">${line||t(isOff?'dtOfficeSub':'dtHomeSub')}</div></span>
+      <span class="mch-c" onclick="openModeModal(true)">${t('modeChange')}</span>
+    </div>`;
+  }
+  function companyByName(n){ return (CFG.companies||[]).find(c=>String(c.name).toLowerCase().trim()===String(n||'').toLowerCase().trim())||null; }
+  function setDeliveryType(mode){
+    deliveryType=(mode==='office')?'office':'home';
+    const ic=document.getElementById('ckModeIc'), ct=document.getElementById('ckModeT'), cs=document.getElementById('ckModeS');
+    if(ic){ ic.textContent=(deliveryType==='office')?'🏢':'🏠'; }
+    if(ct){ ct.textContent=(deliveryType==='office')?t('dtOffice'):t('dtHome'); }
+    if(cs){ cs.textContent=(deliveryType==='office')?t('dtOfficeSub'):t('dtHomeSub'); }
+    document.getElementById('homeFields').classList.toggle('hidden',deliveryType==='office');
+    document.getElementById('officeFields').classList.toggle('hidden',deliveryType!=='office');
+    if(!document.getElementById('page2').classList.contains('hidden')){ renderSummary(); const b=document.getElementById('barTotal2'); if(b) b.textContent='₹'+cartTotalDisplay(); }
+  }
   function deliveryFee(){
     if(!cart.length) return 0;
+    if(deliveryType==='office'){
+      const co=companyByName(document.getElementById('company')?document.getElementById('company').value:'');
+      return co ? (co.fee||CFG.deliveryNear||10) : (CFG.deliveryNear||10);
+    }
     const soc=(document.getElementById('society')?document.getElementById('society').value:'')||'';
     const far=(CFG.farSocieties||[]).map(s=>String(s).toLowerCase().trim());
     return far.indexOf(String(soc).toLowerCase().trim())>=0 ? (CFG.deliveryFar||20) : (CFG.deliveryNear||10);
@@ -1479,6 +1776,7 @@
   function cartTotal(){ const st=cartSubtotal(); return st>0 ? st + deliveryFeeTotal() : 0; }
   // ── PROMO / COUPON (client = preview only; asli discount SERVER decide karta hai) ──
   let appliedPromo=null;
+  try{ const __p=storeGet('fbt_promo'); if(__p&&__p.code&&cart.length) appliedPromo=__p; }catch(e){}
   function firstDateTotal(){
     if(!cart.length) return 0;
     const d0=[...new Set(cart.map(x=>x.deliveryDate))].sort()[0];
@@ -1490,11 +1788,13 @@
     const inp=document.getElementById('promoCode'); const code=(inp?inp.value:'').trim();
     if(!code){ showToast('⚠️ '+t('promoHave'),'warning'); return; }
     if(!cart.length){ showToast('⚠️ '+t('cartEmpty'),'warning'); return; }
+    const pb=document.getElementById('promoApplyBtn'); btnBusy(pb,true);
     apiPost({action:'checkpromo',token:SESSION.token,code:code,amount:firstDateTotal()}).then(j=>{
+      btnBusy(pb,false);
       if(j.status==='success'){ appliedPromo={code:j.code,discount:j.discount,label:j.label||''}; renderCart(); renderSummary&&!document.getElementById('page2').classList.contains('hidden')&&renderSummary(); showToast('🎟️ '+j.code+' '+t('promoApplied')+' — −₹'+j.discount,'success'); }
       else if(j.status==='invalid_session'){ forceLogout(); }
       else showToast('❌ '+(j.message||'Invalid coupon')+(feeDates()>1?(' '+t('promoFirstDateNote')):''),'error');
-    }).catch(()=>showToast('❌ Network error.','error'));
+    }).catch(()=>showToast(t('errNetwork'),'error'));
   }
   function pickPromo(code){ const i=document.getElementById('promoCode'); if(i){ i.value=code; applyPromo(); } }
   function removePromo(){ appliedPromo=null; renderCart(); if(!document.getElementById('page2').classList.contains('hidden')){ renderSummary(); document.getElementById('barTotal2').textContent='₹'+cartTotalDisplay(); } }
@@ -1517,7 +1817,7 @@
     
     else{ showLanding(); }
   }
-  function saveCart(){ try{ storeSet('fbt_cart', cart); }catch(e){} }
+  function saveCart(){ try{ storeSet('fbt_cart', cart); storeSet('fbt_promo', appliedPromo||null); }catch(e){} }
   function updateCartBadge(){
     saveCart();
     const n=cart.reduce((s,it)=>s+it.qty,0);
@@ -1530,10 +1830,17 @@
   }
 
   // ═══════ VIEW NAV ═══════
-  function showView(id){ ['authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel'].forEach(v=>document.getElementById(v).classList.toggle('hidden', v!==id)); window.scrollTo(0,0); updateBottomNav(id); }
+  function closeAllPopups(){
+    ['mealSheet','orderModal','limitModal','modeModal'].forEach(x=>{ const e=document.getElementById(x); if(e) e.classList.add('hidden'); });
+  }
+  function showView(id){
+    closeAllPopups();                                       // page badle to koi popup upar chipka na rahe
+    try{ if(['pubView','authPage','homeView','page1','cartView','ordersView','subView','aboutView','profileView','adminPanel'].indexOf(id)>=0) storeSet('fbt_view',id); }catch(e){}
+    ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel'].forEach(v=>document.getElementById(v).classList.toggle('hidden', v!==id)); window.scrollTo(0,0); updateBottomNav(id); }
   // Bottom nav shows only on the 4 main customer screens
   const BN_SCREENS={ homeView:'land', page1:'menu', cartView:'cart', ordersView:'orders', profileView:'profile' };
   function updateBottomNav(viewId){
+    const ps=document.querySelector('.pub-sticky'); if(ps) ps.style.display = (viewId==='pubView')?'flex':'none';
     const bn=document.getElementById('bottomNav'); if(!bn)return;
     const show=Object.keys(BN_SCREENS).indexOf(viewId)>=0 && isLoggedIn();
     bn.classList.toggle('hidden', !show);
@@ -1551,10 +1858,18 @@
     else if(where==='profile') showProfilePage();
   }
   function showLanding(){ showView('homeView'); renderHome(); }
+  function showPublic(){
+    showView('pubView');
+    const ls=document.getElementById('langSelPub'), src=document.getElementById('langSel');
+    if(ls&&src&&!ls.options.length) ls.innerHTML=src.innerHTML;
+    if(ls) ls.value=LANG;
+    document.querySelectorAll('.fssai-line').forEach(e=>{ e.textContent = CFG.fssai ? ('FSSAI Reg. No: '+CFG.fssai) : ''; });
+  }
   function showProfilePage(){ showView('profileView'); renderProfile(); }
   function goMenuMeal(m){ showHomePage(); const av=mealsAvail(dateOffset); if(av[m]&&av[m].ok) selectMeal(m); }
   function renderHome(){
     const hv=document.getElementById('homeView'); if(!hv)return;
+    renderModeChip();
     const ls=document.getElementById('langSelHome'); const src=document.getElementById('langSel');
     if(ls&&src&&!ls.options.length){ ls.innerHTML=src.innerHTML; } if(ls) ls.value=LANG;
     const hp=document.getElementById('homePromo');
@@ -1604,7 +1919,19 @@
     else showAuthMode('signin');
     initGoogleButton();
   }
-  function enterApp(){ document.getElementById('profileName').textContent='👤 '+(SESSION.name||''); showLanding(); refreshAvailability(); renderCart(); loadPublicStats(selDateStr()); }
+  function enterApp(restore){
+    document.getElementById('profileName').textContent='👤 '+(SESSION.name||'');
+    const v=restore?storeGet('fbt_view'):null;     // showLanding se PEHLE padho (warna overwrite)
+    showLanding(); ensureMode(); refreshAvailability(); renderCart(); loadPublicStats(selDateStr());
+    if(restore){                                   // refresh ke baad wahi page wapas kholo
+      if(v==='page1') showHomePage();
+      else if(v==='cartView') showCartPage();
+      else if(v==='ordersView') showOrdersPage();
+      else if(v==='subView') showSubPage();
+      else if(v==='aboutView') showAboutPage();
+      else if(v==='profileView') showProfilePage();
+    }
+  }
 
   function showAuthMode(mode){
     authMode=mode;
@@ -1629,8 +1956,8 @@
       btn.disabled=false;
       if(j.status!=='success'){ showToast('❌ '+(j.message||'Sign in failed'),'error'); return; }
       SESSION={token:j.token,name:j.name,phone:j.phone}; storeSet('fbt_session',SESSION);
-      showToast('🎉 Welcome, '+j.name+'!','success'); enterApp();
-    }).catch(()=>{ btn.disabled=false; showToast('❌ Network error.','error'); });
+      showToast(t('welcomeUser')+' '+j.name+'!','success'); enterApp();
+    }).catch(()=>{ btn.disabled=false; showToast(t('errNetwork'),'error'); });
   }
 
   function doEmailSignUp(){
@@ -1649,8 +1976,8 @@
       btn.disabled=false;
       if(j.status!=='success'){ showToast('❌ '+(j.message||'Sign up failed'),'error'); return; }
       SESSION={token:j.token,name:j.name,phone:j.phone}; storeSet('fbt_session',SESSION);
-      showToast('🎉 Welcome, '+j.name+'!','success'); enterApp();
-    }).catch(()=>{ btn.disabled=false; showToast('❌ Network error.','error'); });
+      showToast(t('welcomeUser')+' '+j.name+'!','success'); enterApp();
+    }).catch(()=>{ btn.disabled=false; showToast(t('errNetwork'),'error'); });
   }
 
   function doForgotPassword(){
@@ -1662,7 +1989,7 @@
       btn.disabled=false; btn.textContent=t('sendResetBtn');
       showToast('📧 '+t('resetLinkSent'),'success');
       showAuthMode('signin');
-    }).catch(()=>{ btn.disabled=false; btn.textContent=t('sendResetBtn'); showToast('❌ Network error.','error'); });
+    }).catch(()=>{ btn.disabled=false; btn.textContent=t('sendResetBtn'); showToast(t('errNetwork'),'error'); });
   }
 
   function doResetPassword(){
@@ -1672,7 +1999,7 @@
     if(pw.length<6){ fieldErr('rpPassword',true); ok=false; } else fieldErr('rpPassword',false);
     if(cpw!==pw || !cpw){ fieldErr('rpConfirm',true); ok=false; } else fieldErr('rpConfirm',false);
     if(!ok) return;
-    if(!resetToken){ showToast('❌ This reset link is invalid or has expired.','error'); return; }
+    if(!resetToken){ showToast(t('resetLinkBad'),'error'); return; }
     const btn=document.getElementById('rpBtn'); btn.disabled=true;
     apiPost({ action:'resetPassword', token:resetToken, password:pw }).then(j=>{
       btn.disabled=false;
@@ -1680,7 +2007,7 @@
       showToast('✅ '+t('passwordResetDone'),'success');
       history.replaceState(null,'',location.pathname); // strip ?reset= from URL
       showAuthMode('signin');
-    }).catch(()=>{ btn.disabled=false; showToast('❌ Network error.','error'); });
+    }).catch(()=>{ btn.disabled=false; showToast(t('errNetwork'),'error'); });
   }
 
   function initGoogleButton(){
@@ -1701,7 +2028,7 @@
     apiPost({ action:'googleLogin', credential: googleCredential, phone: readAuthPhone() }).then(j=>{
       if(j.status==='success'){
         SESSION={token:j.token,name:j.name,phone:j.phone}; storeSet('fbt_session',SESSION);
-        showToast('🎉 Welcome, '+j.name+'!','success'); enterApp(); return;
+        showToast(t('welcomeUser')+' '+j.name+'!','success'); enterApp(); return;
       }
       if(j.status==='need_phone'){
         document.getElementById('googlePhoneBox').classList.remove('hidden');
@@ -1710,7 +2037,7 @@
         return;
       }
       showToast('❌ '+(j.message||'Google sign-in failed'),'error');
-    }).catch(()=>{ showToast('❌ Network error.','error'); });
+    }).catch(()=>{ showToast(t('errNetwork'),'error'); });
   }
 
   function finishGoogleLogin(){
@@ -1724,12 +2051,12 @@
       if(j.status!=='success'){ showToast('❌ '+(j.message||'Login failed'),'error'); return; }
       document.getElementById('googlePhoneBox').classList.add('hidden');
       SESSION={token:j.token,name:j.name,phone:j.phone}; storeSet('fbt_session',SESSION);
-      showToast('🎉 Welcome, '+j.name+'!','success'); enterApp();
-    }).catch(()=>{ btn.textContent=t('completeSignup'); btn.disabled=false; showToast('❌ Network error.','error'); });
+      showToast(t('welcomeUser')+' '+j.name+'!','success'); enterApp();
+    }).catch(()=>{ btn.textContent=t('completeSignup'); btn.disabled=false; showToast(t('errNetwork'),'error'); });
   }
 
-  function logout(){ if(SESSION&&SESSION.token) apiPost({action:'logout',token:SESSION.token}).catch(()=>{}); SESSION=null; storeDel('fbt_session'); cart=[]; showAuth(); }
-  function forceLogout(){ SESSION=null; storeDel('fbt_session'); showToast('⚠️ Session expired — please log in again.','warning'); showAuth(); }
+  function logout(){ if(SESSION&&SESSION.token) apiPost({action:'logout',token:SESSION.token}).catch(()=>{}); SESSION=null; storeDel('fbt_session'); cart=[]; saveCart(); showPublic(); }
+  function forceLogout(){ SESSION=null; storeDel('fbt_session'); showToast(t('sessionExpired'),'warning'); showAuth(); }
 
   // ═══════ DATE ═══════
   function renderDateSelector(){
@@ -1914,7 +2241,17 @@
   function shSet(k,v){ builder[sheetMeal][k]=v; if(k==='timeSlot')saveTimePref(sheetMeal,v); renderMealSheet(); }
   function shSetRoti(butter){ builder[sheetMeal].butterRoti=butter; renderMealSheet(); }
   function shToggleExtraRoti(){ const b=builder[sheetMeal]; b.extraRoti = b.extraRoti>0?0:1; renderMealSheet(); }
-  function shQtyChange(dir){ let v=builder[sheetMeal].qty+dir; v=Math.min(5,Math.max(1,v)); builder[sheetMeal].qty=v; document.getElementById('shQty').textContent=v; updateSheetAddBtn(); }
+  function shQtyChange(dir){
+    if(dir>0){ showLimitPopup(); return; }   // 1:1:1 rule — max 1 per meal per day
+    builder[sheetMeal].qty=1; document.getElementById('shQty').textContent=1; updateSheetAddBtn();
+  }
+  function showLimitPopup(){ document.getElementById('limitModal').classList.remove('hidden'); }
+  function closeLimitPopup(){ document.getElementById('limitModal').classList.add('hidden'); }
+  function contactKitchen(){
+    const msg=encodeURIComponent('Namaste, mujhe ek din me ek se zyada tiffin chahiye. Kripya help karein.');
+    window.open('https://wa.me/91'+OWNER_WHATSAPP.replace(/^91/,'')+'?text='+msg,'_blank');
+    closeLimitPopup();
+  }
   function shAddToCart(){
     const m=sheetMeal, b=builder[m];
     if(m!=='breakfast' && !b.sabzi){ showToast('⚠️ '+t('selectSabzi'),'warning'); return; }
@@ -1964,7 +2301,7 @@
     const pd=promoDiscountNow();
     html+=`<div class="promo-box">${appliedPromo
       ?`<div class="promo-applied"><span>🎟️ ${appliedPromo.code} <b>−₹${pd}</b>${feeDates()>1?`<small>${t('promoFirstDateNote')}</small>`:''}</span><span class="pr-x" onclick="removePromo()">✕</span></div>`
-      :`${(CFG.promos&&CFG.promos.length)?`<div class="promo-chips">${CFG.promos.map(pp=>`<span class="promo-chip" onclick="pickPromo('${pp.code}')">🎟️ ${pp.code} · ${pp.label}${pp.firstOnly?' · 🆕':''}</span>`).join('')}</div>`:''}<div class="promo-input"><input id="promoCode" placeholder="${t('promoHave')}" onkeydown="if(event.key==='Enter')applyPromo()"><button onclick="applyPromo()">${t('promoApply')}</button></div>`}</div>`;
+      :`${(CFG.promos&&CFG.promos.length)?`<div class="promo-chips">${CFG.promos.map(pp=>`<span class="promo-chip" onclick="pickPromo('${pp.code}')">🎟️ ${pp.code} · ${pp.label}${pp.firstOnly?' · 🆕':''}</span>`).join('')}</div>`:''}<div class="promo-input"><input id="promoCode" placeholder="${t('promoHave')}" onkeydown="if(event.key==='Enter')applyPromo()"><button id="promoApplyBtn" onclick="applyPromo()">${t('promoApply')}</button></div>`}</div>`;
     html+=`<div class="cart-break"><div class="cb-row"><span>${t('subtotalLbl')}</span><span>₹${cartSubtotal()}</span></div><div class="cb-row"><span>🛵 ${t('deliveryLbl')}${feeDates()>1?(' × '+feeDates()):''}</span><span>₹${deliveryFeeTotal()}</span></div>${appliedPromo?`<div class="cb-row" style="color:var(--ok);"><span>🎟️ ${t('discountLbl')} (${appliedPromo.code})</span><span>−₹${pd}</span></div>`:''}<div class="cb-row total"><span>${t('cartTotal')}</span><span>₹${cartTotalDisplay()}</span></div></div>`;
     box.innerHTML=html;
     if(cbt) cbt.textContent='₹'+cartTotalDisplay();
@@ -1993,7 +2330,14 @@
     if(c){ if(c.society){ document.getElementById('society').value=c.society; filled=true; } if(c.flatNo){ document.getElementById('flatNo').value=c.flatNo; filled=true; } }
     document.getElementById('savedNote').classList.toggle('show',filled);
   }
-  function saveAddr(d){ storeSet('fbt_addr',{society:d.society,flatNo:d.flatNo}); }
+  function saveAddr(d){
+    const a=storeGet('fbt_addr')||{};
+    const isOff=(d.deliveryType||deliveryType)==='office';
+    const out={ deliveryType:(d.deliveryType||deliveryType),
+      society: isOff?(a.society||''):(d.society||''), flatNo: isOff?(a.flatNo||''):(d.flatNo||''),
+      company: isOff?(d.society||d.company||''):(a.company||''), empId: isOff?(d.flatNo||d.empId||''):(a.empId||'') };
+    storeSet('fbt_addr',out);
+  }
 
   function renderSummary(){
     let html='', lastDate='';
@@ -2013,6 +2357,8 @@
   function clearErr(id,e){ document.getElementById(id).classList.remove('error'); document.getElementById(e).classList.remove('show'); }
   function validateSociety(){ const v=document.getElementById('society').value; v?setValid('society','err-society'):setError('society','err-society'); return !!v; }
   function validateFlat(){ const el=document.getElementById('flatNo'); let v=el.value.trim().toUpperCase().replace(/\s+/g,''); const m=v.match(/^([A-Z]{1,3})[-\/]?(\d{1,4})$/); if(m){ el.value=m[1]+'-'+m[2]; setValid('flatNo','err-flatNo'); return true; } setError('flatNo','err-flatNo'); return false; }
+  function validateCompany(){ const v=document.getElementById('company').value; v?setValid('company','err-company'):setError('company','err-company'); return !!v; }
+  function validateEmpId(){ const el=document.getElementById('empId'); const v=el.value.trim().toUpperCase(); el.value=v; const ok=v.length>=2; ok?setValid('empId','err-empId'):setError('empId','err-empId'); return ok; }
   function validateName(){ const v=document.getElementById('customerName').value.trim(); const ok=v.length>=2 && /^[a-zA-Z\s]+$/.test(v); ok?setValid('customerName','err-name'):setError('customerName','err-name'); return ok; }
   function setPay(p){ payment=p; document.getElementById('pay-COD').classList.toggle('sel',p==='COD'); document.getElementById('pay-UPI').classList.toggle('sel',p==='UPI'); }
 
@@ -2033,9 +2379,14 @@
   // ═══════ PLACE ORDER (cart → per-date orders) ═══════
   function placeOrder(){
     if(!isLoggedIn()){ showAuth(); return; }
-    const okS=validateSociety(),okF=validateFlat(),okN=validateName();
-    if(!okS||!okF||!okN){ showToast('⚠️ Please complete all required fields.','warning'); return; }
-    const addr={ society:document.getElementById('society').value, flatNo:document.getElementById('flatNo').value.trim(), name:document.getElementById('customerName').value.trim(), phone:SESSION.phone, note:document.getElementById('orderNote')?document.getElementById('orderNote').value.trim():'', payment:payment };
+    const okN=validateName();
+    const okLoc=(deliveryType==='office') ? (validateCompany() & validateEmpId()) : (validateSociety() & validateFlat());
+    if(!okLoc||!okN){ showToast(t('completeFields'),'warning'); return; }
+    const isOff=(deliveryType==='office');
+    const addr={ society: isOff?document.getElementById('company').value:document.getElementById('society').value,
+                 flatNo: isOff?document.getElementById('empId').value.trim():document.getElementById('flatNo').value.trim(),
+                 name:document.getElementById('customerName').value.trim(), phone:SESSION.phone,
+                 note:document.getElementById('orderNote')?document.getElementById('orderNote').value.trim():'', payment:payment };
     saveAddr(addr);
 
     const btn=document.getElementById('placeBtn'); btn.textContent='⏳ ...'; btn.disabled=true;
@@ -2045,7 +2396,7 @@
     const payloads=dates.map(dstr=>{
       const dItems=cart.filter(it=>it.deliveryDate===dstr);
       const p={ action:'order', token:SESSION.token, deliveryDate:dstr, deliveryLabel:dItems[0].deliveryLabel, day:dItems[0].day,
-        society:addr.society, flatNo:addr.flatNo, name:addr.name, note:addr.note, payment:addr.payment, scheme:CFG.township,
+        society:addr.society, flatNo:addr.flatNo, deliveryType:deliveryType, name:addr.name, note:addr.note, payment:addr.payment, scheme:CFG.township,
         editRow:(editingRow && dateWithOffsetStr && dItems[0].deliveryDate===dstr)?editingRow:undefined,
         items:dItems.map(it=>({meal:it.meal,tiffinType:it.tiffinType||'',qty:it.qty,sabzi:it.sabzi||'',butterRoti:!!it.butterRoti,extraRoti:it.extraRoti||0,dahi:!!it.dahi,extraSabzi:!!it.extraSabzi,timeSlot:it.timeSlot||''})) };
       if(appliedPromo && dstr===dates[0]){ p.couponCode=appliedPromo.code; p.applyCoupon='1'; }
@@ -2102,7 +2453,7 @@
         document.getElementById('successMsg').textContent=m;
         // Server-returned total (authoritative) — exactly jo charge hua
         const grandTotal=serverTotal;
-        cart=[]; editingRow=null; appliedPromo=null; saveCart();
+        cart=[]; editingRow=null; appliedPromo=null; saveCart(); payRef=makePayRef();
         document.getElementById('orderFormWrap').classList.add('hidden');
         document.getElementById('page2Bar').classList.add('hidden');
         document.getElementById('successCard').classList.remove('hidden');
@@ -2112,32 +2463,48 @@
       } else {
         btn.textContent=t('placeOrder'); btn.disabled=false;
         if(dup && !fail) showToast('⚠️ '+t('dupMsg'),'warning');
-        else showToast('❌ Order could not be placed. Please try again.','error');
+        else showToast(t('orderFailed'),'error');
       }
     })();
   }
 
   // ═══════ ONLINE UPI PAYMENT (Option A) ═══════
-  function upiDeepLink(amount){
+  let payRef='';
+  function makePayRef(){
+    const d=new Date(), p=(SESSION&&SESSION.phone)?String(SESSION.phone).slice(-4):'0000';
+    return 'FBT'+String(d.getDate()).padStart(2,'0')+String(d.getMonth()+1).padStart(2,'0')+p+String(Math.floor(Math.random()*90)+10);
+  }
+  function upiDeepLink(amount, scheme){
     const pa=encodeURIComponent(CFG.upiId||'');
     const pn=encodeURIComponent(CFG.upiName||'Flying Birds Tiffin');
-    const am=encodeURIComponent(String(amount));
-    const tn=encodeURIComponent('Flying Birds Tiffin order');
-    return `upi://pay?pa=${pa}&pn=${pn}&am=${am}&cu=INR&tn=${tn}`;
+    const am=encodeURIComponent(Number(amount).toFixed(2));   // 2-decimal — strict PSPs ke liye
+    const tn=encodeURIComponent('Tiffin order '+payRef);      // per-order note → bank statement me match
+    const tr=encodeURIComponent(payRef);                      // unique transaction ref
+    const q=`pa=${pa}&pn=${pn}&am=${am}&cu=INR&tn=${tn}&tr=${tr}`;
+    if(scheme==='gpay')   return 'tez://upi/pay?'+q;
+    if(scheme==='paytm')  return 'paytmmp://pay?'+q;
+    if(scheme==='phonepe')return 'phonepe://pay?'+q;
+    return 'upi://pay?'+q;
   }
   function renderUpiPay(amount){
     const box=document.getElementById('upiPayBox'); if(!box)return;
     if(!CFG.upiId || amount<=0){ box.classList.add('hidden'); box.innerHTML=''; return; }
+    if(!payRef) payRef=makePayRef();
     const link=upiDeepLink(amount);
     const qr='https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(link);
     box.classList.remove('hidden');
     box.innerHTML=`
-      <div class="upb-title">💳 ${t('payNowUpi')}</div>
+      <div class="upb-title">${t('payNowUpi')}</div>
       <div class="upb-amt">₹${amount}</div>
-      <a class="upb-btn" href="${link}">${t('payWithUpiBtn')}</a>
-      <div class="upb-or">${t('orScan')}</div>
       <div class="upb-qr"><img src="${qr}" alt="UPI QR" onerror="this.parentElement.style.display='none'"></div>
-      <div class="upb-vpa" onclick="copyUpiId()">${CFG.upiId} 📋</div>
+      <div class="upb-scan">${t('scanToPay')}</div>
+      <div class="upb-vpa" onclick="copyUpiId()">${CFG.upiId}<span>${t('copyId')}</span></div>
+      <div class="upb-apps">
+        <a href="${upiDeepLink(amount,'gpay')}">GPay</a>
+        <a href="${upiDeepLink(amount,'paytm')}">Paytm</a>
+        <a href="${upiDeepLink(amount,'phonepe')}">PhonePe</a>
+      </div>
+      <div class="upb-ref">${t('payRefLbl')}: <b>${payRef}</b></div>
       <div class="upb-note">${t('upiPayNote')}</div>`;
   }
   function copyUpiId(){ try{ navigator.clipboard.writeText(CFG.upiId); showToast('📋 '+t('copied'),'success'); }catch(e){} }
@@ -2252,12 +2619,12 @@
     apiPost({ action:'saveSub', token:SESSION.token, name:SESSION.name, society:subState.society, flat:subState.flat.trim(),
       meals:subState.meals, days:subState.days, time:subState.time, startDate:subState.startDate, endDate:subState.endDate, payment:subState.payment })
       .then(j=>{ if(j.status==='success'){ showToast('✅ '+t('subSaved'),'success'); loadSub(); } else if(j.status==='invalid_session')forceLogout(); else showToast('❌ '+(j.message||'Error'),'error'); })
-      .catch(()=>showToast('❌ Network error.','error'));
+      .catch(()=>showToast(t('errNetwork'),'error'));
   }
   function doCancelSub(){ if(!confirm(t('subCancelConfirm')))return;
-    apiPost({action:'cancelSub',token:SESSION.token}).then(j=>{ if(j.status==='success'){ showToast('✅ '+t('subCancelled'),'success'); loadSub(); } else if(j.status==='invalid_session')forceLogout(); else showToast('❌ '+(j.message||'Error'),'error'); }).catch(()=>showToast('❌ Network error.','error')); }
+    apiPost({action:'cancelSub',token:SESSION.token}).then(j=>{ if(j.status==='success'){ showToast('✅ '+t('subCancelled'),'success'); loadSub(); } else if(j.status==='invalid_session')forceLogout(); else showToast('❌ '+(j.message||'Error'),'error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
   function doSkip(){ const d=document.getElementById('subSkipDate').value; if(!d){ showToast('⚠️ '+t('subPickSkipDate'),'warning'); return; }
-    apiPost({action:'skipSub',token:SESSION.token,date:d}).then(j=>{ if(j.status==='success'){ showToast(j.skipped?('⏭️ '+t('subSkipDone')):('↩️ '+t('subUnskipDone')),'success'); loadSub(); } else if(j.status==='invalid_session')forceLogout(); else showToast('❌ '+(j.message||'Error'),'error'); }).catch(()=>showToast('❌ Network error.','error')); }
+    apiPost({action:'skipSub',token:SESSION.token,date:d}).then(j=>{ if(j.status==='success'){ showToast(j.skipped?('⏭️ '+t('subSkipDone')):('↩️ '+t('subUnskipDone')),'success'); loadSub(); } else if(j.status==='invalid_session')forceLogout(); else showToast('❌ '+(j.message||'Error'),'error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
 
   // ═══════ MY ORDERS ═══════
   function orderMealsText(o){ const tf=v=>v?(' 🍱 '+v):''; const sz=v=>v&&String(v).trim()?v:'Chef\'s choice'; const p=[]; if(Number(o.breakfastQty))p.push('🌅 '+mealTitle('breakfast')+' ×'+o.breakfastQty+(o.breakfastTimeSlot?' · 🕐 '+o.breakfastTimeSlot:'')); if(Number(o.lunchQty))p.push('☀️ '+sz(o.lunchSabzi)+' ×'+o.lunchQty+tf(o.lunchTiffin)+(o.lunchRoti?' ('+o.lunchRoti+')':'')+(o.lunchAddons&&o.lunchAddons!=='None'?' · '+o.lunchAddons:'')+(o.lunchTimeSlot?' · 🕐 '+o.lunchTimeSlot:'')); if(Number(o.dinnerQty))p.push('🌙 '+sz(o.dinnerSabzi)+' ×'+o.dinnerQty+tf(o.dinnerTiffin)+(o.dinnerRoti?' ('+o.dinnerRoti+')':'')+(o.dinnerAddons&&o.dinnerAddons!=='None'?' · '+o.dinnerAddons:'')+(o.dinnerTimeSlot?' · 🕐 '+o.dinnerTimeSlot:'')); return p.join('<br>'); }
@@ -2284,7 +2651,7 @@
         <span class="ord-pill" style="${pillColor(o.status)}">${STATUS_LABEL[o.status]||o.status}</span>${o.paymentStatus==='Paid'?(o.status==='Cancelled'?'<span class="ord-pill" style="background:var(--dangerbg);color:var(--danger);margin-left:4px;">REFUND DUE</span>':'<span class="ord-pill" style="background:var(--okbg);color:var(--ok);margin-left:4px;">PAID</span>'):''}
       </div>
       <div class="or-right"><div class="or-total">${o.total}</div></div>
-      <button class="or-re" title="Reorder" onclick="event.stopPropagation();reorderFromOrder(${i})">🔁</button><span class="or-chev">›</span>
+      ${(myOrdersIsHist||o.status==='Delivered'||o.status==='Cancelled')?`<button class="or-re" title="Reorder" onclick="event.stopPropagation();reorderFromOrder(${i})">🔁</button>`:''}<span class="or-chev">›</span>
     </div>`).join('');
   }
   function reorderFromOrder(i){
@@ -2299,7 +2666,7 @@
       const vs=variantsFor(m);
       const str=String(o[m+'Tiffin']||'');
       const v=vs.find(x=>str.indexOf(x.name)>=0)||vs[0];
-      const qty=Math.min(5,Math.max(1,parseInt(o[m+'Qty'],10)||1));
+      const qty=1;
       const slotRaw=String(o[m+'TimeSlot']||'').split(' / ')[0];
       const slot=TIME_SLOTS[m].includes(slotRaw)?slotRaw:defaultTimeSlot(m);
       const item={ id:selDateStr()+'|'+m+'|'+v.id, deliveryDate:selDateStr(), deliveryLabel:fmtLabel(selDate()), day:dk.charAt(0).toUpperCase()+dk.slice(1), meal:m, qty:qty, timeSlot:slot, tiffinType:v.id, variantName:v.name };
@@ -2343,15 +2710,17 @@
     if(o.note&&o.note!=='None') body+=`<div class="om-addr">📝 ${o.note}</div>`;
     body+=`<div class="om-total"><span class="t-lbl">💳 ${o.payment}${o.paymentStatus==='Paid'?(o.status==='Cancelled'?' · ⚠️ REFUND DUE':' · ✓ PAID'):''} · Total</span><span class="t-amt">${o.total}</span></div>`;
     const win=!myOrdersIsHist&&(o.status==='Pending'||o.status==='Preparing')&&canCancel(o);
-    const canEditO=win&&!o.promo;
-    if(o.promo) body+=`<div class="om-addr" style="color:var(--ok);">🎟️ <b>${o.promo}</b>${win?('<br><span style="color:var(--muted);font-size:11px;">'+t('promoEditNote')+'</span>'):''}</div>`;
+    if(o.promo) body+=`<div class="om-addr" style="color:var(--ok);">🎟️ <b>${o.promo}</b></div>`;
     if(win){
       body+=`<div class="om-status-btns">
-        ${canEditO?`<button style="border-color:var(--accent);background:var(--accent-soft);color:var(--accent-dark);" onclick='closeOrderModal();editMyOrder(${JSON.stringify(o)})'>✏️ ${t('editOrder')}</button>`:''}
-        <button style="border-color:var(--danger);background:var(--dangerbg);color:var(--danger);" onclick="closeOrderModal();cancelMyOrder(${o.row},'${o.deliveryDate}')">${t('cancelOrder')}</button>
+        <button style="border-color:var(--danger);background:var(--dangerbg);color:var(--danger);" onclick="closeOrderModal();cancelMyOrder(${o.row},'${o.deliveryDate}','${o.createdIso||''}')">${t('cancelOrder')}</button>
       </div>`;
+    } else if(!myOrdersIsHist && o.status!=='Cancelled' && o.status!=='Delivered'){
+      body+=`<div class="om-addr" style="font-size:11.5px;color:var(--muted);">${t('cancelWindowOver')}</div>`;
     }
-    body+=`<div class="om-status-btns"><button style="border-color:var(--accent);background:var(--accent-soft);color:var(--accent-dark);" onclick="closeOrderModal();reorderFromOrder(${i})">🔁 ${t('reorderBtn')}</button></div>`;
+    if(myOrdersIsHist||o.status==='Delivered'||o.status==='Cancelled'){
+      body+=`<div class="om-status-btns"><button style="border-color:var(--accent);background:var(--accent-soft);color:var(--accent-dark);" onclick="closeOrderModal();reorderFromOrder(${i})">🔁 ${t('reorderBtn')}</button></div>`;
+    }
     document.getElementById('omBody').innerHTML=body;
     document.getElementById('orderModal').classList.remove('hidden');
     document.body.style.overflow='hidden';
@@ -2381,14 +2750,14 @@
     let url=GOOGLE_SCRIPT_URL+'?action=myOrders&token='+encodeURIComponent(SESSION.token); if(dateOpt)url+='&date='+encodeURIComponent(dateOpt);
     fetch(url).then(r=>r.json()).then(j=>{ if(j.status==='success')renderMyOrders(j.orders||[],!!dateOpt); else if(j.status==='invalid_session')forceLogout(); else box.innerHTML='<div style="color:#999;font-size:13px;">Could not load orders.</div>'; }).catch(()=>{ box.innerHTML='<div style="color:#999;font-size:13px;">Network error.</div>'; });
   }
-  function viewHistory(){ const d=document.getElementById('histDate').value; if(!d){ showToast('⚠️ Select a date first.','warning'); return; } loadMyOrders(d); }
-  function cancelMyOrder(row,dd){ if(!isLoggedIn()){ showAuth(); return; } if(!canCancel(dd)){ showToast(t('cancelClosed'),'error'); return; } if(!confirm('Are you sure you want to cancel this order?'))return;
-    apiPost({action:'cancelOrder',token:SESSION.token,row:row}).then(j=>{ if(j.status==='success'){ showToast('✅ Order cancelled.','success'); loadMyOrders(); } else if(j.status==='invalid_session')forceLogout(); else showToast(j.message||'Could not cancel.','error'); }).catch(()=>showToast('❌ Network error.','error')); }
+  function viewHistory(){ const d=document.getElementById('histDate').value; if(!d){ showToast(t('selectDate'),'warning'); return; } loadMyOrders(d); }
+  function cancelMyOrder(row,dd,createdIso){ if(!isLoggedIn()){ showAuth(); return; } if(!canCancel({deliveryDate:dd,createdIso:createdIso||''})){ showToast(t('cancelClosed'),'error'); return; } if(!confirm(t('confirmCancel')))return;
+    apiPost({action:'cancelOrder',token:SESSION.token,row:row}).then(j=>{ if(j.status==='success'){ showToast(t('orderCancelled'),'success'); loadMyOrders(); } else if(j.status==='invalid_session')forceLogout(); else showToast(j.message||'Could not cancel.','error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
 
   // ═══════ ADMIN ═══════
   let adminCreds=null, adminMenuWorking=null, adminPrevDay='monday', adminOrders=[], adminUsers=[], orderFilter='All';
   function showAdminLogin(){ showView('adminLogin'); }
-  function hideAdmin(){ isLoggedIn()?showView('page1'):showAuth(); }
+  function hideAdmin(){ isLoggedIn()?showLanding():showPublic(); }
   function adminLogout(){ adminCreds=null; storeDel('fbt_admin'); stopAlertPolling(); stopRing(); hideAdmin(); }
   function adminTab(tb){ ['orders','users','menu','config','stats','variants','promos'].forEach(x=>{ const v=document.getElementById('aview-'+x); const b=document.getElementById('atab-'+x); if(v)v.classList.toggle('hidden',x!==tb); if(b)b.classList.toggle('active',x===tb); }); if(tb==='variants') openVariantsEditor(); if(tb==='promos') loadPromos(); }
 
@@ -2429,13 +2798,13 @@
   }
   function savePromoFE(){
     const d=promoFormData();
-    if(!d.code.trim()||!(parseInt(d.value,10)>0)){ showToast('⚠️ Code aur value dono chahiye.','warning'); return; }
+    if(!d.code.trim()||!(parseInt(d.value,10)>0)){ showToast('⚠️ Code and value are both required.','warning'); return; }
     const btn=document.getElementById('pmSaveBtn'); btn.disabled=true; btn.textContent='⏳ Saving…';
     apiPost(d).then(j=>{
       btn.disabled=false; btn.textContent='💾 Save Promo';
       if(j.status==='success'){ adminPromos=j.promos||[]; renderPromoList(); ['pmCode','pmValue','pmMaxD','pmMinO','pmExp','pmPerU','pmTotL'].forEach(id=>document.getElementById(id).value=''); document.getElementById('pmFirst').checked=false; document.getElementById('pmVisible').checked=false; showToast('✅ Promo saved','success'); }
       else showToast('❌ '+(j.message||'Failed'),'error');
-    }).catch(()=>{ btn.disabled=false; btn.textContent='💾 Save Promo'; showToast('❌ Network error.','error'); });
+    }).catch(()=>{ btn.disabled=false; btn.textContent='💾 Save Promo'; showToast(t('errNetwork'),'error'); });
   }
   function editPromoFE(i){
     const p=adminPromos[i]; if(!p)return;
@@ -2468,12 +2837,13 @@
       if(j.status!=='success'){ showToast('❌ Invalid username or password.','error'); return; }
       adminCreds={user:u,pass:p}; storeSet('fbt_admin',adminCreds);
       showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminTab('orders'); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
-    }).catch(()=>{ btn.textContent='🔓 Login'; btn.disabled=false; showToast('❌ Network error.','error'); });
+    }).catch(()=>{ btn.textContent='🔓 Login'; btn.disabled=false; showToast(t('errNetwork'),'error'); });
   }
-  // Refresh ke baad admin panel wapas restore karo (creds localStorage me hain).
+  // Refresh ke baad admin panel tabhi restore karo jab refresh se pehle admin panel hi khula tha.
   function restoreAdmin(){
     const a=storeGet('fbt_admin'); if(!a||!a.user||!a.pass) return false;
-    adminCreds=a;
+    adminCreds=a;                                  // creds cached — password dobara nahi maangega
+    if(storeGet('fbt_view')!=='adminPanel') return false;   // customer/public page par tha => admin mat kholo
     fetch(`${GOOGLE_SCRIPT_URL}?action=stats&user=${encodeURIComponent(a.user)}&pass=${encodeURIComponent(a.pass)}`).then(r=>r.json()).then(j=>{
       if(j.status!=='success'){ adminCreds=null; storeDel('fbt_admin'); return; }
       showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminTab('orders'); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
@@ -2494,13 +2864,15 @@
   function loadOrders(){ if(!adminCreds)return; adminDateLabels(); fillSocFilter();
     const dateStr=fmtYMD(dateWithOffset(adminDateOffset));
     document.getElementById('ordersList').innerHTML='<div style="text-align:center;color:#999;padding:20px;">Loading...</div>';
-    fetch(`${GOOGLE_SCRIPT_URL}?action=orders&date=${dateStr}&user=${encodeURIComponent(adminCreds.user)}&pass=${encodeURIComponent(adminCreds.pass)}`).then(r=>r.json()).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminOrders=j.orders||[]; renderOrders(); renderKitchen(); }).catch(()=>showToast('❌ Network error.','error')); }
+    fetch(`${GOOGLE_SCRIPT_URL}?action=orders&date=${dateStr}&user=${encodeURIComponent(adminCreds.user)}&pass=${encodeURIComponent(adminCreds.pass)}`).then(r=>r.json()).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminOrders=j.orders||[]; renderOrders(); renderKitchen(); }).catch(()=>showToast(t('errNetwork'),'error')); }
   function setOrderFilter(f){ orderFilter=f; const c=document.getElementById('filterChips').children; for(let i=0;i<c.length;i++)c[i].classList.toggle('sel',c[i].getAttribute('data-f')===f); renderOrders(); }
   let socFilter='All';
   function fillSocFilter(){
     const sel=document.getElementById('ordSocFilter'); if(!sel)return;
-    const opts=['All'].concat(CFG.societies||[]);
-    sel.innerHTML=opts.map(s=>`<option value="${s}" ${socFilter===s?'selected':''}>${s==='All'?'🏘️ All Societies':('🏘️ '+s)}</option>`).join('');
+    const socs=(CFG.societies||[]).map(s=>({v:s,l:'🏠 '+s}));
+    const comps=(CFG.companies||[]).map(c=>({v:c.name,l:'🏢 '+c.name}));
+    const opts=[{v:'All',l:'📍 All Locations'}].concat(socs,comps);
+    sel.innerHTML=opts.map(o=>`<option value="${o.v}" ${socFilter===o.v?'selected':''}>${o.l}</option>`).join('');
   }
   function setSocFilter(v){ socFilter=v; renderOrders(); }
   function renderBulkBar(){
@@ -2523,7 +2895,7 @@
         renderOrders(); renderKitchen();
         showToast('✅ '+j.updated+' orders → '+to,'success');
       } else showToast('❌ '+(j.message||'Failed'),'error');
-    }).catch(()=>showToast('❌ Network error.','error'));
+    }).catch(()=>showToast(t('errNetwork'),'error'));
   }
   function renderKitchen(){
     const active=adminOrders.filter(o=>o.status==='Pending'||o.status==='Preparing');
@@ -2551,7 +2923,7 @@
     if(!list.length){ box.innerHTML='<div style="text-align:center;color:#999;padding:20px;">No orders ('+orderFilter+(socFilter!=='All'?(' · '+socFilter):'')+').</div>'; return; }
     box.innerHTML=list.map(o=>`<div class="oc" onclick="openOrderModal(${o.row})"><div class="oc-top"><span class="oc-name">${o.name}</span><span class="oc-status st-${o.status}">${STATUS_LABEL[o.status]||o.status}</span></div>
       <div class="oc-meal-box">${orderMealsText(o)}${o.note&&o.note!=='None'?'<br><span style="color:var(--muted);">📝 '+o.note+'</span>':''}${o.promo?'<br><span style="color:var(--ok);font-weight:800;">🎟️ '+o.promo+'</span>':''}</div>
-      <div class="oc-info"><span>🏠 ${o.society} ${o.flat}</span><span>📞 <a href="tel:+91${o.phone}" onclick="event.stopPropagation()">${o.phone}</a></span></div>
+      <div class="oc-info"><span>${o.deliveryType==='office'?`🏢 ${o.society} · Emp ${o.flat}`:`🏠 ${o.society} ${o.flat}`}</span><span>📞 <a href="tel:+91${o.phone}" onclick="event.stopPropagation()">${o.phone}</a></span></div>
       <div class="oc-info"><span>🕐 ${o.time}</span><span>💳 ${o.payment}${o.paymentStatus==='Paid'?(o.status==='Cancelled'?' <span class="paid-badge" style="background:var(--dangerbg);color:var(--danger);">REFUND DUE</span>':' <span class="paid-badge">PAID</span>'):''} · 💰 <b>${o.total}</b></span></div>
       <div class="oc-tap-hint">👆 Tap for details & status update</div></div>`).join('');
   }
@@ -2600,7 +2972,7 @@
     apiPost({action:'setpaid',user:adminCreds.user,pass:adminCreds.pass,row:row,paid:nv}).then(j=>{
       if(j.status==='success'){ const o=adminOrders.find(x=>x.row===row); if(o)o.paymentStatus=j.paymentStatus; renderOrders(); openOrderModal(row); showToast('✅ '+(j.paymentStatus==='Paid'?'Marked as Paid':'Marked as Unpaid'),'success'); }
       else showToast('❌ '+(j.message||'Failed'),'error');
-    }).catch(()=>showToast('❌ Network error.','error'));
+    }).catch(()=>showToast(t('errNetwork'),'error'));
   }
   function waUpdate(row){
     const o=adminOrders.find(x=>x.row===row); if(!o)return;
@@ -2633,7 +3005,7 @@
     fetch(`${GOOGLE_SCRIPT_URL}?action=lastorder&user=${encodeURIComponent(adminCreds.user)}&pass=${encodeURIComponent(adminCreds.pass)}`)
       .then(r=>r.json()).then(j=>{ if(j.status==='success') storeSet('fbt_lastrow', j.lastRow||0); })
       .catch(()=>{})
-      .finally(()=>{ startAlertPolling(); showToast('🔔 Order alerts ON — ye tab/panel khula rakhein','success'); });
+      .finally(()=>{ startAlertPolling(); showToast('🔔 Order alerts ON — keep this panel open','success'); });
   }
   function startAlertPolling(){ stopAlertPolling(); if(!alertsOn()||!adminCreds)return; alertTimer=setInterval(checkNewOrders,40000); }
   function stopAlertPolling(){ if(alertTimer){ clearInterval(alertTimer); alertTimer=null; } }
@@ -2656,10 +3028,10 @@
   }
   function dismissNewOrder(){ stopRing(); const b=document.getElementById('newOrderBanner'); if(b)b.classList.add('hidden'); setOrderDate(0); }
   function updateStatus(row,status){ const o=adminOrders.find(x=>x.row===row); if(!o||!adminCreds)return; const old=o.status; o.status=status; renderOrders(); renderKitchen();
-    apiPost({action:'setStatus',user:adminCreds.user,pass:adminCreds.pass,row:row,phone:o.phone,status:status}).then(j=>{ if(j.status!=='success'){ o.status=old; renderOrders(); renderKitchen(); showToast('❌ '+(j.message||'Update failed'),'error'); } }).catch(()=>{ o.status=old; renderOrders(); renderKitchen(); showToast('❌ Network error.','error'); }); }
+    apiPost({action:'setStatus',user:adminCreds.user,pass:adminCreds.pass,row:row,phone:o.phone,status:status}).then(j=>{ if(j.status!=='success'){ o.status=old; renderOrders(); renderKitchen(); showToast('❌ '+(j.message||'Update failed'),'error'); } }).catch(()=>{ o.status=old; renderOrders(); renderKitchen(); showToast(t('errNetwork'),'error'); }); }
 
   function loadUsers(){ if(!adminCreds)return; document.getElementById('usersList').innerHTML='<div style="text-align:center;color:#999;padding:20px;">Loading...</div>';
-    fetch(`${GOOGLE_SCRIPT_URL}?action=users&user=${encodeURIComponent(adminCreds.user)}&pass=${encodeURIComponent(adminCreds.pass)}`).then(r=>r.json()).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminUsers=j.users||[]; renderUsers(); }).catch(()=>showToast('❌ Network error.','error')); }
+    fetch(`${GOOGLE_SCRIPT_URL}?action=users&user=${encodeURIComponent(adminCreds.user)}&pass=${encodeURIComponent(adminCreds.pass)}`).then(r=>r.json()).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminUsers=j.users||[]; renderUsers(); }).catch(()=>showToast(t('errNetwork'),'error')); }
   function renderUsers(){
     const q=(document.getElementById('userSearch').value||'').toLowerCase().trim();
     const list=adminUsers.filter(u=>!q||u.name.toLowerCase().includes(q)||u.phone.includes(q)||(u.email||'').toLowerCase().includes(q));
@@ -2671,7 +3043,7 @@
       <button class="block-btn ${u.status==='Blocked'?'un':''}" onclick="toggleUserBlock('${u.phone}','${u.status==='Blocked'?'Active':'Blocked'}')">${u.status==='Blocked'?'✅ Unblock':'🚫 Block'}</button></div>`).join('');
   }
   function toggleUserBlock(phone,ns){ if(!adminCreds)return; if(!confirm((ns==='Blocked'?'Block':'Unblock')+' '+phone+'?'))return;
-    apiPost({action:'setUserStatus',user:adminCreds.user,pass:adminCreds.pass,phone:phone,status:ns}).then(j=>{ if(j.status==='success'){ const u=adminUsers.find(x=>x.phone===phone); if(u)u.status=ns; renderUsers(); showToast('✅ Updated.','success'); } else showToast('❌ '+(j.message||'Failed'),'error'); }).catch(()=>showToast('❌ Network error.','error')); }
+    apiPost({action:'setUserStatus',user:adminCreds.user,pass:adminCreds.pass,phone:phone,status:ns}).then(j=>{ if(j.status==='success'){ const u=adminUsers.find(x=>x.phone===phone); if(u)u.status=ns; renderUsers(); showToast('✅ Updated.','success'); } else showToast('❌ '+(j.message||'Failed'),'error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
 
   function loadStats(){ if(!adminCreds)return; fetch(`${GOOGLE_SCRIPT_URL}?action=stats&user=${encodeURIComponent(adminCreds.user)}&pass=${encodeURIComponent(adminCreds.pass)}`).then(r=>r.json()).then(j=>{ if(j.status==='success'){ fillStats(j); showToast('🔄 Refreshed.','success'); } }).catch(()=>showToast('❌ Refresh failed.','error')); }
   function fillStats(j){ document.getElementById('st-todayCount').textContent=j.today.count; document.getElementById('st-todayRev').textContent='₹'+j.today.revenue; document.getElementById('st-weekCount').textContent=j.week.count; document.getElementById('st-totalCount').textContent=j.total.count;
@@ -2687,7 +3059,7 @@
   function saveMenu(){ readEditorInto(adminPrevDay);
     for(const day of Object.keys(adminMenuWorking)){ const d=adminMenuWorking[day]; if(!d.breakfast.length||!d.lunch.sabziOptions.length||!d.lunch.fixedItems.length||!d.dinner.sabziOptions.length||!d.dinner.fixedItems.length){ showToast('⚠️ '+day+' menu incomplete.','warning'); return; } }
     const btn=document.getElementById('saveMenuBtn'); btn.textContent='⏳ Saving...'; btn.disabled=true;
-    apiPost({action:'saveMenu',user:adminCreds.user,pass:adminCreds.pass,menu:adminMenuWorking}).then(j=>{ btn.textContent='💾 Save Menu'; btn.disabled=false; if(j.status==='success'){ MENU=JSON.parse(JSON.stringify(adminMenuWorking)); storeSet('fbt_menu',MENU); renderMealPanel(); showToast('✅ Menu saved!','success'); } else showToast('❌ '+(j.message||'Save failed'),'error'); }).catch(()=>{ btn.textContent='💾 Save Menu'; btn.disabled=false; showToast('❌ Network error.','error'); }); }
+    apiPost({action:'saveMenu',user:adminCreds.user,pass:adminCreds.pass,menu:adminMenuWorking}).then(j=>{ btn.textContent='💾 Save Menu'; btn.disabled=false; if(j.status==='success'){ MENU=JSON.parse(JSON.stringify(adminMenuWorking)); storeSet('fbt_menu',MENU); renderMealPanel(); showToast('✅ Menu saved!','success'); } else showToast('❌ '+(j.message||'Save failed'),'error'); }).catch(()=>{ btn.textContent='💾 Save Menu'; btn.disabled=false; showToast(t('errNetwork'),'error'); }); }
 
   // Config editor (prices + society + township + closed dates + capacity)
   const PRICE_LABELS={ breakfast:'🌅 Breakfast', lunch:'☀️ Lunch (Full Tiffin)', dinner:'🌙 Dinner (Full Tiffin)', tiffinMini:'🥗 Mini Tiffin (Lunch/Dinner)', extraRotiPlain:'Extra Roti (Plain)', extraRotiButter:'Extra Roti (Butter)', dahi:'Dahi / Curd', extraSabzi:'Extra Sabzi' };
@@ -2793,13 +3165,17 @@
           showToast('✅ Variants saved!','success');
         } else { showToast('❌ '+(j.message||'Save failed'),'error'); }
       })
-      .catch(()=>{ btn.textContent=old; btn.disabled=false; showToast('❌ Network error','error'); });
+      .catch(()=>{ btn.textContent=old; btn.disabled=false; showToast(t('errNetwork'),'error'); });
   }
 
   function initConfigEditor(){
     document.getElementById('priceEditor').innerHTML=Object.keys(PRICE_LABELS).map(k=>`<div class="price-row"><label>${PRICE_LABELS[k]}</label><div class="inp">₹<input type="number" id="pr-${k}" value="${CFG.prices[k]}" min="0" max="2000"></div></div>`).join('');
     document.getElementById('cfg-township').value=CFG.township;
     document.getElementById('cfg-societies').value=CFG.societies.join('\n');
+    const ce=document.getElementById('cfg-companies');
+    if(ce) ce.value=(CFG.companies||[]).map(c=>[c.name,c.building||'',c.fee].join(' | ')).join('\n');
+    const he=document.getElementById('cfg-homeEnabled'); if(he) he.checked=(CFG.homeEnabled!==false);
+    const oe=document.getElementById('cfg-officeEnabled'); if(oe) oe.checked=(CFG.officeEnabled===true);
     const uid=document.getElementById('cfg-upiId'); if(uid)uid.value=CFG.upiId||'';
     const unm=document.getElementById('cfg-upiName'); if(unm)unm.value=CFG.upiName||'Flying Birds Tiffin';
     const ufs=document.getElementById('cfg-fssai'); if(ufs)ufs.value=CFG.fssai||'';
@@ -2830,14 +3206,36 @@
     const township=document.getElementById('cfg-township').value.trim()||'Godrej Garden City';
     const societies=document.getElementById('cfg-societies').value.split('\n').map(s=>s.trim()).filter(Boolean);
     if(!societies.length){ showToast('⚠️ Add at least one society.','warning'); return; }
-    const cfg={ prices, township, societies, deliveryNear:CFG.deliveryNear, deliveryFar:CFG.deliveryFar, farSocieties:CFG.farSocieties, closedDates:workingClosedDates, capacity:capacity, upiId:(document.getElementById('cfg-upiId')?document.getElementById('cfg-upiId').value.trim():CFG.upiId), upiName:(document.getElementById('cfg-upiName')?document.getElementById('cfg-upiName').value.trim():CFG.upiName), fssai:(document.getElementById('cfg-fssai')?document.getElementById('cfg-fssai').value.trim():CFG.fssai) };
+    // Companies: "Name | Building | Fee" per line
+    const companies=(document.getElementById('cfg-companies')?document.getElementById('cfg-companies').value:'').split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
+      const p=l.split('|').map(x=>x.trim());
+      let fee=parseInt(p[2],10); if(isNaN(fee)||fee<0) fee=CFG.deliveryNear||10;
+      return { name:p[0], building:p[1]||'', fee:fee };
+    }).filter(c=>c.name);
+    const homeEnabled=document.getElementById('cfg-homeEnabled')?document.getElementById('cfg-homeEnabled').checked:true;
+    const officeEnabled=document.getElementById('cfg-officeEnabled')?document.getElementById('cfg-officeEnabled').checked:false;
+    if(!homeEnabled&&!officeEnabled){ showToast('⚠️ Keep at least one delivery mode ON.','warning'); return; }
+    if(officeEnabled&&!companies.length){ showToast('⚠️ Add at least one company for office delivery.','warning'); return; }
+    const cfg={ prices, township, societies, deliveryNear:CFG.deliveryNear, deliveryFar:CFG.deliveryFar, farSocieties:CFG.farSocieties, closedDates:workingClosedDates, capacity:capacity, companies:companies, homeEnabled:homeEnabled, officeEnabled:officeEnabled, upiId:(document.getElementById('cfg-upiId')?document.getElementById('cfg-upiId').value.trim():CFG.upiId), upiName:(document.getElementById('cfg-upiName')?document.getElementById('cfg-upiName').value.trim():CFG.upiName), fssai:(document.getElementById('cfg-fssai')?document.getElementById('cfg-fssai').value.trim():CFG.fssai) };
     const btn=document.getElementById('saveConfigBtn'); btn.textContent='⏳ Saving...'; btn.disabled=true;
-    apiPost({action:'saveConfig',user:adminCreds.user,pass:adminCreds.pass,config:cfg}).then(j=>{ btn.textContent='💾 Save Setup'; btn.disabled=false; if(j.status==='success'){ cfg.variants=CFG.variants; cfg.banners=CFG.banners; CFG=cfg; storeSet('fbt_cfg',CFG); applyConfigToUI(); refreshAvailability(); showToast('✅ Setup saved!','success'); } else showToast('❌ '+(j.message||'Save failed'),'error'); }).catch(()=>{ btn.textContent='💾 Save Setup'; btn.disabled=false; showToast('❌ Network error.','error'); }); }
+    apiPost({action:'saveConfig',user:adminCreds.user,pass:adminCreds.pass,config:cfg}).then(j=>{ btn.textContent='💾 Save Setup'; btn.disabled=false; if(j.status==='success'){ cfg.variants=CFG.variants; cfg.banners=CFG.banners; CFG=cfg; storeSet('fbt_cfg',CFG); applyConfigToUI(); refreshAvailability(); showToast('✅ Setup saved!','success'); } else showToast('❌ '+(j.message||'Save failed'),'error'); }).catch(()=>{ btn.textContent='💾 Save Setup'; btn.disabled=false; showToast(t('errNetwork'),'error'); }); }
 
   function applyConfigToUI(){
     const sel=document.getElementById('society'); const cur=sel.value;
     sel.innerHTML='<option value="">— '+t('society')+' —</option>'+CFG.societies.map(s=>`<option value="${s}">${s}</option>`).join('');
     if(cur && CFG.societies.includes(cur)) sel.value=cur;
+    // Company dropdown + home/office toggle
+    const cs=document.getElementById('company');
+    if(cs){ const cc=cs.value;
+      cs.innerHTML='<option value="">— '+t('companyLbl')+' —</option>'+(CFG.companies||[]).map(c=>`<option value="${c.name}">${c.name}${c.building?(' — '+c.building):''}</option>`).join('');
+      if(cc) cs.value=cc;
+    }
+    const m=modesAvailable();
+    const wrap=document.getElementById('dtypeWrap');
+    if(wrap) wrap.classList.toggle('hidden', !(m.home&&m.office));
+    if(!m.home && m.office) setDeliveryType('office');
+    else if(m.home && !m.office) setDeliveryType('home');
+    renderModeChip();
     document.getElementById('township').value=CFG.township;
     document.querySelectorAll('.fssai-line').forEach(e=>{ e.textContent = CFG.fssai ? ('FSSAI Reg. No: '+CFG.fssai) : ''; });
   }
@@ -2858,7 +3256,7 @@
       // admin panel restore ho gaya — customer auth skip
     }
     else if(isLoggedIn()){
-      enterApp();
+      enterApp(true);   // refresh ke baad wahi page wapas
       // Background session refresh — user ko sirf tab logout karo jab backend
       // PAKKA 'invalid_session' bole. Network error/timeout pe andar hi rehne do
       // (warna offline ya slow net pe logged-in user bewajah login page dekhega).
@@ -2872,7 +3270,7 @@
           .catch(()=>{ /* network error — session localStorage me hai, andar rehne do */ });
       }
     }
-    else showAuth();
+    else showPublic();
 
     // ═══════ MOBILE BACK BUTTON ═══════
     // Pehle koi khula popup/drawer band karo; phir sub-page se home; home pe hi
@@ -2886,11 +3284,13 @@
       const drawer=document.getElementById('drawer');
       if(drawer && drawer.classList.contains('open')){ closeDrawer(); history.pushState({fbt:true},''); return; }
       const onHome=!document.getElementById('homeView').classList.contains('hidden');
-      const onAuth=!document.getElementById('authPage').classList.contains('hidden');
+      const onAuth=!document.getElementById('authPage').classList.contains('hidden')||!document.getElementById('pubView').classList.contains('hidden');
       const onAdmin=!document.getElementById('adminPanel').classList.contains('hidden');
       // checkout/cart/orders/sub/about/adminPanel → back goes to home (or admin→app)
       if(onAdmin){ hideAdmin(); history.pushState({fbt:true},''); return; }
-      if(!onHome && !onAuth){ if(isLoggedIn())showLanding(); else showAuth(); history.pushState({fbt:true},''); return; }
+      const onAuthPage=!document.getElementById('authPage').classList.contains('hidden');
+      if(onAuthPage && !isLoggedIn()){ showPublic(); history.pushState({fbt:true},''); return; }
+      if(!onHome && !onAuth){ if(isLoggedIn())showLanding(); else showPublic(); history.pushState({fbt:true},''); return; }
       // on home/auth → allow the browser to actually go back (exit)
       history.back();
     });

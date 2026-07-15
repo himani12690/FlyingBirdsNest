@@ -464,6 +464,25 @@ function placeOrderAuthed(p) {
   try {
     const isEdit = !!p.editRow;
     let oldPaidVal = '';
+    // 1:1:1 rule — ek din me har meal ka max 1 tiffin
+    const qB = parseInt(p.breakfastQty, 10) || 0;
+    const qL = parseInt(p.lunchQty, 10) || 0;
+    const qD = parseInt(p.dinnerQty, 10) || 0;
+    if (qB > 1 || qL > 1 || qD > 1) {
+      return { status:'error', message:'Ek din me har meal ka sirf 1 tiffin order ho sakta hai. Zyada quantity ke liye kitchen se sampark karein.' };
+    }
+    // ── Delivery type: home (society+flat) ya office (company + employee id) ──
+    const cfgD = readConfig();
+    const dType = (String(p.deliveryType || 'home') === 'office') ? 'office' : 'home';
+    if (dType === 'office') {
+      if (!cfgD.officeEnabled) return { status:'error', message:'Office delivery abhi available nahi hai.' };
+      const co = findCompany(p.society);
+      if (!co) return { status:'error', message:'Kripya list me se apni company select karein.' };
+      if (!String(p.flatNo || '').trim()) return { status:'error', message:'Employee ID zaroori hai.' };
+    } else {
+      if (!cfgD.homeEnabled) return { status:'error', message:'Home delivery abhi available nahi hai.' };
+    }
+    p.deliveryType = dType;
     const existingRow = findActiveOrderRow(phone, p.deliveryDate);
 
     if (isEdit) {
@@ -561,7 +580,7 @@ function computeTotal(p) {
       }
       t += unit * q;
     });
-    return t + deliveryFeeFor(p.society);
+    return t + deliveryFeeForOrder(p);
   }
 
   // Legacy flat-field fallback (old clients)
@@ -575,7 +594,7 @@ function computeTotal(p) {
     if (String(p[m + 'ExtraSabzi']) === '1') unit += PRICE.extraSabzi;
     t += unit * q;
   });
-  return t + (t > 0 ? deliveryFeeFor(p.society) : 0);
+  return t + (t > 0 ? deliveryFeeForOrder(p) : 0);
 }
 
 // Server-side IST cutoff rules — frontend bypass nahi kar sakta
@@ -876,7 +895,7 @@ function tgOrderMsg(p, name, total, tag) {
   if (parseInt(p.dinnerQty,10))    meals.push('🌙 Dinner ×' + p.dinnerQty + (p.dinnerTiffin ? ' (' + p.dinnerTiffin + ')' : ''));
   return (tag || '🆕 NEW ORDER') + '\n' +
     '👤 ' + name + '\n' +
-    '🏠 ' + (p.society || '') + ' ' + (p.flatNo || '') + '\n' +
+    ((String(p.deliveryType||'home')==='office') ? ('🏢 ' + (p.society || '') + ' · Emp ID ' + (p.flatNo || '')) : ('🏠 ' + (p.society || '') + ' ' + (p.flatNo || ''))) + '\n' +
     '📅 ' + (p.deliveryDate || '') + '\n' +
     meals.join('\n') + '\n' +
     '💰 ₹' + total + ' · ' + (p.payment || 'COD') + (p.promoApplied ? ('\n🎟️ ' + p.promoApplied) : '') + '\n' +
@@ -895,7 +914,7 @@ function saveOrder(p, phone, name, total, promoStr) {
     "'" + p.deliveryDate,
     p.breakfastTimeSlot || '', p.lunchTimeSlot || '', p.dinnerTimeSlot || '',
     p.lunchTiffin || '', p.dinnerTiffin || '',
-    '', (promoStr || '')
+    '', (promoStr || ''), (p.deliveryType || 'home')
   ]);
 }
 
@@ -914,6 +933,7 @@ function rowToOrder(r, rowNum) {
     breakfastTimeSlot: r[20] || '', lunchTimeSlot: r[21] || '', dinnerTimeSlot: r[22] || '',
     lunchTiffin: r[23] || '', dinnerTiffin: r[24] || '',
     paymentStatus: r[25] || 'Unpaid',
+    deliveryType: r[27] || 'home',
     promo: r[26] || '',
     createdIso: (r[0] instanceof Date) ? Utilities.formatDate(r[0], TZ, "yyyy-MM-dd'T'HH:mm") : ''
   };
@@ -923,7 +943,7 @@ function allOrders() {
   const sh = ordersSheet();
   const lastRow = sh.getLastRow();
   if (lastRow < 2) return [];
-  const data = sh.getRange(2, 1, lastRow - 1, 27).getValues();
+  const data = sh.getRange(2, 1, lastRow - 1, 28).getValues();
   return data.map((r, i) => rowToOrder(r, i + 2));
 }
 
@@ -966,7 +986,7 @@ function sendOrderEmail(p, phone, name, total) {
   let body = '<h2 style="color:#667eea;">🍱 New Tiffin Order!</h2><table style="border-collapse:collapse;font-family:Arial;font-size:14px;">';
   body += row('📅 Delivery', (p.deliveryDate || '') + ' (' + (p.day || '') + ')') + row('👤 Name', name);
   body += row('📱 Phone', '<a href="tel:+91' + phone + '">' + phone + '</a> ✓verified');
-  body += row('📍 Address', (p.society||'') + ', Flat ' + (p.flatNo||'') + ', Godrej Garden City');
+  body += row('📍 Address', (String(p.deliveryType||'home')==='office') ? ((p.society||'') + ' — Employee ID: ' + (p.flatNo||'')) : ((p.society||'') + ', Flat ' + (p.flatNo||'') + ', Godrej Garden City'));
   if (parseInt(p.breakfastQty,10)) body += row('🌅 Breakfast', 'Qty: ' + p.breakfastQty);
   if (parseInt(p.lunchQty,10)) body += row('☀️ Lunch × ' + p.lunchQty, 'Sabzi: ' + p.lunchSabzi + '<br>Roti: ' + p.lunchRoti + '<br>Add-ons: ' + p.lunchAddons);
   if (parseInt(p.dinnerQty,10)) body += row('🌙 Dinner × ' + p.dinnerQty, 'Sabzi: ' + p.dinnerSabzi + '<br>Roti: ' + p.dinnerRoti + '<br>Add-ons: ' + p.dinnerAddons);
@@ -1110,8 +1130,37 @@ function defaultConfig() {
     variants: defaultVariants(),
     banners: { breakfast:'', lunch:'', dinner:'' },   // optional meal banner images
     upiId: '', upiName: 'Flying Birds Tiffin',        // online UPI payment (Option A)
-    fssai: ''                                          // FSSAI reg no. shown in footer
+    fssai: '',                                         // FSSAI reg no. shown in footer
+    // ── B2B corporate mode ──
+    homeEnabled: true,      // society/flat delivery on/off
+    officeEnabled: false,   // company/office delivery on/off
+    companies: []           // [{ name, building, fee }] — Employee ID hamesha required
   };
+}
+function sanitizeCompanies(list) {
+  if (!Array.isArray(list)) return [];
+  const d = { deliveryNear: 10 };
+  return list.map(x => {
+    if (!x) return null;
+    const name = String(x.name || '').slice(0, 60).trim();
+    if (!name) return null;
+    let fee = parseInt(x.fee, 10);
+    if (isNaN(fee) || fee < 0) fee = d.deliveryNear;
+    return { name: name, building: String(x.building || '').slice(0, 40).trim(), fee: Math.min(500, fee) };
+  }).filter(Boolean).slice(0, 50);
+}
+function findCompany(name) {
+  const c = readConfig();
+  const n = String(name || '').toLowerCase().trim();
+  return (c.companies || []).find(x => String(x.name).toLowerCase().trim() === n) || null;
+}
+// Order ka delivery fee: office => company fee, home => society (near/far)
+function deliveryFeeForOrder(p) {
+  if (String(p.deliveryType || 'home') === 'office') {
+    const co = findCompany(p.society);
+    return co ? co.fee : readConfig().deliveryNear;
+  }
+  return deliveryFeeFor(p.society);
 }
 function deliveryFeeFor(society) {
   const c = readConfig();
@@ -1150,7 +1199,10 @@ function readConfig() {
       banners: Object.assign({ breakfast:'', lunch:'', dinner:'' }, c.banners || {}),
       upiId: String(c.upiId || '').trim(),
       upiName: String(c.upiName || d.upiName).trim(),
-      fssai: String(c.fssai || '').trim()
+      fssai: String(c.fssai || '').trim(),
+      homeEnabled: (c.homeEnabled !== false),
+      officeEnabled: (c.officeEnabled === true),
+      companies: sanitizeCompanies(c.companies)
     };
   } catch (e) { return defaultConfig(); }
 }
@@ -1179,7 +1231,10 @@ function saveConfig(cfg) {
   const upiId = String(cfg.upiId || '').slice(0, 80).trim();
   const upiName = String(cfg.upiName || d.upiName || '').slice(0, 40).trim();
   const fssai = String(cfg.fssai || '').slice(0, 40).trim();
-  const clean = { prices: prices, township: township, societies: societies, deliveryNear: dNear, deliveryFar: dFar, farSocieties: farSoc, closedDates: closedDates, capacity: capacity, upiId: upiId, upiName: upiName, fssai: fssai };
+  const companies = sanitizeCompanies(cfg.companies);
+  const homeEnabled = (cfg.homeEnabled !== false);
+  const officeEnabled = (cfg.officeEnabled === true);
+  const clean = { prices: prices, township: township, societies: societies, deliveryNear: dNear, deliveryFar: dFar, farSocieties: farSoc, closedDates: closedDates, capacity: capacity, upiId: upiId, upiName: upiName, fssai: fssai, companies: companies, homeEnabled: homeEnabled, officeEnabled: officeEnabled };
   // Preserve variants + banners that were set via the Variants tab (Setup save
   // must not wipe them). Read whatever is currently saved and carry it over.
   const cur = readConfig();
@@ -1203,7 +1258,8 @@ function saveVariants(p) {
     closedDates: cur.closedDates, capacity: cur.capacity,
     variants: sanitizeVariants(p.variants || cur.variants),
     banners: Object.assign({ breakfast:'', lunch:'', dinner:'' }, p.banners || cur.banners),
-    upiId: cur.upiId, upiName: cur.upiName, fssai: cur.fssai
+    upiId: cur.upiId, upiName: cur.upiName, fssai: cur.fssai,
+    companies: cur.companies, homeEnabled: cur.homeEnabled, officeEnabled: cur.officeEnabled
   };
   const ss = getSS();
   let sh = ss.getSheetByName(CONFIG_SHEET);
