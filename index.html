@@ -666,7 +666,7 @@
       <div class="pub-logo">🍱</div>
       <h1>Flying Birds Tiffin</h1>
       <p data-i="lpTagline"></p>
-      <button class="pub-cta" onclick="showAuth()" data-i="pubCta"></button>
+      <button class="pub-cta" onclick="goOrderNow()" data-i="pubCta"></button>
       <div class="pub-sub">📍 Godrej Garden City <span class="fssai-line" style="font-size:10px;"></span></div>
     </div>
     <div class="section">
@@ -702,8 +702,8 @@
       <div class="footer" style="border-radius:14px;margin-top:18px;">Flying Birds Tiffin Services · 📞 99249 37939<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
     </div>
     <div class="pub-sticky">
-      <div class="ps-txt" data-i="pubCutoffLine"></div>
-      <button onclick="showAuth()" data-i="lpOrderNow"></button>
+      <div class="ps-txt" data-i-html="pubCutoffLine"></div>
+      <button onclick="goOrderNow()" data-i="lpOrderNow"></button>
     </div>
   </div>
 
@@ -1914,7 +1914,10 @@
     else if(where==='profile') showProfilePage();
   }
   function showLanding(){ showView('homeView'); renderHome(); }
+  function goOrderNow(){ if(isLoggedIn()) enterApp(); else showAuth(); }
   function showPublic(){
+    // Logged-in user ko landing/login mat dikhao — seedha app
+    if(isLoggedIn()){ enterApp(); return; }
     showView('pubView');
     initGoogleButton();
     const ls=document.getElementById('langSelPub'), src=document.getElementById('langSel');
