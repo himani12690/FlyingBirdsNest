@@ -1,8 +1,18 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "io.github.himani12690.flyingbirdsnest",
-        "sha256_cert_fingerprints": ["06:05:5B:30:FB:7A:D0:8F:15:94:B8:8A:6A:7C:27:13:8A:EB:95:4B:36:55:14:21:96:F4:36:BE:F0:EA:D6:3A"]
-      }
-    }]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.himani12690.flyingbirdsnest",
+      "sha256_cert_fingerprints": ["06:05:5B:30:FB:7A:D0:8F:15:94:B8:8A:6A:7C:27:13:8A:EB:95:4B:36:55:14:21:96:F4:36:BE:F0:EA:D6:3A"]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.himani12690.twa",
+      "sha256_cert_fingerprints": ["06:05:5B:30:FB:7A:D0:8F:15:94:B8:8A:6A:7C:27:13:8A:EB:95:4B:36:55:14:21:96:F4:36:BE:F0:EA:D6:3A"]
+    }
+  }
+]
