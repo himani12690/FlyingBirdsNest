@@ -594,6 +594,12 @@
     .sub-text { font-size:13px; color:var(--muted); margin:-6px 0 16px; line-height:1.5; }
     .hint { font-size:11.5px; color:var(--muted); margin-top:6px; line-height:1.5; display:block; }
     .center-hint { text-align:center; font-size:12px; color:var(--muted); margin-top:8px; line-height:1.5; padding:0 10px; }
+    /* Google button — full-width clean look (mockup jaisa) */
+    #googleBtnBox { width:100%; display:flex; justify-content:center; }
+    #googleBtnBox > div { width:100% !important; }
+    #googleBtnBox iframe { width:100% !important; margin:0 auto !important; }
+    #authSocialBlock { margin-top:6px; }
+
     .admin-btn:disabled { opacity:0.6; }
     .admin-btn.sec { background:var(--accent-soft); color:var(--accent); }
     .edit-label { font-size:12.5px; font-weight:800; color:var(--ink); margin:14px 0 6px; }
@@ -1911,7 +1917,6 @@
   function showPublic(){
     showView('pubView');
     initGoogleButton();
-    try{ if(window.google&&google.accounts&&google.accounts.id) google.accounts.id.prompt(); }catch(e){}
     const ls=document.getElementById('langSelPub'), src=document.getElementById('langSel');
     if(ls&&src&&!ls.options.length) ls.innerHTML=src.innerHTML;
     if(ls) ls.value=LANG;
@@ -1990,7 +1995,6 @@
     const e1=document.getElementById('err-authPhone'); if(e1)e1.classList.remove('show');
     const e2=document.getElementById('authGoogleErr'); if(e2)e2.classList.remove('show');
     // Returning Google user → One Tap khud sign-in kar dega (zero click)
-    try{ if(window.google&&google.accounts&&google.accounts.id) google.accounts.id.prompt(); }catch(e){}
     showView('authPage');
     // Password-reset link opened from email? (?reset=TOKEN)
     const urlToken=new URLSearchParams(location.search).get('reset');
@@ -2093,11 +2097,14 @@
   function initGoogleButton(){
     if(!window.google || !google.accounts || !google.accounts.id) { setTimeout(initGoogleButton, 300); return; }
     if(__gsiInit) return; __gsiInit=true;
-    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: onGoogleCredential, auto_select:true, itp_support:true });
+    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: onGoogleCredential, auto_select:false, itp_support:true });
     const box=document.getElementById('googleBtnBox'); if(!box)return;
     box.innerHTML='';
-    const w=Math.min(360, Math.max(240, box.offsetWidth||280));
-    google.accounts.id.renderButton(box, { theme:'outline', size:'large', shape:'pill', text:'signin_with', logo_alignment:'left', width:w });
+    // Full-width clean button (mockup jaisa) — parent ki poori width lo
+    const parentW = box.parentElement ? box.parentElement.offsetWidth : 320;
+    const w=Math.min(400, Math.max(240, parentW-4));
+    box.style.width='100%';
+    google.accounts.id.renderButton(box, { theme:'outline', size:'large', shape:'rectangular', text:'continue_with', logo_alignment:'center', width:w });
   }
 
   function readAuthPhone(){ const ph=document.getElementById('authPhone').value.trim(); return /^[6-9]\d{9}$/.test(ph)?ph:''; }
