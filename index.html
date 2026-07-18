@@ -318,7 +318,7 @@
     .var-photo img { width:100%; height:100%; object-fit:cover; }
     .var-photo .vp-edit { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.55); color:#fff; font-size:8.5px; font-weight:700; text-align:center; padding:2px; }
     .var-fields { flex:1; min-width:0; }
-    .var-fields input, .var-fields textarea { width:100%; padding:8px 10px; border:1.5px solid var(--line); border-radius:9px; font-size:12.5px; margin-bottom:6px; font-family:inherit; }
+    .var-fields input, .var-fields textarea { width:100%; padding:8px 10px; border:1.5px solid var(--line); border-radius:9px; font-size:12.5px; margin-bottom:6px; font-family:inherit; background:var(--card); color:var(--ink); }
     .var-fields textarea { resize:vertical; min-height:52px; }
     .var-row2 { display:flex; gap:8px; }
     .var-row2 input { flex:1; }
@@ -465,7 +465,7 @@
     .add-cart-btn { width:100%; padding:13px; background:var(--accent); color:#fff; border:none; border-radius:12px; font-size:14.5px; font-weight:800; cursor:pointer; margin-top:6px; }
     .add-cart-btn:disabled { opacity:0.5; }
 
-    textarea { width:100%; padding:12px 14px; border:2px solid var(--line); border-radius:12px; font-size:14px; font-family:inherit; resize:none; outline:none; }
+    textarea { width:100%; padding:12px 14px; border:2px solid var(--line); border-radius:12px; font-size:14px; font-family:inherit; resize:none; outline:none; background:var(--card); color:var(--ink); }
     textarea:focus { border-color:var(--accent); }
 
     /* Cart */
@@ -634,11 +634,11 @@
     .edit-label { font-size:12.5px; font-weight:800; color:var(--ink); margin:14px 0 6px; }
     .edit-label .hint { font-weight:600; color:var(--muted); font-size:11px; }
     .refresh-link { color:var(--accent); font-weight:800; font-size:13px; cursor:pointer; float:right; }
-    .search-box { width:100%; padding:11px 14px; border:2px solid var(--line); border-radius:12px; font-size:14px; font-weight:600; margin-bottom:12px; outline:none; }
+    .search-box { width:100%; padding:11px 14px; border:2px solid var(--line); border-radius:12px; font-size:14px; font-weight:600; margin-bottom:12px; outline:none; background:var(--card); color:var(--ink); }
     .price-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:9px 12px; margin-bottom:8px; }
     .price-row label { font-size:13px; font-weight:700; color:var(--ink); }
     .price-row .inp { display:flex; align-items:center; gap:4px; }
-    .price-row input { width:80px; padding:8px 10px; border:1.5px solid var(--line); border-radius:8px; font-size:14px; font-weight:700; text-align:right; }
+    .price-row input { width:80px; padding:8px 10px; border:1.5px solid var(--line); border-radius:8px; font-size:14px; font-weight:700; text-align:right; background:var(--card); color:var(--ink); }
 
     .toast { position:fixed; bottom:150px; left:50%; transform:translateX(-50%) translateY(8px); background:#1a1c2b; color:#fff; padding:13px 22px; border-radius:12px; font-size:13.5px; font-weight:600; z-index:12000; opacity:0; visibility:hidden; pointer-events:none; transition:transform .25s ease, opacity .25s ease, visibility 0s linear .25s; box-shadow:0 8px 25px rgba(0,0,0,0.3); text-align:center; min-width:250px; max-width:340px; }
     .toast.show { transform:translateX(-50%) translateY(0); opacity:1; visibility:visible; transition:transform .3s ease, opacity .3s ease, visibility 0s; }
@@ -1009,7 +1009,7 @@
       <div class="section-title"><span data-i="myOrders"></span> <span class="refresh-link" onclick="const hd=document.getElementById('histDate');loadMyOrders(hd&&hd.value?hd.value:fmtYMD(dateWithOffset(0)));" data-i="refresh"></span></div>
       <div class="cust-label" data-i="viewPast"></div>
       <div class="hist-row" style="margin-bottom:14px;">
-        <input type="date" id="histDate">
+        <input type="date" id="histDate" style="background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:11px;padding:11px;">
         <button class="add-cart-btn" style="width:auto;padding:11px 18px;margin:0;" onclick="viewHistory()" data-i="view"></button>
       </div>
       <div id="myOrdersList"></div>
@@ -1276,7 +1276,7 @@
         <div class="section-title" style="margin-top:20px;">🔒 Kitchen Closed Dates</div>
         <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">No orders will be accepted for these dates (holidays, off-days).</div>
         <div class="dt-row" style="margin:0 0 10px;">
-          <input type="date" id="closedDateInput" style="flex:1;padding:11px;border:1.5px solid var(--line);border-radius:11px;">
+          <input type="date" id="closedDateInput" style="flex:1;padding:11px;border:1.5px solid var(--line);border-radius:11px;background:var(--card);color:var(--ink);">
           <button class="admin-btn" style="width:auto;padding:11px 18px;margin:0;" onclick="addClosedDate()">+ Add</button>
         </div>
         <div id="closedDatesList"></div>
