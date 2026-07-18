@@ -2037,8 +2037,10 @@
     if(ready){ goToCheckout(); setTimeout(()=>placeOrder(),60); }   // ek tap = order
     else goToCheckout();                                          // pehli baar: address bharwao
   }
-  function showOrdersPage(){ showView('ordersView'); loadMyOrders();
-    const hd=document.getElementById('histDate'); if(hd) hd.max=fmtYMD(dateWithOffset(0));   // history = aaj tak
+  function showOrdersPage(){ showView('ordersView'); loadMyOrders(fmtYMD(dateWithOffset(0)));
+    // Sirf Today/Tomorrow/Day-After — order-window jaisa hi (aage past history nahi)
+    const hd=document.getElementById('histDate');
+    if(hd){ hd.min=fmtYMD(dateWithOffset(0)); hd.max=fmtYMD(dateWithOffset(2)); hd.value=fmtYMD(dateWithOffset(0)); }
   }
   function showSubPage(){ if(!isLoggedIn()){ showAuth(); return; } showView('subView'); loadSub(); }
   function showAboutPage(){ showView('aboutView'); renderAbout(); }
@@ -2916,7 +2918,7 @@
     if(!isLoggedIn())return; const box=document.getElementById('myOrdersList'); if(!box)return;
     box.innerHTML='<div style="color:#999;font-size:13px;">Loading...</div>';
     let url=GOOGLE_SCRIPT_URL+'?action=myOrders&token='+encodeURIComponent(SESSION.token); if(dateOpt)url+='&date='+encodeURIComponent(dateOpt);
-    fetch(url).then(r=>r.json()).then(j=>{ if(j.status==='success')renderMyOrders(j.orders||[],!!dateOpt); else if(j.status==='invalid_session')forceLogout(); else box.innerHTML='<div style="color:#999;font-size:13px;">Could not load orders.</div>'; }).catch(()=>{ box.innerHTML='<div style="color:#999;font-size:13px;">Network error.</div>'; });
+    fetch(url).then(r=>r.json()).then(j=>{ if(j.status==='success')renderMyOrders(j.orders||[], !!(dateOpt && dateOpt!==fmtYMD(dateWithOffset(0)))); else if(j.status==='invalid_session')forceLogout(); else box.innerHTML='<div style="color:#999;font-size:13px;">Could not load orders.</div>'; }).catch(()=>{ box.innerHTML='<div style="color:#999;font-size:13px;">Network error.</div>'; });
   }
   function viewHistory(){ const d=document.getElementById('histDate').value; if(!d){ showToast(t('selectDate'),'warning'); return; } loadMyOrders(d); }
   function cancelMyOrder(row,dd,createdIso){ if(!isLoggedIn()){ showAuth(); return; } if(!canCancel({deliveryDate:dd,createdIso:createdIso||''})){ showToast(t('cancelClosed'),'error'); return; } if(!confirm(t('confirmCancel')))return;
