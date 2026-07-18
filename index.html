@@ -30,7 +30,7 @@
     /* HERO — clean flat header with proper top-left back button */
     .hero { background:var(--card); padding:20px 20px 18px; text-align:center; color:var(--ink); position:relative; border-bottom:1px solid var(--line); }
     .hero.sub-hero { padding-top:52px; }
-    .back-link { position:absolute; top:14px; left:14px; display:inline-flex; align-items:center; gap:5px; font-size:13.5px; font-weight:700; color:var(--accent-dark); background:var(--accent-soft); padding:8px 14px; border-radius:20px; cursor:pointer; z-index:5; }
+    .back-link { position:fixed; bottom:80px; left:16px; display:inline-flex; align-items:center; gap:5px; font-size:13.5px; font-weight:800; color:#fff; background:var(--accent); border:none; font-family:inherit; padding:11px 18px; border-radius:24px; cursor:pointer; z-index:120; box-shadow:0 6px 16px rgba(99,102,241,0.35); }
     .hero .logo { font-size:38px; margin-bottom:4px; }
     .hero h1 { font-size:21px; font-weight:900; margin-bottom:2px; color:var(--ink); letter-spacing:-0.3px; }
     .hero .tagline { font-size:13px; color:var(--muted); margin-bottom:8px; }
@@ -948,7 +948,7 @@
   <!-- ══════ CART VIEW ══════ -->
   <div id="cartView" class="hidden">
     <div class="hero sub-hero">
-      <span class="back-link" onclick="goToPage1()" data-i="backMenu"></span>
+      <button type="button" class="back-link" onclick="goToPage1()" data-i="backMenu"></button>
       <h1 style="font-size:20px;" data-i="yourCart"></h1>
     </div>
     <div class="section">
@@ -967,7 +967,7 @@
   <!-- ══════ SUBSCRIPTION VIEW ══════ -->
   <div id="subView" class="hidden">
     <div class="hero sub-hero">
-      <span class="back-link" onclick="goToPage1()" data-i="backMenu"></span>
+      <button type="button" class="back-link" onclick="goToPage1()" data-i="backMenu"></button>
       <h1 style="font-size:20px;" data-i="subTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="subSub"></p>
     </div>
@@ -979,12 +979,12 @@
   </div>
 
   <!-- ══════ MY ORDERS VIEW ══════ -->
-  <div id="ordersView" class="hidden" style="display:flex;flex-direction:column;min-height:calc(100vh - 66px);">
+  <div id="ordersView" class="hidden">
     <div class="hero sub-hero">
-      <span class="back-link" onclick="goToPage1()" data-i="backMenu"></span>
+      <button type="button" class="back-link" onclick="goToPage1()" data-i="backMenu"></button>
       <h1 style="font-size:20px;" data-i="myOrders"></h1>
     </div>
-    <div class="section" style="flex:1;">
+    <div class="section">
       <div class="section-title"><span data-i="myOrders"></span> <span class="refresh-link" onclick="const hd=document.getElementById('histDate');loadMyOrders(hd&&hd.value?hd.value:fmtYMD(dateWithOffset(0)));" data-i="refresh"></span></div>
       <div class="cust-label" data-i="viewPast"></div>
       <div class="hist-row" style="margin-bottom:14px;">
@@ -993,13 +993,13 @@
       </div>
       <div id="myOrdersList"></div>
     </div>
-    <div class="footer">Flying Birds Tiffin Services · Godrej Garden City<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
   </div>
+
 
   <!-- ══════ ABOUT + CONTACT (merged) ══════ -->
   <div id="aboutView" class="hidden">
     <div class="hero sub-hero">
-      <span class="back-link" onclick="goToPage1()" data-i="backMenu"></span>
+      <button type="button" class="back-link" onclick="goToPage1()" data-i="backMenu"></button>
       <h1 style="font-size:20px;" data-i="aboutTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="aboutSub"></p>
     </div>
@@ -1039,7 +1039,7 @@
     </div>
 
     <div class="section" id="orderFormWrap">
-      <span class="back-link" onclick="goToPage1()" data-i="backMenu"></span>
+      <button type="button" class="back-link" onclick="goToPage1()" data-i="backMenu"></button>
       <div class="summary-card" id="summaryCard"></div>
       <div class="saved-note" id="savedNote" data-i="autofillNote"></div>
 
@@ -1126,9 +1126,9 @@
 
   <!-- ══════ ADMIN LOGIN ══════ -->
   <!-- ══════ PROFILE ══════ -->
-  <div id="profileView" class="hidden" style="display:flex;flex-direction:column;min-height:calc(100vh - 66px);">
-    <div class="hero sub-hero"><span class="back-link" onclick="showLanding()" data-i="backMenu"></span><h1 style="font-size:20px;" data-i="pfTitle"></h1></div>
-    <div class="section" style="flex:1;">
+  <div id="profileView" class="hidden">
+    <div class="hero sub-hero"><button type="button" class="back-link" onclick="showLanding()" data-i="backMenu"></button><h1 style="font-size:20px;" data-i="pfTitle"></h1></div>
+    <div class="section">
       <div class="pf-card"><div class="pf-ava" id="pfAva">?</div><div class="pf-nm" id="pfName"></div><div class="pf-ph" id="pfPhone"></div></div>
       <div class="lp-sec-t" data-i="pfAddr"></div>
       <div class="pf-box">
@@ -1146,8 +1146,8 @@
       <select class="sh-select" id="langSelProfile" onchange="setLang(this.value)"></select>
       <button class="add-cart-btn" style="margin-top:20px;background:var(--dangerbg);color:var(--danger);" onclick="logout()" data-i="logout"></button>
     </div>
-    <div class="footer">Flying Birds Tiffin Services · Godrej Garden City<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
   </div>
+
 
   <div id="adminLogin" class="hidden">
     <div class="hero" style="padding:20px;"><h1 style="font-size:20px;">🔐 Admin Login</h1></div>
@@ -3468,29 +3468,28 @@
     }
     else showPublic();
 
-    // ═══════ SWIPE GESTURES ═══════
-    // Right swipe: home/menu (jaha hamburger hai) → drawer khole.
-    // Sub-pages (Orders/Profile/Cart/About/etc, jaha ← Back hai) → back jaaye
-    // (existing popstate wali smart-back logic reuse karta hai).
+    // ═══════ EDGE SWIPE → DRAWER ═══════
+    // Sirf screen ke bilkul left edge (24px) se shuru hoke right swipe karne
+    // par drawer khulega. Beech screen se swipe karne par kuch nahi hota
+    // (isse content/scroll disturb nahi hota).
     (function(){
       let sx=0, sy=0, tracking=false;
-      const NOSWIPE_SEL='.sh-addons-row, .about-slides, input, select, textarea';
       document.addEventListener('touchstart', function(e){
-        if(e.touches.length!==1) { tracking=false; return; }
-        if(e.target.closest && e.target.closest(NOSWIPE_SEL)) { tracking=false; return; }
+        if(e.touches.length!==1){ tracking=false; return; }
         const drawer=document.getElementById('drawer');
-        if(drawer && drawer.classList.contains('open')) { tracking=false; return; }
-        sx=e.touches[0].clientX; sy=e.touches[0].clientY; tracking=true;
+        if(drawer && drawer.classList.contains('open')){ tracking=false; return; }
+        const x=e.touches[0].clientX;
+        if(x>24){ tracking=false; return; }   // sirf edge se
+        sx=x; sy=e.touches[0].clientY; tracking=true;
       }, {passive:true});
       document.addEventListener('touchend', function(e){
         if(!tracking) return; tracking=false;
         const t=e.changedTouches[0]; if(!t) return;
         const dx=t.clientX-sx, dy=t.clientY-sy;
-        if(dx<80 || Math.abs(dy)>60) return;   // sirf clean right-swipe
+        if(dx<60 || Math.abs(dy)>60) return;
         const onHome=!document.getElementById('homeView').classList.contains('hidden');
         const onMenu=!document.getElementById('page1').classList.contains('hidden');
-        if(onHome||onMenu){ openDrawer(); return; }
-        history.back();   // popstate handler already smart-back karta hai
+        if(onHome||onMenu) openDrawer();
       }, {passive:true});
     })();
 
