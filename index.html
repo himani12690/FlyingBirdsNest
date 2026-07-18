@@ -296,7 +296,7 @@
     .sh-radio.on::after { content:''; width:11px; height:11px; background:var(--accent); border-radius:50%; }
     .sh-lbl { font-size:12px; font-weight:700; color:var(--ink); margin:10px 0 5px; }
     .sh-lbl:first-child { margin-top:0; }
-    .sh-select { width:100%; padding:11px; border:1.5px solid var(--line); border-radius:11px; font-size:13px; font-weight:700; background:var(--card); }
+    .sh-select { width:100%; padding:12px 11px; line-height:1.5; border:1.5px solid var(--line); border-radius:11px; font-size:13px; font-weight:700; background:var(--card); }
     .sh-chips { display:flex; gap:8px; flex-wrap:wrap; }
     .sh-chip { padding:8px 13px; border:1.5px solid var(--line); border-radius:20px; font-size:12px; font-weight:700; color:var(--ink); background:var(--card); cursor:pointer; white-space:nowrap; }
     .sh-chip.on { border-color:var(--accent); background:var(--accent-soft); color:var(--accent-dark); }
@@ -969,7 +969,7 @@
   <!-- ══════ CART VIEW ══════ -->
   <div id="cartView" class="hidden">
     <div class="hero sub-hero">
-      
+      <span class="hamburger" style="position:absolute;left:14px;top:14px;" onclick="openDrawer()">☰</span>
       <h1 style="font-size:20px;" data-i="yourCart"></h1>
     </div>
     <div class="section">
@@ -1002,7 +1002,7 @@
   <!-- ══════ MY ORDERS VIEW ══════ -->
   <div id="ordersView" class="hidden">
     <div class="hero sub-hero">
-      
+      <span class="hamburger" style="position:absolute;left:14px;top:14px;" onclick="openDrawer()">☰</span>
       <h1 style="font-size:20px;" data-i="myOrders"></h1>
     </div>
     <div class="section">
@@ -1148,7 +1148,7 @@
   <!-- ══════ ADMIN LOGIN ══════ -->
   <!-- ══════ PROFILE ══════ -->
   <div id="profileView" class="hidden">
-    <div class="hero sub-hero"><h1 style="font-size:20px;" data-i="pfTitle"></h1></div>
+    <div class="hero sub-hero"><span class="hamburger" style="position:absolute;left:14px;top:14px;" onclick="openDrawer()">☰</span><h1 style="font-size:20px;" data-i="pfTitle"></h1></div>
     <div class="section">
       <div class="pf-card"><div class="pf-ava" id="pfAva">?</div><div class="pf-nm" id="pfName"></div><div class="pf-ph" id="pfPhone"></div></div>
       <div class="lp-sec-t" data-i="pfAddr"></div>
