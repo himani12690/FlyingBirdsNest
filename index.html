@@ -979,13 +979,13 @@
   </div>
 
   <!-- ══════ MY ORDERS VIEW ══════ -->
-  <div id="ordersView" class="hidden">
+  <div id="ordersView" class="hidden" style="display:flex;flex-direction:column;min-height:100vh;">
     <div class="hero sub-hero">
       <span class="back-link" onclick="goToPage1()" data-i="backMenu"></span>
       <h1 style="font-size:20px;" data-i="myOrders"></h1>
     </div>
-    <div class="section">
-      <div class="section-title"><span data-i="myOrders"></span> <span class="refresh-link" onclick="loadMyOrders()" data-i="refresh"></span></div>
+    <div class="section" style="flex:1;">
+      <div class="section-title"><span data-i="myOrders"></span> <span class="refresh-link" onclick="const hd=document.getElementById('histDate');loadMyOrders(hd&&hd.value?hd.value:fmtYMD(dateWithOffset(0)));" data-i="refresh"></span></div>
       <div class="cust-label" data-i="viewPast"></div>
       <div class="hist-row" style="margin-bottom:14px;">
         <input type="date" id="histDate">
@@ -1618,7 +1618,7 @@
     document.querySelectorAll('[data-ph]').forEach(el => { el.placeholder = t(el.getAttribute('data-ph')); });
     if (SESSION && SESSION.name) document.getElementById('profileName').textContent = '👤 ' + SESSION.name;
     renderDateSelector(); renderMealTabs(); renderMenuDateTime(); renderMealPanel(); renderCart(); renderAbout(); renderHome(); renderProfile();
-    if (isLoggedIn()) loadMyOrders();
+    if (isLoggedIn()) { const hd=document.getElementById('histDate'); loadMyOrders(hd&&hd.value?hd.value:fmtYMD(dateWithOffset(0))); }
   }
   function initLangSelectors() {
     ['langSel','langSelAuth'].forEach(id => {
