@@ -769,7 +769,7 @@
 
   <div id="authPage" class="hidden">
     <div class="hero">
-      <span class="back-link" style="position:absolute;left:14px;top:14px;color:#fff;" onclick="showPublic()" data-i="pubBack"></span>
+      <span class="back-link" style="position:absolute;left:14px;top:14px;bottom:auto;background:rgba(255,255,255,.15);color:#fff;box-shadow:none;padding:7px 13px;font-size:12.5px;" onclick="showPublic()" data-i="pubBack"></span>
       <div class="lang-switch"><select id="langSelAuth" onchange="setLang(this.value)"></select></div>
       <div class="logo">🍱</div>
       <h1>Flying Birds Tiffin</h1>
@@ -1178,9 +1178,11 @@
 
 
   <div id="adminLogin" class="hidden">
-    <div class="hero" style="padding:20px;"><h1 style="font-size:20px;">🔐 Admin Login</h1></div>
+    <div class="hero" style="padding:20px;position:relative;">
+      <span class="back-link" style="position:absolute;left:14px;top:14px;bottom:auto;background:var(--accent-soft);color:var(--accent-dark);box-shadow:none;padding:7px 13px;font-size:12.5px;" onclick="hideAdmin()" data-i="backApp"></span>
+      <h1 style="font-size:20px;">🔐 Admin Login</h1>
+    </div>
     <div class="section">
-      <span class="back-link" onclick="hideAdmin()" data-i="backApp"></span>
       <div class="form-group"><label>Username</label><input type="text" id="adminUser"></div>
       <div class="form-group"><label>Password</label><input type="password" id="adminPass"></div>
       <button class="admin-btn" id="loginBtn" onclick="adminLogin()">🔓 Login</button>
