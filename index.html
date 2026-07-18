@@ -631,10 +631,18 @@
   #bootLoader .bl-spin{width:34px;height:34px;border:3.5px solid #e7e9f0;border-top-color:#6366f1;border-radius:50%;animation:blsp .8s linear infinite;}
   @keyframes blsp{to{transform:rotate(360deg)}}
   #bootLoader .bl-t{font-size:13px;font-weight:700;color:#6b7280;}
+  #authTransition{position:fixed;inset:0;background:#f7f8fc;z-index:99998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:'Segoe UI',system-ui,sans-serif;transition:opacity .25s;}
+  #authTransition.hidden{display:none;}
+  #authTransition.gone{opacity:0;pointer-events:none;}
+  #authTransition .bl-logo{font-size:44px;}
+  #authTransition .bl-spin{width:34px;height:34px;border:3.5px solid #e7e9f0;border-top-color:#6366f1;border-radius:50%;animation:blsp .8s linear infinite;}
+  #authTransition .bl-t{font-size:15px;font-weight:800;color:#3a3f52;}
+  #authTransition .bl-t.welcome{color:var(--accent);font-size:17px;}
   </style>
 </head>
 <body>
 <div id="bootLoader"><div class="bl-logo">🍱</div><div class="bl-spin"></div><div class="bl-t">Loading…</div></div>
+<div id="authTransition" class="hidden"><div class="bl-logo">🍱</div><div class="bl-spin"></div><div class="bl-t" id="authTransitionText">Signing in…</div></div>
 <div class="container">
 
   <!-- ══════ SIDE DRAWER ══════ -->
@@ -2164,11 +2172,18 @@
     googleCredential=resp.credential;
     const err=document.getElementById('authGoogleErr'); if(err) err.classList.remove('show');
     document.getElementById('err-authPhone').classList.remove('show');
+    const at=document.getElementById('authTransition'); const atText=document.getElementById('authTransitionText');
+    if(at){ atText.textContent='Signing in…'; atText.classList.remove('welcome'); at.classList.remove('hidden','gone'); }
     apiPost({ action:'googleLogin', credential: googleCredential, phone: readAuthPhone() }).then(j=>{
       if(j.status==='success'){
         SESSION={token:j.token,name:j.name,phone:j.phone}; storeSet('fbt_session',SESSION);
-        showToast(t('welcomeUser')+' '+j.name+'!','success'); enterApp(); return;
+        if(at){
+          atText.textContent='👋 '+t('welcomeUser')+' '+j.name+'!'; atText.classList.add('welcome');
+          setTimeout(()=>{ enterApp(); at.classList.add('gone'); setTimeout(()=>at.classList.add('hidden'),300); }, 900);
+        } else { enterApp(); }
+        return;
       }
+      if(at){ at.classList.add('gone'); setTimeout(()=>at.classList.add('hidden'),300); }
       if(j.status==='need_phone'){
         document.getElementById('googlePhoneBox').classList.remove('hidden');
         document.getElementById('authPhone').focus();
@@ -2176,7 +2191,7 @@
         return;
       }
       showToast('❌ '+(j.message||'Google sign-in failed'),'error');
-    }).catch(()=>{ showToast(t('errNetwork'),'error'); });
+    }).catch(()=>{ if(at){ at.classList.add('gone'); setTimeout(()=>at.classList.add('hidden'),300); } showToast(t('errNetwork'),'error'); });
   }
 
   function finishGoogleLogin(){
