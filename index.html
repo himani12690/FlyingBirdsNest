@@ -1126,9 +1126,9 @@
 
   <!-- ══════ ADMIN LOGIN ══════ -->
   <!-- ══════ PROFILE ══════ -->
-  <div id="profileView" class="hidden">
+  <div id="profileView" class="hidden" style="display:flex;flex-direction:column;min-height:calc(100vh - 66px);">
     <div class="hero sub-hero"><span class="back-link" onclick="showLanding()" data-i="backMenu"></span><h1 style="font-size:20px;" data-i="pfTitle"></h1></div>
-    <div class="section">
+    <div class="section" style="flex:1;">
       <div class="pf-card"><div class="pf-ava" id="pfAva">?</div><div class="pf-nm" id="pfName"></div><div class="pf-ph" id="pfPhone"></div></div>
       <div class="lp-sec-t" data-i="pfAddr"></div>
       <div class="pf-box">
@@ -3467,6 +3467,32 @@
       }
     }
     else showPublic();
+
+    // ═══════ SWIPE GESTURES ═══════
+    // Right swipe: home/menu (jaha hamburger hai) → drawer khole.
+    // Sub-pages (Orders/Profile/Cart/About/etc, jaha ← Back hai) → back jaaye
+    // (existing popstate wali smart-back logic reuse karta hai).
+    (function(){
+      let sx=0, sy=0, tracking=false;
+      const NOSWIPE_SEL='.sh-addons-row, .about-slides, input, select, textarea';
+      document.addEventListener('touchstart', function(e){
+        if(e.touches.length!==1) { tracking=false; return; }
+        if(e.target.closest && e.target.closest(NOSWIPE_SEL)) { tracking=false; return; }
+        const drawer=document.getElementById('drawer');
+        if(drawer && drawer.classList.contains('open')) { tracking=false; return; }
+        sx=e.touches[0].clientX; sy=e.touches[0].clientY; tracking=true;
+      }, {passive:true});
+      document.addEventListener('touchend', function(e){
+        if(!tracking) return; tracking=false;
+        const t=e.changedTouches[0]; if(!t) return;
+        const dx=t.clientX-sx, dy=t.clientY-sy;
+        if(dx<80 || Math.abs(dy)>60) return;   // sirf clean right-swipe
+        const onHome=!document.getElementById('homeView').classList.contains('hidden');
+        const onMenu=!document.getElementById('page1').classList.contains('hidden');
+        if(onHome||onMenu){ openDrawer(); return; }
+        history.back();   // popstate handler already smart-back karta hai
+      }, {passive:true});
+    })();
 
     // ═══════ MOBILE BACK BUTTON ═══════
     // Pehle koi khula popup/drawer band karo; phir sub-page se home; home pe hi
