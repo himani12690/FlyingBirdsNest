@@ -585,7 +585,7 @@
     .orders-table th { background:var(--accent); color:#fff; padding:8px 6px; font-size:11.5px; text-align:left; }
     .orders-table td { padding:8px 6px; border-bottom:1px solid #eee; color:#444; }
     .admin-btn { width:100%; padding:14px; background:var(--accent); color:#fff; border:none; border-radius:14px; font-size:15px; font-weight:800; cursor:pointer; margin-top:6px; }
-    .btn-primary { width:100%; padding:14px; background:var(--accent); color:#fff; border:none; border-radius:14px; font-size:15px; font-weight:800; cursor:pointer; margin-top:4px; box-shadow:0 6px 16px rgba(99,102,241,0.28); }
+    .btn-primary { width:100%; display:flex; align-items:center; justify-content:center; gap:8px; padding:15px 16px; background:var(--accent); color:#fff; border:none; border-radius:16px; font-size:15.5px; font-weight:800; letter-spacing:.2px; cursor:pointer; margin-top:4px; box-shadow:0 6px 16px rgba(99,102,241,0.28); }
     .btn-primary:active { transform:translateY(1px); }
     .divider { display:flex; align-items:center; gap:12px; color:var(--muted); font-size:12px; font-weight:700; margin:20px 0 14px; }
     .divider::before,.divider::after { content:''; flex:1; height:1px; background:var(--line); }
@@ -599,8 +599,8 @@
     .sub-text { font-size:13px; color:var(--muted); margin:-6px 0 16px; line-height:1.5; }
     .hint { font-size:11.5px; color:var(--muted); margin-top:6px; line-height:1.5; display:block; }
     .center-hint { text-align:center; font-size:12px; color:var(--muted); margin-top:8px; line-height:1.5; padding:0 10px; }
-    /* Google button — full-width clean look (mockup jaisa) */
-    #googleBtnBox { width:100%; display:flex; justify-content:center; }
+    /* Google button — full-width clean look, size matched to Sign In button */
+    #googleBtnBox { width:100%; display:flex; justify-content:center; align-items:center; min-height:50px; zoom:1.14; margin:2px 0; }
     #googleBtnBox > div { width:100% !important; }
     #googleBtnBox iframe { width:100% !important; margin:0 auto !important; }
     #authSocialBlock { margin-top:6px; }
@@ -758,7 +758,7 @@
           <div class="field-error" id="err-siPassword" data-i="errPassword"></div>
         </div>
         <span class="forgot-link" onclick="showAuthMode('forgot')" data-i="forgotPw"></span>
-        <button class="btn-primary" id="siBtn" onclick="doEmailSignIn()">→ <span data-i="signInBtn"></span></button>
+        <button class="btn-primary" id="siBtn" onclick="doEmailSignIn()"><span>→</span><span data-i="signInBtn"></span></button>
         <div class="auth-switch" data-i-html="switchToSignUp"></div>
       </div>
 
@@ -787,7 +787,7 @@
           <div class="pwd-wrap"><input type="password" id="suConfirm" data-ph="confirmPwPh" autocomplete="new-password"><button type="button" class="pwd-toggle" onclick="togglePwd('suConfirm',this)">👁️</button></div>
           <div class="field-error" id="err-suConfirm" data-i="errConfirmPw"></div>
         </div>
-        <button class="btn-primary" id="suBtn" onclick="doEmailSignUp()">➕ <span data-i="createAccountBtn"></span></button>
+        <button class="btn-primary" id="suBtn" onclick="doEmailSignUp()"><span>➕</span><span data-i="createAccountBtn"></span></button>
         <div class="auth-switch" data-i-html="switchToSignIn"></div>
       </div>
 
@@ -824,7 +824,7 @@
       <!-- SHARED: Google option (hidden in forgot/reset modes) -->
       <div id="authSocialBlock">
         <div class="divider"><span data-i="orDivider"></span></div>
-        <div id="googleBtnBox" style="display:flex;justify-content:center;min-height:44px;align-items:center;"></div>
+        <div id="googleBtnBox"></div>
         <div class="center-hint" data-i="loginHint"></div>
         <div id="googlePhoneBox" class="hidden" style="margin-top:14px;">
           <div class="form-group">
