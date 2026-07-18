@@ -948,7 +948,7 @@
   <!-- ══════ CART VIEW ══════ -->
   <div id="cartView" class="hidden">
     <div class="hero sub-hero">
-      <button type="button" class="back-link" onclick="goToPage1()" data-i="backMenu"></button>
+      
       <h1 style="font-size:20px;" data-i="yourCart"></h1>
     </div>
     <div class="section">
@@ -967,7 +967,7 @@
   <!-- ══════ SUBSCRIPTION VIEW ══════ -->
   <div id="subView" class="hidden">
     <div class="hero sub-hero">
-      <button type="button" class="back-link" onclick="goToPage1()" data-i="backMenu"></button>
+      
       <h1 style="font-size:20px;" data-i="subTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="subSub"></p>
     </div>
@@ -981,7 +981,7 @@
   <!-- ══════ MY ORDERS VIEW ══════ -->
   <div id="ordersView" class="hidden">
     <div class="hero sub-hero">
-      <button type="button" class="back-link" onclick="goToPage1()" data-i="backMenu"></button>
+      
       <h1 style="font-size:20px;" data-i="myOrders"></h1>
     </div>
     <div class="section">
@@ -999,7 +999,7 @@
   <!-- ══════ ABOUT + CONTACT (merged) ══════ -->
   <div id="aboutView" class="hidden">
     <div class="hero sub-hero">
-      <button type="button" class="back-link" onclick="goToPage1()" data-i="backMenu"></button>
+      
       <h1 style="font-size:20px;" data-i="aboutTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="aboutSub"></p>
     </div>
@@ -1039,7 +1039,7 @@
     </div>
 
     <div class="section" id="orderFormWrap">
-      <button type="button" class="back-link" onclick="goToPage1()" data-i="backMenu"></button>
+      
       <div class="summary-card" id="summaryCard"></div>
       <div class="saved-note" id="savedNote" data-i="autofillNote"></div>
 
@@ -1127,7 +1127,7 @@
   <!-- ══════ ADMIN LOGIN ══════ -->
   <!-- ══════ PROFILE ══════ -->
   <div id="profileView" class="hidden">
-    <div class="hero sub-hero"><button type="button" class="back-link" onclick="showLanding()" data-i="backMenu"></button><h1 style="font-size:20px;" data-i="pfTitle"></h1></div>
+    <div class="hero sub-hero"><h1 style="font-size:20px;" data-i="pfTitle"></h1></div>
     <div class="section">
       <div class="pf-card"><div class="pf-ava" id="pfAva">?</div><div class="pf-nm" id="pfName"></div><div class="pf-ph" id="pfPhone"></div></div>
       <div class="lp-sec-t" data-i="pfAddr"></div>
@@ -2799,7 +2799,7 @@
     apiPost({action:'skipSub',token:SESSION.token,date:d}).then(j=>{ if(j.status==='success'){ showToast(j.skipped?('⏭️ '+t('subSkipDone')):('↩️ '+t('subUnskipDone')),'success'); loadSub(); } else if(j.status==='invalid_session')forceLogout(); else showToast('❌ '+srvMsg(j),'error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
 
   // ═══════ MY ORDERS ═══════
-  function orderMealsText(o){ const tf=v=>v?(' 🍱 '+v):''; const sz=v=>v&&String(v).trim()?v:'Chef\'s choice'; const p=[]; if(Number(o.breakfastQty))p.push('🌅 '+mealTitle('breakfast')+' ×'+o.breakfastQty+(o.breakfastTimeSlot?' · 🕐 '+o.breakfastTimeSlot:'')); if(Number(o.lunchQty))p.push('☀️ '+sz(o.lunchSabzi)+' ×'+o.lunchQty+tf(o.lunchTiffin)+(o.lunchRoti?' ('+o.lunchRoti+')':'')+(o.lunchAddons&&o.lunchAddons!=='None'?' · '+o.lunchAddons:'')+(o.lunchTimeSlot?' · 🕐 '+o.lunchTimeSlot:'')); if(Number(o.dinnerQty))p.push('🌙 '+sz(o.dinnerSabzi)+' ×'+o.dinnerQty+tf(o.dinnerTiffin)+(o.dinnerRoti?' ('+o.dinnerRoti+')':'')+(o.dinnerAddons&&o.dinnerAddons!=='None'?' · '+o.dinnerAddons:'')+(o.dinnerTimeSlot?' · 🕐 '+o.dinnerTimeSlot:'')); return p.join('<br>'); }
+  function orderMealsText(o){ const tf=v=>v?(' 🍱 '+esc(v)):''; const sz=v=>v&&String(v).trim()?esc(v):'Chef\'s choice'; const p=[]; if(Number(o.breakfastQty))p.push('🌅 '+mealTitle('breakfast')+' ×'+o.breakfastQty+(o.breakfastTimeSlot?' · 🕐 '+esc(o.breakfastTimeSlot):'')); if(Number(o.lunchQty))p.push('☀️ '+sz(o.lunchSabzi)+' ×'+o.lunchQty+tf(o.lunchTiffin)+(o.lunchRoti?' ('+esc(o.lunchRoti)+')':'')+(o.lunchAddons&&o.lunchAddons!=='None'?' · '+esc(o.lunchAddons):'')+(o.lunchTimeSlot?' · 🕐 '+esc(o.lunchTimeSlot):'')); if(Number(o.dinnerQty))p.push('🌙 '+sz(o.dinnerSabzi)+' ×'+o.dinnerQty+tf(o.dinnerTiffin)+(o.dinnerRoti?' ('+esc(o.dinnerRoti)+')':'')+(o.dinnerAddons&&o.dinnerAddons!=='None'?' · '+esc(o.dinnerAddons):'')+(o.dinnerTimeSlot?' · 🕐 '+esc(o.dinnerTimeSlot):'')); return p.join('<br>'); }
   function fmtDateStr(ymd){
     const s=String(ymd);
     const p=s.split('-').map(Number);
@@ -2937,8 +2937,8 @@
   let adminPromos=[];
   function loadPromos(){
     if(!adminCreds)return;
-    fetch(`${GOOGLE_SCRIPT_URL}?action=getpromos&user=${encodeURIComponent(adminCreds.user)}&pass=${encodeURIComponent(adminCreds.pass)}`)
-      .then(r=>r.json()).then(j=>{ if(j.status==='success'){ adminPromos=j.promos||[]; renderPromoList(); } })
+    apiPost({action:'getpromos', user:adminCreds.user, pass:adminCreds.pass})
+      .then(j=>{ if(j.status==='success'){ adminPromos=j.promos||[]; renderPromoList(); } })
       .catch(()=>{ document.getElementById('promoList').innerHTML='<p style="text-align:center;color:#999;">Network error.</p>'; });
   }
   function renderPromoList(){
@@ -3004,7 +3004,7 @@
     const u=document.getElementById('adminUser').value.trim(), p=document.getElementById('adminPass').value;
     if(!u||!p){ showToast('⚠️ Enter username and password.','warning'); return; }
     const btn=document.getElementById('loginBtn'); btn.textContent='⏳ ...'; btn.disabled=true;
-    fetch(`${GOOGLE_SCRIPT_URL}?action=stats&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`).then(r=>r.json()).then(j=>{
+    apiPost({action:'stats', user:u, pass:p}).then(j=>{
       btn.textContent='🔓 Login'; btn.disabled=false;
       if(j.status!=='success'){ showToast('❌ Invalid username or password.','error'); return; }
       adminCreds={user:u,pass:p}; storeSet('fbt_admin',adminCreds);
@@ -3016,7 +3016,7 @@
     const a=storeGet('fbt_admin'); if(!a||!a.user||!a.pass) return false;
     adminCreds=a;                                  // creds cached — password dobara nahi maangega
     if(storeGet('fbt_view')!=='adminPanel') return false;   // customer/public page par tha => admin mat kholo
-    fetch(`${GOOGLE_SCRIPT_URL}?action=stats&user=${encodeURIComponent(a.user)}&pass=${encodeURIComponent(a.pass)}`).then(r=>r.json()).then(j=>{
+    apiPost({action:'stats', user:a.user, pass:a.pass}).then(j=>{
       if(j.status!=='success'){ adminCreds=null; storeDel('fbt_admin'); return; }
       showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminTab('orders'); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
     }).catch(()=>{ /* offline: creds set, panel dikha do */ showView('adminPanel'); initMenuEditor(); initConfigEditor(); adminTab('orders'); });
@@ -3036,7 +3036,7 @@
   function loadOrders(){ if(!adminCreds)return; adminDateLabels(); fillSocFilter();
     const dateStr=fmtYMD(dateWithOffset(adminDateOffset));
     document.getElementById('ordersList').innerHTML='<div style="text-align:center;color:#999;padding:20px;">Loading...</div>';
-    fetch(`${GOOGLE_SCRIPT_URL}?action=orders&date=${dateStr}&user=${encodeURIComponent(adminCreds.user)}&pass=${encodeURIComponent(adminCreds.pass)}`).then(r=>r.json()).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminOrders=j.orders||[]; renderOrders(); renderKitchen(); }).catch(()=>showToast(t('errNetwork'),'error')); }
+    apiPost({action:'orders', date:dateStr, user:adminCreds.user, pass:adminCreds.pass}).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminOrders=j.orders||[]; renderOrders(); renderKitchen(); }).catch(()=>showToast(t('errNetwork'),'error')); }
   function setOrderFilter(f){ orderFilter=f; const c=document.getElementById('filterChips').children; for(let i=0;i<c.length;i++)c[i].classList.toggle('sel',c[i].getAttribute('data-f')===f); renderOrders(); }
   let socFilter='All';
   function fillSocFilter(){
@@ -3094,7 +3094,7 @@
     renderBulkBar();
     if(!list.length){ box.innerHTML='<div style="text-align:center;color:#999;padding:20px;">No orders ('+orderFilter+(socFilter!=='All'?(' · '+socFilter):'')+').</div>'; return; }
     box.innerHTML=list.map(o=>`<div class="oc" onclick="openOrderModal(${o.row})"><div class="oc-top"><span class="oc-name">${esc(o.name)}</span><span class="oc-status st-${o.status}">${STATUS_LABEL[o.status]||o.status}</span></div>
-      <div class="oc-meal-box">${orderMealsText(o)}${o.note&&o.note!=='None'?'<br><span style="color:var(--muted);">📝 '+o.note+'</span>':''}${o.promo?'<br><span style="color:var(--ok);font-weight:800;">🎟️ '+o.promo+'</span>':''}</div>
+      <div class="oc-meal-box">${orderMealsText(o)}${o.note&&o.note!=='None'?'<br><span style="color:var(--muted);">📝 '+esc(o.note)+'</span>':''}${o.promo?'<br><span style="color:var(--ok);font-weight:800;">🎟️ '+esc(o.promo)+'</span>':''}</div>
       <div class="oc-info"><span>${o.deliveryType==='office'?`🏢 ${esc(o.society)} · Emp ${esc(o.flat)}`:`🏠 ${esc(o.society)} ${esc(o.flat)}`}</span><span>📞 <a href="tel:+91${o.phone}" onclick="event.stopPropagation()">${o.phone}</a></span></div>
       <div class="oc-info"><span>🕐 ${o.time}</span><span>💳 ${o.payment}${o.paymentStatus==='Paid'?(o.status==='Cancelled'?' <span class="paid-badge" style="background:var(--dangerbg);color:var(--danger);">REFUND DUE</span>':' <span class="paid-badge">PAID</span>'):''} · 💰 <b>${o.total}</b></span></div>
       <div class="oc-tap-hint">👆 Tap for details & status update</div></div>`).join('');
@@ -3174,8 +3174,8 @@
     try{ ringCtx = ringCtx || new (window.AudioContext||window.webkitAudioContext)(); if(ringCtx.resume) ringCtx.resume(); }catch(e){}
     storeSet('fbt_alerts_on',1); updateAlertToggleUI();
     if(!adminCreds){ return; }
-    fetch(`${GOOGLE_SCRIPT_URL}?action=lastorder&user=${encodeURIComponent(adminCreds.user)}&pass=${encodeURIComponent(adminCreds.pass)}`)
-      .then(r=>r.json()).then(j=>{ if(j.status==='success') storeSet('fbt_lastrow', j.lastRow||0); })
+    apiPost({action:'lastorder', user:adminCreds.user, pass:adminCreds.pass})
+      .then(j=>{ if(j.status==='success') storeSet('fbt_lastrow', j.lastRow||0); })
       .catch(()=>{})
       .finally(()=>{ startAlertPolling(); showToast('🔔 Order alerts ON — keep this panel open','success'); });
   }
@@ -3183,8 +3183,8 @@
   function stopAlertPolling(){ if(alertTimer){ clearInterval(alertTimer); alertTimer=null; } }
   function checkNewOrders(){
     if(!adminCreds||!alertsOn())return;
-    fetch(`${GOOGLE_SCRIPT_URL}?action=lastorder&user=${encodeURIComponent(adminCreds.user)}&pass=${encodeURIComponent(adminCreds.pass)}`)
-      .then(r=>r.json()).then(j=>{
+    apiPost({action:'lastorder', user:adminCreds.user, pass:adminCreds.pass})
+      .then(j=>{
         if(j.status!=='success')return;
         const prev=parseInt(storeGet('fbt_lastrow')||0,10)||0;
         if(j.lastRow>prev){ storeSet('fbt_lastrow',j.lastRow); showNewOrderAlert(j.latest||{}, j.lastRow-prev); }
@@ -3203,7 +3203,7 @@
     apiPost({action:'setStatus',user:adminCreds.user,pass:adminCreds.pass,row:row,phone:o.phone,status:status}).then(j=>{ if(j.status!=='success'){ o.status=old; renderOrders(); renderKitchen(); showToast('❌ '+(j.message||'Update failed'),'error'); } }).catch(()=>{ o.status=old; renderOrders(); renderKitchen(); showToast(t('errNetwork'),'error'); }); }
 
   function loadUsers(){ if(!adminCreds)return; document.getElementById('usersList').innerHTML='<div style="text-align:center;color:#999;padding:20px;">Loading...</div>';
-    fetch(`${GOOGLE_SCRIPT_URL}?action=users&user=${encodeURIComponent(adminCreds.user)}&pass=${encodeURIComponent(adminCreds.pass)}`).then(r=>r.json()).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminUsers=j.users||[]; renderUsers(); }).catch(()=>showToast(t('errNetwork'),'error')); }
+    apiPost({action:'users', user:adminCreds.user, pass:adminCreds.pass}).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminUsers=j.users||[]; renderUsers(); }).catch(()=>showToast(t('errNetwork'),'error')); }
   function renderUsers(){
     const q=(document.getElementById('userSearch').value||'').toLowerCase().trim();
     const list=adminUsers.filter(u=>!q||u.name.toLowerCase().includes(q)||u.phone.includes(q)||(u.email||'').toLowerCase().includes(q));
@@ -3217,7 +3217,7 @@
   function toggleUserBlock(phone,ns){ if(!adminCreds)return; if(!confirm((ns==='Blocked'?'Block':'Unblock')+' '+phone+'?'))return;
     apiPost({action:'setUserStatus',user:adminCreds.user,pass:adminCreds.pass,phone:phone,status:ns}).then(j=>{ if(j.status==='success'){ const u=adminUsers.find(x=>x.phone===phone); if(u)u.status=ns; renderUsers(); showToast('✅ Updated.','success'); } else showToast('❌ '+(j.message||'Failed'),'error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
 
-  function loadStats(){ if(!adminCreds)return; fetch(`${GOOGLE_SCRIPT_URL}?action=stats&user=${encodeURIComponent(adminCreds.user)}&pass=${encodeURIComponent(adminCreds.pass)}`).then(r=>r.json()).then(j=>{ if(j.status==='success'){ fillStats(j); showToast('🔄 Refreshed.','success'); } }).catch(()=>showToast('❌ Refresh failed.','error')); }
+  function loadStats(){ if(!adminCreds)return; apiPost({action:'stats', user:adminCreds.user, pass:adminCreds.pass}).then(j=>{ if(j.status==='success'){ fillStats(j); showToast('🔄 Refreshed.','success'); } }).catch(()=>showToast('❌ Refresh failed.','error')); }
   function fillStats(j){ document.getElementById('st-todayCount').textContent=j.today.count; document.getElementById('st-todayRev').textContent='₹'+j.today.revenue; document.getElementById('st-weekCount').textContent=j.week.count; document.getElementById('st-totalCount').textContent=j.total.count;
     const tb=document.querySelector('#recentTable tbody'); if(!j.recent||!j.recent.length){ tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:#999;">No orders yet.</td></tr>'; return; }
     const stPill={Pending:'background:var(--warnbg);color:var(--warn);',Preparing:'background:var(--accent-soft);color:var(--accent-dark);',Delivered:'background:var(--okbg);color:var(--ok);'};
