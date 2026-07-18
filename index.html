@@ -599,10 +599,10 @@
     .sub-text { font-size:13px; color:var(--muted); margin:-6px 0 16px; line-height:1.5; }
     .hint { font-size:11.5px; color:var(--muted); margin-top:6px; line-height:1.5; display:block; }
     .center-hint { text-align:center; font-size:12px; color:var(--muted); margin-top:8px; line-height:1.5; padding:0 10px; }
-    /* Google button — full-width clean look, size matched to Sign In button */
-    #googleBtnBox { width:100%; display:flex; justify-content:center; align-items:center; min-height:50px; zoom:1.14; margin:2px 0; }
-    #googleBtnBox > div { width:100% !important; }
-    #googleBtnBox iframe { width:100% !important; margin:0 auto !important; }
+    /* Google button — natural, non-distorted size. Google ke cross-origin
+       iframe ko zoom/scale karna shape distort kar deta hai, isliye avoid.
+       Width force-override hata di — wahi left-shift ka reason thi. */
+    #googleBtnBox { width:100%; display:flex; justify-content:center; align-items:center; min-height:48px; margin:6px 0; }
     #authSocialBlock { margin-top:6px; }
 
     .admin-btn:disabled { opacity:0.6; }
