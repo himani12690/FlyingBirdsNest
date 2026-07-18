@@ -2,6 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>
+    // Theme flash-prevent — page paint se pehle hi sahi theme laga do
+    (function(){
+      try {
+        var m = localStorage.getItem('fbt_theme');
+        m = m ? JSON.parse(m) : 'system';
+        var dark = (m === 'dark') || (m === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      } catch(e){}
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <title>Flying Birds Tiffin — Fresh Homemade Tiffin</title>
@@ -18,13 +29,20 @@
   <link rel="preconnect" href="https://accounts.google.com">
   <style>
     :root{
-      --accent:#6366f1; --accent-dark:#4f46e5; --accent-soft:var(--accent-soft);
+      --accent:#6366f1; --accent-dark:#4f46e5; --accent-soft:#eef0ff;
       --ink:#1e2233; --muted:#6b7280; --line:#e7e9f0; --bg:#f7f8fc; --card:#ffffff;
       --ok:#16a34a; --okbg:#e9f9ef; --danger:#e11d48; --dangerbg:#fdecef;
       --warn:#b45309; --warnbg:#fef6e7; --radius:16px;
+      --body-bg:#dfe3ee;
+    }
+    html[data-theme="dark"]{
+      --accent:#818cf8; --accent-dark:#a5b4fc; --accent-soft:#282a42;
+      --ink:#e7e9f5; --muted:#9ca0b5; --line:#2d3044; --bg:#14151f; --card:#1c1e2c;
+      --ok:#4ade80; --okbg:#173021; --danger:#f87171; --dangerbg:#3a1a20;
+      --warn:#fbbf24; --warnbg:#332508; --body-bg:#0a0a10;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Segoe UI', system-ui, -apple-system, sans-serif; background:#dfe3ee; min-height:100vh; color:var(--ink); }
+    body { font-family:'Segoe UI', system-ui, -apple-system, sans-serif; background:var(--body-bg); min-height:100vh; color:var(--ink); transition:background .2s; }
     .container { max-width:480px; margin:0 auto; background:var(--bg); min-height:100vh; position:relative; }
 
     /* HERO — clean flat header with proper top-left back button */
@@ -47,13 +65,13 @@
     .upi-pay-box { background:var(--accent-soft); border:2px solid var(--accent); border-radius:16px; padding:18px 16px; margin:4px 0 16px; box-shadow:0 6px 18px rgba(99,102,241,0.15); }
     .upi-pay-box .upb-title { font-size:12px; font-weight:800; color:var(--accent-dark); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; }
     .upi-pay-box .upb-amt { font-size:30px; font-weight:900; color:var(--ink); margin-bottom:14px; }
-    .upi-pay-box .upb-qr { margin:0 auto; width:180px; height:180px; background:#fff; border-radius:14px; padding:10px; border:1.5px solid var(--line); }
+    .upi-pay-box .upb-qr { margin:0 auto; width:180px; height:180px; background:var(--card); border-radius:14px; padding:10px; border:1.5px solid var(--line); }
     .upi-pay-box .upb-qr img { width:100%; height:100%; }
     .upi-pay-box .upb-scan { font-size:12px; color:var(--muted); font-weight:700; margin-top:10px; }
-    .upi-pay-box .upb-vpa { display:flex; align-items:center; justify-content:center; gap:8px; font-size:13.5px; font-weight:800; color:var(--ink); background:#fff; border:1.5px solid var(--line); border-radius:11px; padding:12px; margin-top:12px; cursor:pointer; letter-spacing:0.3px; }
+    .upi-pay-box .upb-vpa { display:flex; align-items:center; justify-content:center; gap:8px; font-size:13.5px; font-weight:800; color:var(--ink); background:var(--card); border:1.5px solid var(--line); border-radius:11px; padding:12px; margin-top:12px; cursor:pointer; letter-spacing:0.3px; }
     .upi-pay-box .upb-vpa span { font-size:10.5px; font-weight:800; color:var(--accent-dark); background:var(--accent-soft); border-radius:7px; padding:4px 8px; }
     .upi-pay-box .upb-apps { display:flex; gap:7px; margin-top:11px; }
-    .upi-pay-box .upb-apps a { flex:1; background:#fff; border:1.5px solid var(--line); border-radius:10px; padding:10px 4px; font-size:11.5px; font-weight:800; color:var(--accent-dark); text-decoration:none; }
+    .upi-pay-box .upb-apps a { flex:1; background:var(--card); border:1.5px solid var(--line); border-radius:10px; padding:10px 4px; font-size:11.5px; font-weight:800; color:var(--accent-dark); text-decoration:none; }
     .upi-pay-box .upb-ref { font-size:10.5px; color:var(--muted); margin-top:10px; letter-spacing:0.3px; }
     .upi-pay-box .upb-link { display:inline-block; margin-top:12px; font-size:12.5px; font-weight:800; color:var(--accent-dark); text-decoration:none; }
     .cod-note { background:var(--okbg); border:1.5px dashed var(--ok); border-radius:13px; padding:14px; font-size:12.5px; font-weight:700; color:#166534; line-height:1.6; text-align:center; }
@@ -80,7 +98,7 @@
     .lp-greet:empty { display:none; }
     .lp-brand { font-size:24px; font-weight:900; letter-spacing:0.3px; }
     .lp-tag { font-size:12.5px; opacity:0.92; margin-top:6px; line-height:1.5; }
-    .lp-cta { margin-top:16px; background:#fff; color:var(--accent-dark); border:none; border-radius:14px; padding:14px 36px; font-size:15px; font-weight:900; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,0.18); }
+    .lp-cta { margin-top:16px; background:var(--card); color:var(--accent-dark); border:none; border-radius:14px; padding:14px 36px; font-size:15px; font-weight:900; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,0.18); }
     .lp-loc { font-size:10.5px; opacity:0.85; margin-top:12px; }
     .lp-sec-t { font-size:14px; font-weight:900; color:var(--ink); margin:18px 0 10px; }
     .hm-card { display:flex; align-items:center; gap:12px; background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:11px 13px; margin-bottom:9px; cursor:pointer; }
@@ -138,7 +156,7 @@
     .pub-logo { font-size:42px; }
     .pub-hero h1 { font-size:23px; font-weight:900; margin-top:2px; }
     .pub-hero p { font-size:12.5px; opacity:0.92; margin-top:6px; line-height:1.5; }
-    .pub-cta { margin-top:16px; background:#fff; color:var(--accent-dark); border:none; border-radius:14px; padding:13px 34px; font-size:15px; font-weight:900; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,0.18); }
+    .pub-cta { margin-top:16px; background:var(--card); color:var(--accent-dark); border:none; border-radius:14px; padding:13px 34px; font-size:15px; font-weight:900; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,0.18); }
     .pub-sub { font-size:10.5px; opacity:0.85; margin-top:10px; }
     .pub-hook { text-align:center; padding:6px 2px 4px; }
     .pub-hook .ph-ic { font-size:32px; }
@@ -197,7 +215,7 @@
     .pr-x { cursor:pointer; color:var(--muted); font-weight:900; padding:0 6px; font-size:15px; }
     .pm-row { display:flex; gap:8px; margin-top:8px; }
     .pm-row:first-child { margin-top:0; }
-    .inp-mini { flex:1; padding:10px; border:1.5px solid var(--line); border-radius:10px; font-size:12.5px; background:#fff; min-width:0; }
+    .inp-mini { flex:1; padding:10px; border:1.5px solid var(--line); border-radius:10px; font-size:12.5px; background:var(--card); min-width:0; }
     .promo-chips { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:10px; }
     .promo-chip { background:var(--accent-soft); border:1.5px dashed var(--accent); color:var(--accent-dark); font-size:11px; font-weight:800; padding:7px 11px; border-radius:20px; cursor:pointer; }
     .home-promo { background:linear-gradient(135deg,#fff7e6,#ffedd5); border:1.5px dashed #f59e0b; border-radius:13px; padding:12px 14px; margin-bottom:14px; font-size:12.5px; font-weight:800; color:#92400e; cursor:pointer; line-height:1.6; }
@@ -220,7 +238,7 @@
     .nob-name { font-size:20px; font-weight:800; margin-top:12px; }
     .nob-info { font-size:14px; opacity:0.92; margin-top:4px; }
     .nob-total { font-size:36px; font-weight:900; margin-top:12px; }
-    .nob-btn { margin-top:24px; background:#fff; color:#e11d48; border:none; border-radius:14px; padding:16px 32px; font-size:16px; font-weight:900; cursor:pointer; }
+    .nob-btn { margin-top:24px; background:var(--card); color:#e11d48; border:none; border-radius:14px; padding:16px 32px; font-size:16px; font-weight:900; cursor:pointer; }
     /* ===== SIMPLIFIED MENU ===== */
     .menu-topbar { display:flex; align-items:center; gap:10px; padding:12px 14px; background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:20; }
     .menu-topbar .mt-title { flex:1; min-width:0; }
@@ -333,7 +351,7 @@
     .ord-row .or-chev { color:var(--muted); font-size:16px; flex-shrink:0; }
     .ord-pill { display:inline-block; font-size:9.5px; font-weight:800; padding:2px 8px; border-radius:10px; margin-top:3px; }
     /* Bottom navigation bar */
-    .bottom-nav { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:#fff; border-top:1.5px solid var(--line); display:flex; z-index:150; box-shadow:0 -2px 12px rgba(0,0,0,0.06); }
+    .bottom-nav { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:var(--card); border-top:1.5px solid var(--line); display:flex; z-index:150; box-shadow:0 -2px 12px rgba(0,0,0,0.06); }
     .bn-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 4px 7px; cursor:pointer; position:relative; border:none; background:none; }
     .bn-item .bn-ic { font-size:19px; line-height:1; filter:grayscale(1) opacity(0.55); transition:filter .15s; }
     .bn-item .bn-lbl { font-size:9.5px; font-weight:700; color:var(--muted); }
@@ -348,7 +366,7 @@
     .cart-badge .cnt.zero { display:none; }
     .drawer-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; opacity:0; pointer-events:none; transition:opacity .3s; }
     .drawer-overlay.open { opacity:1; pointer-events:auto; }
-    .drawer { position:fixed; top:0; left:0; bottom:0; width:270px; max-width:80%; background:#fff; z-index:201; transform:translateX(-100%); transition:transform .3s ease; box-shadow:4px 0 24px rgba(0,0,0,0.2); display:flex; flex-direction:column; }
+    .drawer { position:fixed; top:0; left:0; bottom:0; width:270px; max-width:80%; background:var(--card); z-index:201; transform:translateX(-100%); transition:transform .3s ease; box-shadow:4px 0 24px rgba(0,0,0,0.2); display:flex; flex-direction:column; }
     .drawer.open { transform:translateX(0); }
     .drawer-head { background:var(--accent); color:#fff; padding:22px 18px; }
     .drawer-head .dh-logo { font-size:34px; }
@@ -360,13 +378,13 @@
     .drawer-item .di-icon { font-size:20px; width:24px; text-align:center; }
     .drawer-item .di-badge { margin-left:auto; background:var(--danger); color:#fff; font-size:11px; font-weight:800; min-width:20px; height:20px; border-radius:10px; display:flex; align-items:center; justify-content:center; padding:0 5px; }
     .drawer-item.danger { color:var(--danger); }
-    .drawer-foot { padding:16px 20px; border-top:1px solid #eee; font-size:11px; color:#999; }
+    .drawer-foot { padding:16px 20px; border-top:1px solid #eee; font-size:11px; color:var(--muted); }
 
     .section { padding:20px 16px; }
     .section-title { font-size:17px; font-weight:800; color:var(--ink); margin-bottom:12px; }
 
     label.fld { display:block; font-size:13px; font-weight:700; color:var(--ink); margin-bottom:7px; }
-    select.big, input.big { width:100%; padding:13px 15px; border:2px solid var(--line); border-radius:12px; font-size:15px; font-weight:600; color:var(--ink); background:#fff; outline:none; }
+    select.big, input.big { width:100%; padding:13px 15px; border:2px solid var(--line); border-radius:12px; font-size:15px; font-weight:600; color:var(--ink); background:var(--card); outline:none; }
     select.big { border-color:var(--accent); background:var(--bg); font-weight:700; }
     .cutoff-note { margin-top:10px; font-size:12px; color:var(--warn); background:var(--warnbg); border:1px solid #f0d9a8; border-radius:12px; padding:12px 14px; font-weight:600; line-height:1.7; white-space:pre-line; }
     .stats-banner { background:linear-gradient(135deg,var(--accent-soft),#fff); border:1.5px solid var(--accent-soft); border-radius:14px; padding:12px 14px; margin:2px 0 12px; }
@@ -382,7 +400,7 @@
 
     /* Horizontal meal tabs */
     .meal-tabs { display:flex; gap:6px; margin:6px 0 12px; }
-    .meal-tab { flex:1; padding:6px 4px; border:1.5px solid var(--line); border-radius:10px; background:#fff; font-size:11.5px; font-weight:800; color:#666; cursor:pointer; text-align:center; position:relative; }
+    .meal-tab { flex:1; padding:6px 4px; border:1.5px solid var(--line); border-radius:10px; background:var(--card); font-size:11.5px; font-weight:800; color:var(--muted); cursor:pointer; text-align:center; position:relative; }
     .meal-tab.active { border-color:var(--accent); background:var(--accent-soft); color:var(--accent); }
     .meal-tab.closed { opacity:0.5; }
     .meal-tab .emoji { font-size:15px; display:inline-block; margin-right:3px; vertical-align:-1px; }
@@ -390,7 +408,7 @@
     .meal-tab.incart .dot { display:block; }
     .meal-banner { width:100%; height:120px; object-fit:cover; border-radius:12px; margin-bottom:10px; display:block; }
     .tiffin-opts { display:flex; gap:8px; margin:4px 0 12px; }
-    .tiffin-card { flex:1; border:2px solid var(--line); border-radius:14px; background:#fff; cursor:pointer; overflow:hidden; text-align:center; padding-bottom:8px; }
+    .tiffin-card { flex:1; border:2px solid var(--line); border-radius:14px; background:var(--card); cursor:pointer; overflow:hidden; text-align:center; padding-bottom:8px; }
     .tiffin-card.sel { border-color:var(--accent); background:var(--accent-soft); box-shadow:0 4px 12px rgba(102,126,234,0.18); }
     .tiffin-card img { width:100%; height:74px; object-fit:cover; display:block; }
     .tiffin-card .tc-name { font-size:13px; font-weight:800; color:var(--ink); margin-top:6px; }
@@ -399,12 +417,12 @@
     .dt-row { display:flex; gap:8px; margin:10px 0 4px; }
     .dt-cell { flex:1; }
     .dt-cell .dt-lbl { font-size:11px; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:5px; display:block; }
-    .dt-cell select { width:100%; padding:10px 8px; border:1.5px solid #ddd; border-radius:10px; font-size:13px; font-weight:700; background:#fff; }
+    .dt-cell select { width:100%; padding:10px 8px; border:1.5px solid var(--line); border-radius:10px; font-size:13px; font-weight:700; background:var(--card); }
     .sub-days { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 4px; }
-    .sub-day { flex:1; min-width:40px; padding:9px 2px; border:1.5px solid var(--line); border-radius:10px; background:#fff; font-size:11.5px; font-weight:800; color:#666; text-align:center; cursor:pointer; }
+    .sub-day { flex:1; min-width:40px; padding:9px 2px; border:1.5px solid var(--line); border-radius:10px; background:var(--card); font-size:11.5px; font-weight:800; color:var(--muted); text-align:center; cursor:pointer; }
     .sub-day.on { border-color:var(--accent); background:var(--accent); color:#fff; }
     .sub-quick { display:flex; gap:6px; margin-bottom:10px; }
-    .sub-quick button { flex:1; padding:7px 4px; border:1.5px solid #ddd; border-radius:8px; background:#f7f8fc; font-size:11px; font-weight:800; color:var(--accent); cursor:pointer; }
+    .sub-quick button { flex:1; padding:7px 4px; border:1.5px solid var(--line); border-radius:8px; background:#f7f8fc; font-size:11px; font-weight:800; color:var(--accent); cursor:pointer; }
     .sub-meal-card { border:1.5px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:10px; }
     .sub-meal-card.on { border-color:var(--accent); background:var(--accent-soft); }
     .sub-meal-head { display:flex; align-items:center; justify-content:space-between; }
@@ -415,19 +433,19 @@
     .sub-active-card .row { font-size:12.5px; opacity:0.95; margin:3px 0; line-height:1.5; }
     .sub-skip-row { display:flex; gap:8px; margin-top:10px; }
     .sub-skip-row input { flex:1; padding:9px 10px; border:none; border-radius:9px; font-size:13px; }
-    .sub-skip-row button { padding:9px 14px; border:none; border-radius:9px; background:#fff; color:var(--accent); font-weight:800; font-size:12.5px; }
+    .sub-skip-row button { padding:9px 14px; border:none; border-radius:9px; background:var(--card); color:var(--accent); font-weight:800; font-size:12.5px; }
     .sub-badge { display:inline-block; background:rgba(255,255,255,0.22); padding:2px 9px; border-radius:10px; font-size:11px; font-weight:800; }
 
     .panel { background:var(--bg); border:1.5px solid var(--line); border-radius:16px; padding:14px; margin-bottom:14px; }
     .panel .p-price { font-size:13px; font-weight:800; color:var(--ok); background:rgba(0,184,148,0.1); padding:3px 10px; border-radius:20px; display:inline-block; margin-bottom:10px; }
     .closed-msg { font-size:13px; color:var(--danger); font-weight:700; background:var(--dangerbg); border:1px solid #f5b7b1; border-radius:10px; padding:12px; text-align:center; }
     .menu-list { list-style:none; display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px; padding:0; }
-    .menu-list li { background:#fff; border:1px solid #e8e8e8; border-radius:20px; padding:6px 12px; font-size:13px; color:#555; font-weight:600; }
+    .menu-list li { background:var(--card); border:1px solid var(--line); border-radius:20px; padding:6px 12px; font-size:13px; color:var(--muted); font-weight:600; }
 
     .cust-label { font-size:12px; font-weight:800; color:var(--accent); letter-spacing:0.5px; text-transform:uppercase; margin:12px 0 8px; }
-    .cust-row { display:flex; align-items:center; justify-content:space-between; background:#fff; border-radius:12px; padding:10px 12px; margin-bottom:8px; font-size:14px; font-weight:600; color:var(--ink); }
-    .cust-row .sub { display:block; font-size:11px; color:#999; font-weight:600; }
-    .cust-row select { padding:9px 12px; border:1.5px solid #ddd; border-radius:10px; font-size:14px; font-weight:600; background:#fff; outline:none; max-width:55%; }
+    .cust-row { display:flex; align-items:center; justify-content:space-between; background:var(--card); border-radius:12px; padding:10px 12px; margin-bottom:8px; font-size:14px; font-weight:600; color:var(--ink); }
+    .cust-row .sub { display:block; font-size:11px; color:var(--muted); font-weight:600; }
+    .cust-row select { padding:9px 12px; border:1.5px solid var(--line); border-radius:10px; font-size:14px; font-weight:600; background:var(--card); outline:none; max-width:55%; }
 
     .stepper { display:flex; align-items:center; gap:10px; }
     .stepper button { width:32px; height:32px; border-radius:50%; border:none; background:var(--accent-soft); color:var(--accent); font-size:18px; font-weight:800; cursor:pointer; }
@@ -435,7 +453,7 @@
 
     .toggle-switch { position:relative; width:44px; height:24px; background:var(--line); border-radius:12px; cursor:pointer; transition:background .3s; flex-shrink:0; }
     .toggle-switch.active { background:var(--accent); }
-    .toggle-switch::after { content:''; position:absolute; top:2px; left:2px; width:20px; height:20px; background:#fff; border-radius:50%; transition:transform .3s; box-shadow:0 2px 4px rgba(0,0,0,0.2); }
+    .toggle-switch::after { content:''; position:absolute; top:2px; left:2px; width:20px; height:20px; background:var(--card); border-radius:50%; transition:transform .3s; box-shadow:0 2px 4px rgba(0,0,0,0.2); }
     .toggle-switch.active::after { transform:translateX(20px); }
     .tog-wrap { display:flex; align-items:center; gap:8px; }
     .tog-side { font-size:12px; font-weight:700; color:#aaa; }
@@ -448,14 +466,14 @@
     textarea:focus { border-color:var(--accent); }
 
     /* Cart */
-    .cart-item { background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:11px 13px; margin-bottom:10px; }
+    .cart-item { background:var(--card); border:1.5px solid var(--line); border-radius:12px; padding:11px 13px; margin-bottom:10px; }
     .ci-top { display:flex; justify-content:space-between; font-weight:800; font-size:14px; color:var(--ink); }
     .ci-price { color:var(--ok); }
-    .ci-sub { font-size:12px; color:#666; margin-top:3px; line-height:1.5; }
+    .ci-sub { font-size:12px; color:var(--muted); margin-top:3px; line-height:1.5; }
     .ci-remove { color:var(--danger); font-weight:800; font-size:12px; cursor:pointer; margin-top:6px; display:inline-block; }
-    .cart-empty { color:#999; font-size:13px; text-align:center; padding:16px; }
+    .cart-empty { color:var(--muted); font-size:13px; text-align:center; padding:16px; }
 
-    .sticky-bar { position:fixed; bottom:60px; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:#fff; border-top:1px solid #eee; padding:12px 16px; display:flex; align-items:center; gap:12px; box-shadow:0 -6px 20px rgba(0,0,0,0.08); z-index:140; }
+    .sticky-bar { position:fixed; bottom:60px; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:var(--card); border-top:1px solid #eee; padding:12px 16px; display:flex; align-items:center; gap:12px; box-shadow:0 -6px 20px rgba(0,0,0,0.08); z-index:140; }
     /* sticky-bar fixed hone se content ke neeche jagah */
     #page1, #cartView { padding-bottom:130px; }
     .bar-total { flex:1; }
@@ -474,24 +492,24 @@
 
     .form-group { margin-bottom:16px; }
     .form-group label { display:block; font-size:13px; font-weight:700; color:var(--ink); margin-bottom:6px; }
-    .form-group input, .form-group select { width:100%; padding:13px 15px; border:2px solid var(--line); border-radius:12px; font-size:15px; font-weight:600; color:var(--ink); background:#fff; outline:none; }
+    .form-group input, .form-group select { width:100%; padding:13px 15px; border:2px solid var(--line); border-radius:12px; font-size:15px; font-weight:600; color:var(--ink); background:var(--card); outline:none; }
     .form-group input.valid, .form-group select.valid { border-color:var(--ok); background:#f0fff8; }
     .form-group input.error, .form-group select.error { border-color:var(--danger); background:var(--dangerbg); }
-    .form-group input[readonly] { background:var(--line); color:#666; border-color:#ddd; }
+    .form-group input[readonly] { background:var(--line); color:var(--muted); border-color:#ddd; }
     .field-error { display:none; color:var(--danger); font-size:12px; font-weight:600; margin-top:5px; }
     .field-error.show { display:block; }
     .saved-note { font-size:12px; color:#00a085; font-weight:700; background:#e8fff7; border:1px solid #b8f2e0; border-radius:8px; padding:8px 12px; margin-bottom:14px; display:none; }
     .saved-note.show { display:block; }
 
     .pay-opts { display:flex; gap:10px; }
-    .pay-opt { flex:1; border:2px solid var(--line); border-radius:12px; padding:12px; text-align:center; font-size:13.5px; font-weight:800; color:#555; cursor:pointer; background:#fff; }
+    .pay-opt { flex:1; border:2px solid var(--line); border-radius:12px; padding:12px; text-align:center; font-size:13.5px; font-weight:800; color:var(--muted); cursor:pointer; background:var(--card); }
     .pay-opt.sel { border-color:var(--accent); color:var(--accent); background:var(--accent-soft); }
-    .pay-opt .s { display:block; font-size:11px; font-weight:600; color:#999; margin-top:2px; }
+    .pay-opt .s { display:block; font-size:11px; font-weight:600; color:var(--muted); margin-top:2px; }
 
     .success-card { text-align:center; padding:34px 18px; }
     .success-card .big { font-size:56px; }
     .success-card h2 { font-size:20px; font-weight:800; color:var(--ink); margin:10px 0 8px; }
-    .success-card p { font-size:14px; color:#666; line-height:1.6; margin-bottom:16px; }
+    .success-card p { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:16px; }
     .wa-fallback { display:inline-block; margin-top:4px; color:#128c7e; font-weight:800; text-decoration:underline; font-size:14px; }
     .new-order { margin-top:22px; padding:13px 26px; background:var(--accent); color:#fff; border:none; border-radius:14px; font-size:15px; font-weight:800; cursor:pointer; }
 
@@ -504,7 +522,7 @@
     .about-slide .as-icon { font-size:42px; margin-bottom:12px; }
     .about-slide h3 { font-size:16.5px; font-weight:800; margin-bottom:8px; line-height:1.3; }
     .about-slide p { font-size:13px; line-height:1.55; opacity:0.96; margin:0; }
-    .about-hint { text-align:center; font-size:11.5px; color:#999; margin:2px 0 18px; }
+    .about-hint { text-align:center; font-size:11.5px; color:var(--muted); margin:2px 0 18px; }
     .about-contact { margin:0 16px 18px; background:var(--accent-soft); border-radius:16px; padding:20px 18px; text-align:center; }
     .about-contact .ac-title { font-size:14px; font-weight:800; color:var(--ink); margin-bottom:14px; }
     .about-contact .ac-btns { display:flex; gap:10px; }
@@ -513,12 +531,12 @@
     .about-contact .ac-wa { background:#25D366; color:#fff; }
     .admin-link { color:rgba(255,255,255,0.35); cursor:pointer; text-decoration:underline; }
 
-    .otp-hint { font-size:12.5px; color:#666; text-align:center; margin-top:10px; line-height:1.5; }
+    .otp-hint { font-size:12.5px; color:var(--muted); text-align:center; margin-top:10px; line-height:1.5; }
     .resend-link { display:block; text-align:center; margin-top:12px; color:var(--accent); font-weight:800; font-size:13.5px; cursor:pointer; }
     .resend-link.wait { color:#aaa; cursor:default; }
     .change-num { display:block; text-align:center; margin-top:8px; color:#888; font-weight:700; font-size:12.5px; cursor:pointer; text-decoration:underline; }
 
-    .oc { background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:12px; }
+    .oc { background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:12px; }
     .oc-name { font-size:15px; font-weight:800; color:var(--ink); }
     .oc-meal-box { background:var(--accent-soft); border-radius:11px; padding:10px 12px; margin:10px 0; font-size:13px; font-weight:600; color:var(--ink); line-height:1.55; }
     .oc-info { display:flex; justify-content:space-between; font-size:12.5px; color:var(--muted); padding:3px 0; }
@@ -532,22 +550,22 @@
     .st-Cancelled { background:#fdecea; color:var(--danger); }
     .st-Active { background:var(--okbg); color:var(--ok); }
     .st-Blocked { background:#fdecea; color:var(--danger); }
-    .oc-sub { font-size:12.5px; color:#666; margin-top:4px; line-height:1.5; }
+    .oc-sub { font-size:12.5px; color:var(--muted); margin-top:4px; line-height:1.5; }
     .oc-sub a { color:var(--accent); font-weight:700; text-decoration:none; }
     .oc-meals { font-size:12.5px; color:#444; background:var(--bg); border-radius:10px; padding:8px 10px; margin-top:8px; line-height:1.55; }
-    .cancel-btn { margin-top:10px; width:100%; padding:10px; border:1.5px solid var(--danger); background:#fff; color:var(--danger); border-radius:10px; font-size:12.5px; font-weight:800; cursor:pointer; }
-    .block-btn { margin-top:8px; width:100%; padding:9px; border:1.5px solid var(--danger); background:#fff; color:var(--danger); border-radius:10px; font-size:12px; font-weight:800; cursor:pointer; }
+    .cancel-btn { margin-top:10px; width:100%; padding:10px; border:1.5px solid var(--danger); background:var(--card); color:var(--danger); border-radius:10px; font-size:12.5px; font-weight:800; cursor:pointer; }
+    .block-btn { margin-top:8px; width:100%; padding:9px; border:1.5px solid var(--danger); background:var(--card); color:var(--danger); border-radius:10px; font-size:12px; font-weight:800; cursor:pointer; }
     .block-btn.un { border-color:var(--ok); color:var(--ok); }
     .hist-row { display:flex; gap:10px; align-items:center; margin-top:6px; }
     .hist-row input[type=date] { flex:1; padding:11px 12px; border:2px solid var(--line); border-radius:10px; font-size:14px; font-weight:600; }
 
     .tabs { display:flex; gap:5px; margin:12px 0 16px; background:var(--line); padding:5px; border-radius:14px; }
-    .tab-btn { flex:1; padding:9px 2px; border:none; border-radius:10px; font-size:11px; font-weight:800; cursor:pointer; background:transparent; color:#666; }
+    .tab-btn { flex:1; padding:9px 2px; border:none; border-radius:10px; font-size:11px; font-weight:800; cursor:pointer; background:transparent; color:var(--muted); }
     .tab-btn.active { background:var(--accent); color:#fff; }
     /* Admin top bar — hamburger + section title (tabs ki jagah left drawer) */
     .admin-topbar { position:sticky; top:0; z-index:30; background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff; padding:13px 15px; display:flex; align-items:center; gap:13px; }
     .admin-topbar .ham { width:24px; display:flex; flex-direction:column; gap:5px; cursor:pointer; flex-shrink:0; padding:3px 0; }
-    .admin-topbar .ham span { height:2.5px; background:#fff; border-radius:2px; }
+    .admin-topbar .ham span { height:2.5px; background:var(--card); border-radius:2px; }
     .admin-topbar .atb-title { flex:1; font-size:16px; font-weight:900; }
     .admin-topbar .alert-toggle { float:none; font-size:10.5px; font-weight:800; background:rgba(255,255,255,.18); color:#fff; border-radius:16px; padding:6px 12px; cursor:pointer; }
     /* Admin drawer active item */
@@ -561,7 +579,7 @@
     .dchip.on { border-color:var(--accent); background:var(--accent-soft); }
     .dchip.on b { color:var(--accent-dark); }
     .dchip:disabled { opacity:0.45; cursor:not-allowed; background:var(--bg); }
-    .chip { display:inline-block; padding:7px 12px; border-radius:20px; background:var(--line); color:#666; font-size:11.5px; font-weight:800; cursor:pointer; margin:0 6px 8px 0; }
+    .chip { display:inline-block; padding:7px 12px; border-radius:20px; background:var(--line); color:var(--muted); font-size:11.5px; font-weight:800; cursor:pointer; margin:0 6px 8px 0; }
     .chip.sel { background:var(--accent); color:#fff; }
     .kitchen-card { background:var(--card); border:1.5px solid var(--line); border-radius:16px; padding:16px; margin:4px 0 16px; }
     .ks-head { font-size:14px; font-weight:900; color:var(--ink); margin-bottom:12px; }
@@ -583,7 +601,7 @@
     .stat-card { flex:1 1 45%; background:linear-gradient(135deg,var(--accent-soft),var(--accent-soft)); border:1.5px solid #dfe3ff; border-radius:14px; padding:14px; text-align:center; }
     .stat-card .num { font-size:22px; font-weight:800; color:var(--accent); }
     .stat-card .lab { font-size:11.5px; font-weight:700; color:#888; margin-top:2px; }
-    .orders-table { width:100%; border-collapse:collapse; font-size:12.5px; background:#fff; border-radius:12px; overflow:hidden; }
+    .orders-table { width:100%; border-collapse:collapse; font-size:12.5px; background:var(--card); border-radius:12px; overflow:hidden; }
     .orders-table th { background:var(--accent); color:#fff; padding:8px 6px; font-size:11.5px; text-align:left; }
     .orders-table td { padding:8px 6px; border-bottom:1px solid #eee; color:#444; }
     .admin-btn { width:100%; padding:14px; background:var(--accent); color:#fff; border:none; border-radius:14px; font-size:15px; font-weight:800; cursor:pointer; margin-top:6px; }
@@ -610,13 +628,13 @@
     .admin-btn:disabled { opacity:0.6; }
     .admin-btn.sec { background:var(--accent-soft); color:var(--accent); }
     .edit-label { font-size:12.5px; font-weight:800; color:var(--ink); margin:14px 0 6px; }
-    .edit-label .hint { font-weight:600; color:#999; font-size:11px; }
+    .edit-label .hint { font-weight:600; color:var(--muted); font-size:11px; }
     .refresh-link { color:var(--accent); font-weight:800; font-size:13px; cursor:pointer; float:right; }
     .search-box { width:100%; padding:11px 14px; border:2px solid var(--line); border-radius:12px; font-size:14px; font-weight:600; margin-bottom:12px; outline:none; }
     .price-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:9px 12px; margin-bottom:8px; }
     .price-row label { font-size:13px; font-weight:700; color:var(--ink); }
     .price-row .inp { display:flex; align-items:center; gap:4px; }
-    .price-row input { width:80px; padding:8px 10px; border:1.5px solid #ddd; border-radius:8px; font-size:14px; font-weight:700; text-align:right; }
+    .price-row input { width:80px; padding:8px 10px; border:1.5px solid var(--line); border-radius:8px; font-size:14px; font-weight:700; text-align:right; }
 
     .toast { position:fixed; bottom:150px; left:50%; transform:translateX(-50%) translateY(8px); background:var(--ink); color:#fff; padding:13px 22px; border-radius:12px; font-size:13.5px; font-weight:600; z-index:12000; opacity:0; visibility:hidden; pointer-events:none; transition:transform .25s ease, opacity .25s ease, visibility 0s linear .25s; box-shadow:0 8px 25px rgba(0,0,0,0.3); text-align:center; min-width:250px; max-width:340px; }
     .toast.show { transform:translateX(-50%) translateY(0); opacity:1; visibility:visible; transition:transform .3s ease, opacity .3s ease, visibility 0s; }
@@ -1108,7 +1126,7 @@
       <div id="upiPayBox" class="upi-pay-box hidden"></div>
       <div class="success-note" data-i="successConfirmNote"></div>
       <div class="sub-push" onclick="showSubPage()"><span data-i="subPushLine"></span> →</div>
-      <button class="new-order" style="background:#fff;color:var(--accent-dark);border:1.5px solid var(--accent);margin-top:8px;" onclick="showOrdersPage()" data-i="trackOrderBtn"></button>
+      <button class="new-order" style="background:var(--card);color:var(--accent-dark);border:1.5px solid var(--accent);margin-top:8px;" onclick="showOrdersPage()" data-i="trackOrderBtn"></button>
       <button class="new-order" style="background:none;color:var(--muted);border:none;font-weight:700;font-size:13px;margin-top:6px;padding:8px;" onclick="resetAll()" data-i="newOrder"></button>
       <a class="wa-fallback" id="waFallback" target="_blank" data-i="waFallback"></a>
     </div>
@@ -1144,6 +1162,12 @@
       <div class="pf-row" onclick="showAboutPage()"><span>ℹ️</span><span data-i="navAbout"></span><i>›</i></div>
       <div class="lp-sec-t" data-i="pfLang"></div>
       <select class="sh-select" id="langSelProfile" onchange="setLang(this.value)"></select>
+      <div class="lp-sec-t">🎨 Theme</div>
+      <select class="sh-select" id="themeSelProfile" onchange="setTheme(this.value)">
+        <option value="system">📱 System Default</option>
+        <option value="light">☀️ Light</option>
+        <option value="dark">🌙 Dark</option>
+      </select>
       <button class="add-cart-btn" style="margin-top:20px;background:var(--dangerbg);color:var(--danger);" onclick="logout()" data-i="logout"></button>
     </div>
   </div>
@@ -1186,7 +1210,7 @@
           <span class="chip" data-f="Delivered" onclick="setOrderFilter('Delivered')">🟢 Delivered</span>
           <span class="chip" data-f="Cancelled" onclick="setOrderFilter('Cancelled')">🔴 Cancelled</span>
         </div>
-        <div id="ordersList"><div style="text-align:center;color:#999;padding:20px;">Loading...</div></div>
+        <div id="ordersList"><div style="text-align:center;color:var(--muted);padding:20px;">Loading...</div></div>
       </div>
 
       <div id="aview-users" class="hidden">
@@ -1194,7 +1218,7 @@
         <div class="section-title" style="margin-top:4px;">👥 User Management</div>
         <input type="text" class="search-box" id="userSearch" placeholder="🔍 Search by name or number" oninput="renderUsers()">
         <div style="font-size:12.5px;color:#888;font-weight:700;margin-bottom:10px;" id="usersCount"></div>
-        <div id="usersList"><div style="text-align:center;color:#999;padding:20px;">Loading...</div></div>
+        <div id="usersList"><div style="text-align:center;color:var(--muted);padding:20px;">Loading...</div></div>
       </div>
 
       <div id="aview-menu" class="hidden">
@@ -1224,37 +1248,37 @@
         <div id="priceEditor"></div>
         <div class="section-title" style="margin-top:20px;">🏢 Township Name</div>
         <input type="text" class="search-box" id="cfg-township" placeholder="Township name">
-        <div class="section-title" style="margin-top:8px;">🏘️ Societies <span style="font-size:11px;color:#999;font-weight:600;">(one per line)</span></div>
+        <div class="section-title" style="margin-top:8px;">🏘️ Societies <span style="font-size:11px;color:var(--muted);font-weight:600;">(one per line)</span></div>
         <textarea id="cfg-societies" rows="4" placeholder="Vrindavan&#10;Eden"></textarea>
 
         <div class="section-title" style="margin-top:20px;">🚚 Delivery Modes</div>
-        <div style="font-size:11.5px;color:#999;margin-bottom:8px;">Kaunsa delivery mode customer ko dikhe. Dono ON honge to checkout pe Home/Office ka toggle aayega.</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">Kaunsa delivery mode customer ko dikhe. Dono ON honge to checkout pe Home/Office ka toggle aayega.</div>
         <label class="cfg-chk"><input type="checkbox" id="cfg-homeEnabled" checked> 🏠 Home delivery (Society / Flat)</label>
         <label class="cfg-chk"><input type="checkbox" id="cfg-officeEnabled"> 🏢 Office delivery (Company / Employee ID)</label>
 
-        <div class="section-title" style="margin-top:20px;">🏢 Companies <span style="font-size:11px;color:#999;font-weight:600;">(office delivery)</span></div>
-        <div style="font-size:11.5px;color:#999;margin-bottom:8px;">Har line: <b>Company name | Building (optional) | Delivery fee ₹</b><br>Jaise: <code>MoneyPlant Fintech | Tower B | 20</code><br>Employee ID har office order pe zaroori hoti hai.</div>
+        <div class="section-title" style="margin-top:20px;">🏢 Companies <span style="font-size:11px;color:var(--muted);font-weight:600;">(office delivery)</span></div>
+        <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">Har line: <b>Company name | Building (optional) | Delivery fee ₹</b><br>Jaise: <code>MoneyPlant Fintech | Tower B | 20</code><br>Employee ID har office order pe zaroori hoti hai.</div>
         <textarea id="cfg-companies" rows="4" placeholder="MoneyPlant Fintech | Tower B | 20&#10;Zydus Corporate Park | Wing 2 | 20"></textarea>
 
         <div class="section-title" style="margin-top:20px;">💳 Online UPI Payment</div>
-        <div style="font-size:11.5px;color:#999;margin-bottom:8px;">Apni UPI ID daalo (jaise 9924937939@ybl). Customer ko success screen pe "Pay Now via UPI" button milega. Khaali chhodo to online pay option nahi dikhega.</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">Apni UPI ID daalo (jaise 9924937939@ybl). Customer ko success screen pe "Pay Now via UPI" button milega. Khaali chhodo to online pay option nahi dikhega.</div>
         <input type="text" class="search-box" id="cfg-upiId" placeholder="yourname@bank / 9999999999@ybl" style="margin-bottom:8px;">
         <input type="text" class="search-box" id="cfg-upiName" placeholder="Payee name (Flying Birds Tiffin)">
 
         <div class="section-title" style="margin-top:20px;">🏛️ FSSAI Registration No.</div>
-        <div style="font-size:11.5px;color:#999;margin-bottom:8px;">Footer mein customers ko dikhega — trust ke liye. Khaali chhodo to nahi dikhega.</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">Footer mein customers ko dikhega — trust ke liye. Khaali chhodo to nahi dikhega.</div>
         <input type="text" class="search-box" id="cfg-fssai" placeholder="e.g. 20724XXXXXXXXXX">
 
         <div class="section-title" style="margin-top:20px;">🔒 Kitchen Closed Dates</div>
-        <div style="font-size:11.5px;color:#999;margin-bottom:8px;">No orders will be accepted for these dates (holidays, off-days).</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">No orders will be accepted for these dates (holidays, off-days).</div>
         <div class="dt-row" style="margin:0 0 10px;">
           <input type="date" id="closedDateInput" style="flex:1;padding:11px;border:1.5px solid var(--line);border-radius:11px;">
           <button class="admin-btn" style="width:auto;padding:11px 18px;margin:0;" onclick="addClosedDate()">+ Add</button>
         </div>
         <div id="closedDatesList"></div>
 
-        <div class="section-title" style="margin-top:20px;">🍱 Daily Capacity <span style="font-size:11px;color:#999;font-weight:600;">(0 = unlimited)</span></div>
-        <div style="font-size:11.5px;color:#999;margin-bottom:8px;">Max tiffins per meal per day — shown to customers as a live counter.</div>
+        <div class="section-title" style="margin-top:20px;">🍱 Daily Capacity <span style="font-size:11px;color:var(--muted);font-weight:600;">(0 = unlimited)</span></div>
+        <div style="font-size:11.5px;color:var(--muted);margin-bottom:8px;">Max tiffins per meal per day — shown to customers as a live counter.</div>
         <div id="capacityEditor"></div>
 
         <button class="admin-btn" id="saveConfigBtn" onclick="saveConfig()" style="margin-top:16px;">💾 Save Setup</button>
@@ -1272,7 +1296,7 @@
         <div class="section-title" style="font-size:15px;">🧾 Recent Orders</div>
         <table class="orders-table" id="recentTable">
           <thead><tr><th>Time</th><th>Name</th><th>Flat</th><th>Total</th><th>Pay</th><th>Status</th></tr></thead>
-          <tbody><tr><td colspan="6" style="text-align:center;color:#999;">Loading...</td></tr></tbody>
+          <tbody><tr><td colspan="6" style="text-align:center;color:var(--muted);">Loading...</td></tr></tbody>
         </table>
       </div>
 
@@ -1288,7 +1312,7 @@
       <!-- PROMOS -->
       <div id="aview-promos" class="hidden">
         <div class="section-title" style="margin-top:4px;">🎟️ Promo Codes</div>
-        <div style="font-size:11.5px;color:#999;margin-bottom:10px;">Coupon banao — customer cart mein code daalega. Discount server-side verify hota hai. Multi-date cart par discount sirf pehli date ke order par lagta hai.</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-bottom:10px;">Coupon banao — customer cart mein code daalega. Discount server-side verify hota hai. Multi-date cart par discount sirf pehli date ke order par lagta hai.</div>
         <div class="pf-box" style="margin-bottom:14px;">
           <div class="pm-row"><input class="inp-mini" id="pmCode" placeholder="CODE (e.g. WELCOME50)" style="text-transform:uppercase;"><select class="inp-mini" id="pmType"><option value="FLAT">FLAT ₹</option><option value="PERCENT">% OFF</option></select></div>
           <div class="pm-row"><input class="inp-mini" id="pmValue" type="number" placeholder="Value (50 = ₹50 / 50%)"><input class="inp-mini" id="pmMaxD" type="number" placeholder="Max ₹ cap (percent)"></div>
@@ -1298,7 +1322,7 @@
           <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;margin-top:8px;cursor:pointer;"><input type="checkbox" id="pmVisible"> 📢 App me dikhao (Home + Cart me customers ko khud dikhega)</label>
           <button class="add-cart-btn" style="margin-top:12px;" id="pmSaveBtn" onclick="savePromoFE()">💾 Save Promo</button>
         </div>
-        <div id="promoList"><p style="text-align:center;color:#999;font-size:12px;">Loading…</p></div>
+        <div id="promoList"><p style="text-align:center;color:var(--muted);font-size:12px;">Loading…</p></div>
       </div>
     </div>
     <div class="footer">⚙️ Admin · Flying Birds Tiffin</div>
@@ -1601,6 +1625,33 @@
     const cr=document.getElementById('ctArea'); if(cr) cr.textContent=(CFG.societies||[]).join(' · ');
     const pb=document.getElementById('policyBox');
     if(pb) pb.innerHTML=`<div class="policy-t">📄 ${t('policyTitle')}</div><div class="policy-b">${t('policyBody')}</div>`;
+  }
+
+  // ═══════ THEME (Light / Dark / System) ═══════
+  function applyTheme(mode){
+    let effective = mode;
+    if (mode === 'system' || !mode) {
+      effective = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', effective === 'dark' ? 'dark' : 'light');
+    const tc=document.querySelector('meta[name="theme-color"]');
+    if (tc) tc.setAttribute('content', effective === 'dark' ? '#14151f' : '#6366f1');
+  }
+  function setTheme(mode){
+    if (['light','dark','system'].indexOf(mode) === -1) mode = 'system';
+    storeSet('fbt_theme', mode);
+    applyTheme(mode);
+    const sel = document.getElementById('themeSelProfile'); if (sel) sel.value = mode;
+  }
+  function initTheme(){
+    const saved = storeGet('fbt_theme') || 'system';
+    applyTheme(saved);
+    // System badle to (agar 'system' chuna hai) live update ho
+    try {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if ((storeGet('fbt_theme') || 'system') === 'system') applyTheme('system');
+      });
+    } catch(e){}
   }
 
   function setLang(l) {
@@ -2009,6 +2060,7 @@
     if(sel){ const saved=storeGet('fbt_addr')||{}; sel.innerHTML=CFG.societies.map(s=>`<option value="${s}" ${saved.society===s?'selected':''}>${s}</option>`).join(''); const fl=document.getElementById('pfFlat'); if(fl)fl.value=saved.flatNo||''; }
     const lp=document.getElementById('langSelProfile'); const src2=document.getElementById('langSel');
     if(lp&&src2&&!lp.options.length){ lp.innerHTML=src2.innerHTML; } if(lp) lp.value=LANG;
+    const ts=document.getElementById('themeSelProfile'); if(ts) ts.value = storeGet('fbt_theme') || 'system';
   }
   function savePfAddr(){
     const s=document.getElementById('pfSociety').value, f=document.getElementById('pfFlat').value.trim();
@@ -2702,7 +2754,7 @@
     fetch(GOOGLE_SCRIPT_URL+'?action=mySub&token='+encodeURIComponent(SESSION.token)).then(r=>r.json()).then(j=>{
       if(j.status==='invalid_session'){ forceLogout(); return; }
       renderSubActive(j.sub); renderSubForm(j.sub);
-    }).catch(()=>{ document.getElementById('subActiveBox').innerHTML='<div style="color:#999;font-size:13px;">Network error.</div>'; });
+    }).catch(()=>{ document.getElementById('subActiveBox').innerHTML='<div style="color:var(--muted);font-size:13px;">Network error.</div>'; });
   }
 
   function renderSubActive(sub){
@@ -2813,7 +2865,7 @@
   function renderMyOrders(list,isHist){
     myOrdersCache=list||[]; myOrdersIsHist=!!isHist;
     const box=document.getElementById('myOrdersList');
-    if(!list.length){ box.innerHTML=`<div style="color:#999;font-size:13px;padding:16px 0;text-align:center;">${isHist?t('noHistory'):t('noUpcoming')}</div>`; return; }
+    if(!list.length){ box.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:16px 0;text-align:center;">${isHist?t('noHistory'):t('noUpcoming')}</div>`; return; }
     const mealMini=o=>{ const p=[]; if(Number(o.breakfastQty))p.push('🌅'+o.breakfastQty); if(Number(o.lunchQty))p.push('☀️'+o.lunchQty); if(Number(o.dinnerQty))p.push('🌙'+o.dinnerQty); return p.join('  '); };
     const pillColor=s=>({Pending:'background:var(--warnbg);color:var(--warn);',Preparing:'background:var(--accent-soft);color:var(--accent-dark);',Delivered:'background:var(--okbg);color:var(--ok);',Cancelled:'background:var(--dangerbg);color:var(--danger);'}[s]||'background:var(--bg);color:var(--muted);');
     box.innerHTML=list.map((o,i)=>`<div class="ord-row" onclick="openMyOrderModal(${i})">
@@ -2920,7 +2972,7 @@
     if(!isLoggedIn())return; const box=document.getElementById('myOrdersList'); if(!box)return;
     box.innerHTML='<div class="mini-spin-wrap"><div class="mini-spin"></div><span>Loading…</span></div>';
     let url=GOOGLE_SCRIPT_URL+'?action=myOrders&token='+encodeURIComponent(SESSION.token); if(dateOpt)url+='&date='+encodeURIComponent(dateOpt);
-    fetch(url).then(r=>r.json()).then(j=>{ if(j.status==='success')renderMyOrders(j.orders||[], !!(dateOpt && dateOpt!==fmtYMD(dateWithOffset(0)))); else if(j.status==='invalid_session')forceLogout(); else box.innerHTML='<div style="color:#999;font-size:13px;">Could not load orders.</div>'; }).catch(()=>{ box.innerHTML='<div style="color:#999;font-size:13px;">Network error.</div>'; });
+    fetch(url).then(r=>r.json()).then(j=>{ if(j.status==='success')renderMyOrders(j.orders||[], !!(dateOpt && dateOpt!==fmtYMD(dateWithOffset(0)))); else if(j.status==='invalid_session')forceLogout(); else box.innerHTML='<div style="color:var(--muted);font-size:13px;">Could not load orders.</div>'; }).catch(()=>{ box.innerHTML='<div style="color:var(--muted);font-size:13px;">Network error.</div>'; });
   }
   function viewHistory(){ const d=document.getElementById('histDate').value; if(!d){ showToast(t('selectDate'),'warning'); return; } loadMyOrders(d); }
   function cancelMyOrder(row,dd,createdIso){ if(!isLoggedIn()){ showAuth(); return; } if(!canCancel({deliveryDate:dd,createdIso:createdIso||''})){ showToast(t('cancelClosed'),'error'); return; } if(!confirm(t('confirmCancel')))return;
@@ -2939,11 +2991,11 @@
     if(!adminCreds)return;
     apiPost({action:'getpromos', user:adminCreds.user, pass:adminCreds.pass})
       .then(j=>{ if(j.status==='success'){ adminPromos=j.promos||[]; renderPromoList(); } })
-      .catch(()=>{ document.getElementById('promoList').innerHTML='<p style="text-align:center;color:#999;">Network error.</p>'; });
+      .catch(()=>{ document.getElementById('promoList').innerHTML='<p style="text-align:center;color:var(--muted);">Network error.</p>'; });
   }
   function renderPromoList(){
     const box=document.getElementById('promoList'); if(!box)return;
-    if(!adminPromos.length){ box.innerHTML='<p style="text-align:center;color:#999;font-size:12px;">Abhi koi promo nahi. Upar se pehla banao 👆</p>'; return; }
+    if(!adminPromos.length){ box.innerHTML='<p style="text-align:center;color:var(--muted);font-size:12px;">Abhi koi promo nahi. Upar se pehla banao 👆</p>'; return; }
     box.innerHTML=adminPromos.map((p,i)=>`
       <div class="pf-box" style="margin-bottom:10px;${p.active?'':'opacity:0.55;'}">
         <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -3035,7 +3087,7 @@
   }
   function loadOrders(){ if(!adminCreds)return; adminDateLabels(); fillSocFilter();
     const dateStr=fmtYMD(dateWithOffset(adminDateOffset));
-    document.getElementById('ordersList').innerHTML='<div style="text-align:center;color:#999;padding:20px;">Loading...</div>';
+    document.getElementById('ordersList').innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;">Loading...</div>';
     apiPost({action:'orders', date:dateStr, user:adminCreds.user, pass:adminCreds.pass}).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminOrders=j.orders||[]; renderOrders(); renderKitchen(); }).catch(()=>showToast(t('errNetwork'),'error')); }
   function setOrderFilter(f){ orderFilter=f; const c=document.getElementById('filterChips').children; for(let i=0;i<c.length;i++)c[i].classList.toggle('sel',c[i].getAttribute('data-f')===f); renderOrders(); }
   let socFilter='All';
@@ -3092,7 +3144,7 @@
   function renderOrders(){
     const list=adminOrders.filter(o=>(orderFilter==='All'||o.status===orderFilter)&&socMatch(o)); const box=document.getElementById('ordersList');
     renderBulkBar();
-    if(!list.length){ box.innerHTML='<div style="text-align:center;color:#999;padding:20px;">No orders ('+orderFilter+(socFilter!=='All'?(' · '+socFilter):'')+').</div>'; return; }
+    if(!list.length){ box.innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;">No orders ('+orderFilter+(socFilter!=='All'?(' · '+socFilter):'')+').</div>'; return; }
     box.innerHTML=list.map(o=>`<div class="oc" onclick="openOrderModal(${o.row})"><div class="oc-top"><span class="oc-name">${esc(o.name)}</span><span class="oc-status st-${o.status}">${STATUS_LABEL[o.status]||o.status}</span></div>
       <div class="oc-meal-box">${orderMealsText(o)}${o.note&&o.note!=='None'?'<br><span style="color:var(--muted);">📝 '+esc(o.note)+'</span>':''}${o.promo?'<br><span style="color:var(--ok);font-weight:800;">🎟️ '+esc(o.promo)+'</span>':''}</div>
       <div class="oc-info"><span>${o.deliveryType==='office'?`🏢 ${esc(o.society)} · Emp ${esc(o.flat)}`:`🏠 ${esc(o.society)} ${esc(o.flat)}`}</span><span>📞 <a href="tel:+91${o.phone}" onclick="event.stopPropagation()">${o.phone}</a></span></div>
@@ -3202,14 +3254,14 @@
   function updateStatus(row,status){ const o=adminOrders.find(x=>x.row===row); if(!o||!adminCreds)return; const old=o.status; o.status=status; renderOrders(); renderKitchen();
     apiPost({action:'setStatus',user:adminCreds.user,pass:adminCreds.pass,row:row,phone:o.phone,status:status}).then(j=>{ if(j.status!=='success'){ o.status=old; renderOrders(); renderKitchen(); showToast('❌ '+(j.message||'Update failed'),'error'); } }).catch(()=>{ o.status=old; renderOrders(); renderKitchen(); showToast(t('errNetwork'),'error'); }); }
 
-  function loadUsers(){ if(!adminCreds)return; document.getElementById('usersList').innerHTML='<div style="text-align:center;color:#999;padding:20px;">Loading...</div>';
+  function loadUsers(){ if(!adminCreds)return; document.getElementById('usersList').innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;">Loading...</div>';
     apiPost({action:'users', user:adminCreds.user, pass:adminCreds.pass}).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminUsers=j.users||[]; renderUsers(); }).catch(()=>showToast(t('errNetwork'),'error')); }
   function renderUsers(){
     const q=(document.getElementById('userSearch').value||'').toLowerCase().trim();
     const list=adminUsers.filter(u=>!q||u.name.toLowerCase().includes(q)||u.phone.includes(q)||(u.email||'').toLowerCase().includes(q));
     document.getElementById('usersCount').textContent=list.length+' / '+adminUsers.length+' users'+(q?' (filtered)':'');
     const box=document.getElementById('usersList');
-    if(!list.length){ box.innerHTML='<div style="text-align:center;color:#999;padding:20px;">No users found.</div>'; return; }
+    if(!list.length){ box.innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;">No users found.</div>'; return; }
     box.innerHTML=list.map(u=>`<div class="oc"><div class="oc-top"><span>👤 ${esc(u.name)}</span><span class="oc-status st-${u.status}">${u.status}</span></div>
       <div class="oc-sub">📞 <a href="tel:+91${u.phone}">${u.phone}</a>${u.email?' · ✉️ '+u.email:''} · 🧾 ${u.orders} orders<br>Joined: ${u.created} · Last login: ${u.lastLogin}</div>
       <button class="block-btn ${u.status==='Blocked'?'un':''}" onclick="toggleUserBlock('${u.phone}','${u.status==='Blocked'?'Active':'Blocked'}')">${u.status==='Blocked'?'✅ Unblock':'🚫 Block'}</button></div>`).join('');
@@ -3219,7 +3271,7 @@
 
   function loadStats(){ if(!adminCreds)return; apiPost({action:'stats', user:adminCreds.user, pass:adminCreds.pass}).then(j=>{ if(j.status==='success'){ fillStats(j); showToast('🔄 Refreshed.','success'); } }).catch(()=>showToast('❌ Refresh failed.','error')); }
   function fillStats(j){ document.getElementById('st-todayCount').textContent=j.today.count; document.getElementById('st-todayRev').textContent='₹'+j.today.revenue; document.getElementById('st-weekCount').textContent=j.week.count; document.getElementById('st-totalCount').textContent=j.total.count;
-    const tb=document.querySelector('#recentTable tbody'); if(!j.recent||!j.recent.length){ tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:#999;">No orders yet.</td></tr>'; return; }
+    const tb=document.querySelector('#recentTable tbody'); if(!j.recent||!j.recent.length){ tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);">No orders yet.</td></tr>'; return; }
     const stPill={Pending:'background:var(--warnbg);color:var(--warn);',Preparing:'background:var(--accent-soft);color:var(--accent-dark);',Delivered:'background:var(--okbg);color:var(--ok);'};
     tb.innerHTML=j.recent.map(o=>`<tr><td>${o.time}</td><td>${esc(o.name)}</td><td>${o.society?o.society.charAt(0)+'-':''}${esc(o.flat)}</td><td><b>${o.total}</b></td><td>${o.payment}</td><td><span class="ord-pill" style="${stPill[o.status]||''}">${o.status||''}</span></td></tr>`).join(''); }
 
@@ -3376,7 +3428,7 @@
   }
   function renderClosedDatesList(){
     const box=document.getElementById('closedDatesList');
-    if(!workingClosedDates.length){ box.innerHTML='<div style="font-size:12.5px;color:#999;">No closed dates set.</div>'; return; }
+    if(!workingClosedDates.length){ box.innerHTML='<div style="font-size:12.5px;color:var(--muted);">No closed dates set.</div>'; return; }
     box.innerHTML=workingClosedDates.slice().sort().map(d=>`<div class="oc" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:6px;"><span style="font-weight:800;">📅 ${fmtDateStr(d)}</span><span style="color:var(--danger);font-weight:800;cursor:pointer;" onclick="removeClosedDate('${d}')">✖ Remove</span></div>`).join('');
   }
   function addClosedDate(){
@@ -3435,6 +3487,7 @@
 
   // ═══════ INIT ═══════
   (function init(){
+    initTheme();
     const cl=storeGet('fbt_lang'); if(cl&&T[cl])LANG=cl;
     const cm=storeGet('fbt_menu'); if(cm&&cm.monday)MENU=cm;
     const cc=storeGet('fbt_cfg'); if(cc&&cc.prices)CFG=cc;
