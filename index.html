@@ -58,8 +58,9 @@
     .upi-pay-box .upb-link { display:inline-block; margin-top:12px; font-size:12.5px; font-weight:800; color:var(--accent-dark); text-decoration:none; }
     .cod-note { background:var(--okbg); border:1.5px dashed var(--ok); border-radius:13px; padding:14px; font-size:12.5px; font-weight:700; color:#166534; line-height:1.6; text-align:center; }
     .upi-pay-box .upb-note { font-size:11px; color:var(--muted); margin-top:12px; line-height:1.5; }
-    #topBar { position:fixed; top:0; left:0; right:0; height:3px; background:transparent; z-index:999; pointer-events:none; }
-    #topBar.on::after { content:''; position:absolute; left:0; top:0; height:100%; width:38%; background:linear-gradient(90deg,var(--accent),var(--accent-dark)); border-radius:0 3px 3px 0; animation:tb 1s infinite ease-in-out; }
+    #topBar { position:fixed; top:0; left:0; right:0; height:2px; background:transparent; z-index:999; pointer-events:none; opacity:0; transition:opacity .2s; }
+    #topBar.on { opacity:1; }
+    #topBar.on::after { content:''; position:absolute; left:0; top:0; height:100%; width:30%; background:linear-gradient(90deg,transparent,var(--accent)); animation:tb 1.1s infinite ease-in-out; }
     @keyframes tb { 0%{left:-38%;} 100%{left:100%;} }
     .spin { display:inline-block; width:13px; height:13px; border:2px solid rgba(255,255,255,0.45); border-top-color:#fff; border-radius:50%; animation:sp .7s linear infinite; vertical-align:-2px; }
     button.is-busy { opacity:0.75; cursor:progress; }
@@ -452,7 +453,9 @@
     .ci-remove { color:var(--danger); font-weight:800; font-size:12px; cursor:pointer; margin-top:6px; display:inline-block; }
     .cart-empty { color:#999; font-size:13px; text-align:center; padding:16px; }
 
-    .sticky-bar { position:sticky; bottom:0; background:#fff; border-top:1px solid #eee; padding:12px 16px; display:flex; align-items:center; gap:12px; box-shadow:0 -6px 20px rgba(0,0,0,0.08); z-index:50; }
+    .sticky-bar { position:fixed; bottom:60px; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:#fff; border-top:1px solid #eee; padding:12px 16px; display:flex; align-items:center; gap:12px; box-shadow:0 -6px 20px rgba(0,0,0,0.08); z-index:140; }
+    /* sticky-bar fixed hone se content ke neeche jagah */
+    #page1, #cartView { padding-bottom:130px; }
     .bar-total { flex:1; }
     .bar-total .amt { font-size:20px; font-weight:800; color:var(--ink); }
     .bar-total .lbl { font-size:11px; color:#888; font-weight:700; }
@@ -1999,6 +2002,7 @@
     const e2=document.getElementById('authGoogleErr'); if(e2)e2.classList.remove('show');
     // Returning Google user → One Tap khud sign-in kar dega (zero click)
     showView('authPage');
+    setTimeout(()=>{ try{ if(window.google&&google.accounts&&google.accounts.id) google.accounts.id.prompt(); }catch(e){} }, 400);
     // Password-reset link opened from email? (?reset=TOKEN)
     const urlToken=new URLSearchParams(location.search).get('reset');
     if(urlToken){ resetToken=urlToken; showAuthMode('reset'); }
@@ -2100,14 +2104,14 @@
   function initGoogleButton(){
     if(!window.google || !google.accounts || !google.accounts.id) { setTimeout(initGoogleButton, 300); return; }
     if(__gsiInit) return; __gsiInit=true;
-    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: onGoogleCredential, auto_select:false, itp_support:true });
+    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: onGoogleCredential, auto_select:true, itp_support:true, use_fedcm_for_prompt:true });
     const box=document.getElementById('googleBtnBox'); if(!box)return;
     box.innerHTML='';
     // Full-width clean button (mockup jaisa) — parent ki poori width lo
     const parentW = box.parentElement ? box.parentElement.offsetWidth : 320;
     const w=Math.min(400, Math.max(240, parentW-4));
     box.style.width='100%';
-    google.accounts.id.renderButton(box, { theme:'outline', size:'large', shape:'rectangular', text:'continue_with', logo_alignment:'center', width:w });
+    google.accounts.id.renderButton(box, { theme:'filled_blue', size:'large', shape:'pill', text:'continue_with', logo_alignment:'left', width:w });
   }
 
   function readAuthPhone(){ const ph=document.getElementById('authPhone').value.trim(); return /^[6-9]\d{9}$/.test(ph)?ph:''; }
