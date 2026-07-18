@@ -3525,27 +3525,35 @@
     }
     else showPublic();
 
-    // ═══════ EDGE SWIPE → DRAWER ═══════
-    // Screen ke bilkul left edge (24px) se shuru hoke right swipe karne par
-    // drawer khulega — customer pages pe customer drawer, admin panel me
-    // admin ka apna drawer (galti se dusre wala nahi khulna chahiye).
+    // ═══════ EDGE SWIPE ↔ DRAWER (open/close) ═══════
+    // Left edge se RIGHT swipe → drawer khulta hai (customer ya admin,
+    // jahan bhi ho). Drawer khula ho to kahin bhi LEFT swipe karne se
+    // wapas band ho jaata hai.
     (function(){
-      let sx=0, sy=0, tracking=false;
+      let sx=0, sy=0, tracking=false, wasOpen=false;
       document.addEventListener('touchstart', function(e){
         if(e.touches.length!==1){ tracking=false; return; }
         const d1=document.getElementById('drawer'), d2=document.getElementById('adminDrawer');
-        if((d1 && d1.classList.contains('open')) || (d2 && d2.classList.contains('open'))){ tracking=false; return; }
+        wasOpen = !!((d1 && d1.classList.contains('open')) || (d2 && d2.classList.contains('open')));
         const x=e.touches[0].clientX;
-        if(x>24){ tracking=false; return; }   // sirf edge se
+        if(!wasOpen && x>24){ tracking=false; return; }   // band drawer: sirf edge se khulega
         sx=x; sy=e.touches[0].clientY; tracking=true;
       }, {passive:true});
       document.addEventListener('touchend', function(e){
         if(!tracking) return; tracking=false;
         const t=e.changedTouches[0]; if(!t) return;
         const dx=t.clientX-sx, dy=t.clientY-sy;
-        if(dx<60 || Math.abs(dy)>60) return;
-        const onAdmin=!document.getElementById('adminPanel').classList.contains('hidden');
-        if(onAdmin) openAdminDrawer(); else openDrawer();
+        if(Math.abs(dy)>60) return;
+        const d1=document.getElementById('drawer'), d2=document.getElementById('adminDrawer');
+        if(wasOpen){
+          if(dx>-60) return;   // clean left-swipe chahiye band karne ke liye
+          if(d1 && d1.classList.contains('open')) closeDrawer();
+          if(d2 && d2.classList.contains('open')) closeAdminDrawer();
+        } else {
+          if(dx<60) return;    // clean right-swipe chahiye kholne ke liye
+          const onAdmin=!document.getElementById('adminPanel').classList.contains('hidden');
+          if(onAdmin) openAdminDrawer(); else openDrawer();
+        }
       }, {passive:true});
     })();
 
