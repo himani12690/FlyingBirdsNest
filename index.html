@@ -138,7 +138,7 @@
     .mode-chip .mch-x { flex:1; min-width:0; }
     .mode-chip .mch-t { font-size:12.5px; font-weight:800; color:var(--ink); }
     .mode-chip .mch-s { font-size:10.5px; color:var(--muted); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .mode-chip .mch-c { font-size:11px; font-weight:800; color:var(--accent-dark); cursor:pointer; white-space:nowrap; }
+    .mode-chip .mch-c { font-size:11.5px; font-weight:800; color:var(--accent-dark); cursor:pointer; white-space:nowrap; background:var(--accent-soft); border:1px solid var(--accent); border-radius:18px; padding:8px 14px; }
     .dtype-lbl { font-size:12.5px; font-weight:800; color:var(--ink); display:block; margin-bottom:7px; }
     .dtype { display:flex; gap:9px; margin-bottom:14px; }
     .dt { flex:1; border:2px solid var(--line); background:var(--card); border-radius:14px; padding:12px 8px; text-align:center; cursor:pointer; }
@@ -476,7 +476,7 @@
     .ci-remove { color:var(--danger); font-weight:800; font-size:12px; cursor:pointer; margin-top:6px; display:inline-block; }
     .cart-empty { color:var(--muted); font-size:13px; text-align:center; padding:16px; }
 
-    .sticky-bar { position:fixed; bottom:60px; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:var(--card); border-top:1px solid #eee; padding:12px 16px; display:flex; align-items:center; gap:12px; box-shadow:0 -6px 20px rgba(0,0,0,0.08); z-index:140; }
+    .sticky-bar { position:fixed; bottom:60px; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:var(--card); border-top:1px solid var(--line); padding:12px 16px; display:flex; align-items:center; gap:12px; box-shadow:0 -6px 20px rgba(0,0,0,0.08); z-index:140; }
     /* sticky-bar fixed hone se content ke neeche jagah */
     #page1, #cartView { padding-bottom:130px; }
     .bar-total { flex:1; }
@@ -886,7 +886,7 @@
       <button class="lp-cta" onclick="showHomePage()" data-i="lpOrderNow"></button>
       <div class="lp-loc">📍 Godrej Garden City <span class="fssai-line" style="font-size:10px;"></span></div>
     </div>
-    <div class="section" style="padding-top:16px;">
+    <div class="section" style="padding-top:16px;padding-bottom:74px;">
       <div id="modeChip"></div>
       <div id="homePromo"></div>
       <div class="lp-sec-t" data-i="lpWhy"></div>
@@ -901,6 +901,9 @@
         <div class="lp-step"><span>2</span><p data-i="lpH2"></p></div>
         <div class="lp-step"><span>3</span><p data-i="lpH3"></p></div>
       </div>
+    </div>
+    <div class="sticky-bar">
+      <button class="add-cart-btn" style="margin:0;" onclick="showHomePage()" data-i="lpOrderNow"></button>
     </div>
   </div>
 
@@ -973,7 +976,7 @@
       <h1 style="font-size:20px;" data-i="yourCart"></h1>
     </div>
     <div class="section">
-      <div class="section-title"><span data-i="yourCart"></span> <span class="refresh-link" onclick="clearCart()" data-i="clearCart"></span></div>
+      <div class="section-title" style="display:flex;justify-content:flex-end;"><span class="refresh-link" onclick="clearCart()" data-i="clearCart"></span></div>
       <div id="cartList"></div>
     </div>
     <div class="sticky-bar" id="cartBar">
@@ -1006,7 +1009,7 @@
       <h1 style="font-size:20px;" data-i="myOrders"></h1>
     </div>
     <div class="section">
-      <div class="section-title"><span data-i="myOrders"></span> <span class="refresh-link" onclick="const hd=document.getElementById('histDate');loadMyOrders(hd&&hd.value?hd.value:fmtYMD(dateWithOffset(0)));" data-i="refresh"></span></div>
+      <div class="section-title" style="display:flex;justify-content:flex-end;"><span class="refresh-link" onclick="const hd=document.getElementById('histDate');loadMyOrders(hd&&hd.value?hd.value:fmtYMD(dateWithOffset(0)));" data-i="refresh"></span></div>
       <div class="cust-label" data-i="viewPast"></div>
       <div class="hist-row" style="margin-bottom:14px;">
         <input type="date" id="histDate" style="background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:11px;padding:11px;">
@@ -1375,6 +1378,18 @@
         <p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:8px;" data-i="limitBody"></p>
         <button class="add-cart-btn" style="margin-top:16px;" onclick="contactKitchen()" data-i="limitCta"></button>
         <button class="add-cart-btn" style="margin-top:8px;background:var(--card);color:var(--ink);border:1.5px solid var(--line);" onclick="closeLimitPopup()" data-i="limitClose"></button>
+      </div>
+    </div>
+  </div>
+  <!-- ══════ CUSTOM CONFIRM MODAL (native confirm() ki jagah) ══════ -->
+  <div class="sheet-overlay hidden" id="confirmModal" onclick="if(event.target===this)closeConfirm(false)">
+    <div class="sheet" style="max-width:380px;">
+      <div style="padding:26px 20px 20px;text-align:center;">
+        <div style="font-size:38px;" id="cfIcon">⚠️</div>
+        <h3 style="font-size:17px;font-weight:900;margin-top:8px;" id="cfTitle"></h3>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-top:8px;" id="cfBody"></p>
+        <button class="add-cart-btn" id="cfYes" style="margin-top:18px;" onclick="closeConfirm(true)"></button>
+        <button class="add-cart-btn" id="cfNo" style="margin-top:8px;background:var(--card);color:var(--ink);border:1.5px solid var(--line);" onclick="closeConfirm(false)"></button>
       </div>
     </div>
   </div>
@@ -2465,6 +2480,25 @@
   }
   function showLimitPopup(){ document.getElementById('limitModal').classList.remove('hidden'); }
   function closeLimitPopup(){ document.getElementById('limitModal').classList.add('hidden'); }
+
+  // ═══════ CUSTOM CONFIRM (native confirm() ki jagah — app jaisa dikhta hai) ═══════
+  let __confirmResolve = null;
+  function showConfirm(opts){
+    const o = opts || {};
+    document.getElementById('cfIcon').textContent = o.icon || '⚠️';
+    document.getElementById('cfTitle').textContent = o.title || '';
+    document.getElementById('cfBody').textContent = o.body || '';
+    document.getElementById('cfYes').textContent = o.yes || 'Yes';
+    document.getElementById('cfNo').textContent = o.no || 'Cancel';
+    const yes = document.getElementById('cfYes');
+    yes.style.background = o.danger ? 'var(--danger)' : 'var(--accent)';
+    document.getElementById('confirmModal').classList.remove('hidden');
+    return new Promise(res => { __confirmResolve = res; });
+  }
+  function closeConfirm(val){
+    document.getElementById('confirmModal').classList.add('hidden');
+    if(__confirmResolve){ const r = __confirmResolve; __confirmResolve = null; r(!!val); }
+  }
   function contactKitchen(){
     const msg=encodeURIComponent('Namaste, mujhe ek din me ek se zyada tiffin chahiye. Kripya help karein.');
     window.open('https://wa.me/91'+OWNER_WHATSAPP.replace(/^91/,'')+'?text='+msg,'_blank');
@@ -2505,7 +2539,11 @@
   function renderCart(){
     const box=document.getElementById('cartList'); if(!box)return;
     const cbt=document.getElementById('cartBarTotal'), cbtn=document.getElementById('checkoutBtn');
-    if(!cart.length){ box.innerHTML=`<div class="cart-empty">${t('cartEmpty')}</div>`; if(cbt)cbt.textContent='₹0'; if(cbtn)cbtn.disabled=true; updateCartBadge(); return; }
+    if(!cart.length){ box.innerHTML=`<div style="text-align:center;padding:34px 18px;">
+      <div style="font-size:44px;opacity:.55;">🛒</div>
+      <div style="color:var(--ink);font-size:14.5px;font-weight:800;margin-top:10px;">${t('cartEmpty')}</div>
+      <button class="add-cart-btn" style="max-width:230px;margin:16px auto 0;" onclick="showHomePage()">${t('lpOrderNow')}</button>
+    </div>`; if(cbt)cbt.textContent='₹0'; if(cbtn)cbtn.disabled=true; updateCartBadge(); return; }
     // Address saved? → button seedha "Place Order" (checkout page skip), warna "Checkout"
     if(cbtn){
       const a=storeGet('fbt_addr')||{};
@@ -2849,7 +2887,9 @@
       .then(j=>{ if(j.status==='success'){ showToast('✅ '+t('subSaved'),'success'); loadSub(); } else if(j.status==='invalid_session')forceLogout(); else showToast('❌ '+srvMsg(j),'error'); })
       .catch(()=>showToast(t('errNetwork'),'error'));
   }
-  function doCancelSub(){ if(!confirm(t('subCancelConfirm')))return;
+  async function doCancelSub(){
+    const ok = await showConfirm({ icon:'🔁', title:t('subCancelBtn'), body:t('subCancelConfirm'), yes:t('subCancelBtn'), no:t('limitClose'), danger:true });
+    if(!ok) return;
     apiPost({action:'cancelSub',token:SESSION.token}).then(j=>{ if(j.status==='success'){ showToast('✅ '+t('subCancelled'),'success'); loadSub(); } else if(j.status==='invalid_session')forceLogout(); else showToast('❌ '+srvMsg(j),'error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
   function doSkip(){ const el=document.getElementById('subSkipDate'); el.min=dateWithOffsetStr(1); const d=el.value; if(!d){ showToast('⚠️ '+t('subPickSkipDate'),'warning'); return; }
     apiPost({action:'skipSub',token:SESSION.token,date:d}).then(j=>{ if(j.status==='success'){ showToast(j.skipped?('⏭️ '+t('subSkipDone')):('↩️ '+t('subUnskipDone')),'success'); loadSub(); } else if(j.status==='invalid_session')forceLogout(); else showToast('❌ '+srvMsg(j),'error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
@@ -2869,7 +2909,11 @@
   function renderMyOrders(list,isHist){
     myOrdersCache=list||[]; myOrdersIsHist=!!isHist;
     const box=document.getElementById('myOrdersList');
-    if(!list.length){ box.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:16px 0;text-align:center;">${isHist?t('noHistory'):t('noUpcoming')}</div>`; return; }
+    if(!list.length){ box.innerHTML=`<div style="text-align:center;padding:34px 18px;">
+      <div style="font-size:44px;opacity:.55;">🧾</div>
+      <div style="color:var(--ink);font-size:14.5px;font-weight:800;margin-top:10px;">${isHist?t('noHistory'):t('noUpcoming')}</div>
+      ${isHist?'':`<button class="add-cart-btn" style="max-width:230px;margin:16px auto 0;" onclick="showHomePage()">${t('lpOrderNow')}</button>`}
+    </div>`; return; }
     const mealMini=o=>{ const p=[]; if(Number(o.breakfastQty))p.push('🌅'+o.breakfastQty); if(Number(o.lunchQty))p.push('☀️'+o.lunchQty); if(Number(o.dinnerQty))p.push('🌙'+o.dinnerQty); return p.join('  '); };
     const pillColor=s=>({Pending:'background:var(--warnbg);color:var(--warn);',Preparing:'background:var(--accent-soft);color:var(--accent-dark);',Delivered:'background:var(--okbg);color:var(--ok);',Cancelled:'background:var(--dangerbg);color:var(--danger);'}[s]||'background:var(--bg);color:var(--muted);');
     box.innerHTML=list.map((o,i)=>`<div class="ord-row" onclick="openMyOrderModal(${i})">
@@ -2979,7 +3023,9 @@
     fetch(url).then(r=>r.json()).then(j=>{ if(j.status==='success')renderMyOrders(j.orders||[], !!(dateOpt && dateOpt!==fmtYMD(dateWithOffset(0)))); else if(j.status==='invalid_session')forceLogout(); else box.innerHTML='<div style="color:var(--muted);font-size:13px;">Could not load orders.</div>'; }).catch(()=>{ box.innerHTML='<div style="color:var(--muted);font-size:13px;">Network error.</div>'; });
   }
   function viewHistory(){ const d=document.getElementById('histDate').value; if(!d){ showToast(t('selectDate'),'warning'); return; } loadMyOrders(d); }
-  function cancelMyOrder(row,dd,createdIso){ if(!isLoggedIn()){ showAuth(); return; } if(!canCancel({deliveryDate:dd,createdIso:createdIso||''})){ showToast(t('cancelClosed'),'error'); return; } if(!confirm(t('confirmCancel')))return;
+  async function cancelMyOrder(row,dd,createdIso){ if(!isLoggedIn()){ showAuth(); return; } if(!canCancel({deliveryDate:dd,createdIso:createdIso||''})){ showToast(t('cancelClosed'),'error'); return; }
+    const ok = await showConfirm({ icon:'🗑️', title:t('cancelOrder').replace(/^✖\s*/,''), body:t('confirmCancel'), yes:t('cancelOrder').replace(/^✖\s*/,''), no:t('limitClose'), danger:true });
+    if(!ok) return;
     apiPost({action:'cancelOrder',token:SESSION.token,row:row}).then(j=>{ if(j.status==='success'){ showToast(t('orderCancelled'),'success'); loadMyOrders(); } else if(j.status==='invalid_session')forceLogout(); else showToast(j.message||'Could not cancel.','error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
 
   // ═══════ ADMIN ═══════
