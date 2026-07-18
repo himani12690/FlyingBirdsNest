@@ -632,6 +632,8 @@
   #bootLoader .bl-logo{font-size:44px;}
   #bootLoader .bl-spin{width:34px;height:34px;border:3.5px solid #e7e9f0;border-top-color:#6366f1;border-radius:50%;animation:blsp .8s linear infinite;}
   @keyframes blsp{to{transform:rotate(360deg)}}
+  .mini-spin-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px 0;color:#9a9fb0;font-size:12.5px;font-weight:700;}
+  .mini-spin{width:26px;height:26px;border:3px solid #e7e9f0;border-top-color:var(--accent);border-radius:50%;animation:blsp .7s linear infinite;}
   #bootLoader .bl-t{font-size:13px;font-weight:700;color:#6b7280;}
   #authTransition{position:fixed;inset:0;background:#f7f8fc;z-index:99998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:'Segoe UI',system-ui,sans-serif;transition:opacity .25s;}
   #authTransition.hidden{display:none;}
@@ -2695,7 +2697,7 @@
   function subDayLabel(d){ return (SUB_DAY_LABEL[LANG]||SUB_DAY_LABEL.en)[d]; }
 
   function loadSub(){
-    document.getElementById('subActiveBox').innerHTML='<div style="color:#999;font-size:13px;">Loading...</div>';
+    document.getElementById('subActiveBox').innerHTML='<div class="mini-spin-wrap"><div class="mini-spin"></div><span>Loading…</span></div>';
     document.getElementById('subFormBox').innerHTML='';
     fetch(GOOGLE_SCRIPT_URL+'?action=mySub&token='+encodeURIComponent(SESSION.token)).then(r=>r.json()).then(j=>{
       if(j.status==='invalid_session'){ forceLogout(); return; }
@@ -2916,7 +2918,7 @@
   function dateOffsetFromStr(dstr){ for(let o=0;o<=2;o++){ if(dateWithOffsetStr(o)===dstr) return o; } return 0; }
   function loadMyOrders(dateOpt){
     if(!isLoggedIn())return; const box=document.getElementById('myOrdersList'); if(!box)return;
-    box.innerHTML='<div style="color:#999;font-size:13px;">Loading...</div>';
+    box.innerHTML='<div class="mini-spin-wrap"><div class="mini-spin"></div><span>Loading…</span></div>';
     let url=GOOGLE_SCRIPT_URL+'?action=myOrders&token='+encodeURIComponent(SESSION.token); if(dateOpt)url+='&date='+encodeURIComponent(dateOpt);
     fetch(url).then(r=>r.json()).then(j=>{ if(j.status==='success')renderMyOrders(j.orders||[], !!(dateOpt && dateOpt!==fmtYMD(dateWithOffset(0)))); else if(j.status==='invalid_session')forceLogout(); else box.innerHTML='<div style="color:#999;font-size:13px;">Could not load orders.</div>'; }).catch(()=>{ box.innerHTML='<div style="color:#999;font-size:13px;">Network error.</div>'; });
   }
