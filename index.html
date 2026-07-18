@@ -542,12 +542,14 @@
     .tabs { display:flex; gap:5px; margin:12px 0 16px; background:var(--line); padding:5px; border-radius:14px; }
     .tab-btn { flex:1; padding:9px 2px; border:none; border-radius:10px; font-size:11px; font-weight:800; cursor:pointer; background:transparent; color:#666; }
     .tab-btn.active { background:var(--accent); color:#fff; }
-    #adminPanel .tabs { overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
-    #adminPanel .tabs::-webkit-scrollbar { display:none; }
-    #adminPanel .tabs { display:flex; flex-wrap:nowrap; overflow-x:auto; gap:6px; padding:2px 0 6px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
-    #adminPanel .tabs::-webkit-scrollbar { display:none; }
-    #adminPanel .tab-btn { flex:0 0 auto; padding:8px 13px; font-size:11.5px; white-space:nowrap; background:rgba(255,255,255,0.14); color:#fff; border-radius:18px; }
-    #adminPanel .tab-btn.active { background:#fff; color:var(--accent-dark); }
+    /* Admin top bar — hamburger + section title (tabs ki jagah left drawer) */
+    .admin-topbar { position:sticky; top:0; z-index:30; background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff; padding:13px 15px; display:flex; align-items:center; gap:13px; }
+    .admin-topbar .ham { width:24px; display:flex; flex-direction:column; gap:5px; cursor:pointer; flex-shrink:0; padding:3px 0; }
+    .admin-topbar .ham span { height:2.5px; background:#fff; border-radius:2px; }
+    .admin-topbar .atb-title { flex:1; font-size:16px; font-weight:900; }
+    .admin-topbar .alert-toggle { float:none; font-size:10.5px; font-weight:800; background:rgba(255,255,255,.18); color:#fff; border-radius:16px; padding:6px 12px; cursor:pointer; }
+    /* Admin drawer active item */
+    #adminDrawer .drawer-item.active { background:var(--accent-soft); color:var(--accent-dark); font-weight:900; }
     #adminPanel .back-link, #adminPanel .alert-toggle { font-size:11px; }
     .date-chips { display:flex; gap:7px; margin-top:4px; }
     .dchip { flex:1; border:1.5px solid var(--line); background:var(--card); border-radius:11px; padding:8px 4px; text-align:center; cursor:pointer; font-family:inherit; }
@@ -652,6 +654,27 @@
       <div class="drawer-item danger" onclick="drawerGo('logout')"><span class="di-icon">🚪</span><span data-i="logout"></span></div>
     </div>
     <div class="drawer-foot">Flying Birds Tiffin · v6</div>
+  </div>
+
+  <!-- ══════ ADMIN DRAWER ══════ -->
+  <div class="drawer-overlay" id="adminDrawerOverlay" onclick="closeAdminDrawer()"></div>
+  <div class="drawer" id="adminDrawer">
+    <div class="drawer-head">
+      <div class="dh-logo">⚙️</div>
+      <div class="dh-name">Admin Panel</div>
+      <div class="dh-phone">Flying Birds Tiffin</div>
+    </div>
+    <div class="drawer-menu">
+      <div class="drawer-item" id="adr-orders" onclick="adminDrawerGo('orders')"><span class="di-icon">🧾</span><span>Orders</span></div>
+      <div class="drawer-item" id="adr-users" onclick="adminDrawerGo('users')"><span class="di-icon">👥</span><span>Users</span></div>
+      <div class="drawer-item" id="adr-menu" onclick="adminDrawerGo('menu')"><span class="di-icon">✏️</span><span>Menu</span></div>
+      <div class="drawer-item" id="adr-config" onclick="adminDrawerGo('config')"><span class="di-icon">⚙️</span><span>Setup</span></div>
+      <div class="drawer-item" id="adr-variants" onclick="adminDrawerGo('variants')"><span class="di-icon">🍱</span><span>Variants</span></div>
+      <div class="drawer-item" id="adr-promos" onclick="adminDrawerGo('promos')"><span class="di-icon">🎟️</span><span>Promos</span></div>
+      <div class="drawer-item" id="adr-stats" onclick="adminDrawerGo('stats')"><span class="di-icon">📊</span><span>Stats</span></div>
+      <div class="drawer-item danger" onclick="closeAdminDrawer();adminLogout()"><span class="di-icon">🚪</span><span>Logout</span></div>
+    </div>
+    <div class="drawer-foot">Admin · Flying Birds Tiffin</div>
   </div>
 
 
@@ -1125,18 +1148,12 @@
 
   <!-- ══════ ADMIN PANEL ══════ -->
   <div id="adminPanel" class="hidden">
-    <div class="hero" style="padding:20px;"><h1 style="font-size:20px;">⚙️ Admin Dashboard</h1></div>
+    <div class="admin-topbar">
+      <div class="ham" onclick="openAdminDrawer()"><span></span><span></span><span></span></div>
+      <div class="atb-title" id="adminSectionTitle">🧾 Orders</div>
+      <span class="alert-toggle" id="alertToggle" onclick="toggleAlerts()">🔕 OFF</span>
+    </div>
     <div class="section">
-      <span class="back-link" onclick="adminLogout()">← Logout</span><span class="alert-toggle" id="alertToggle" onclick="toggleAlerts()">🔕 Alerts: OFF</span>
-      <div class="tabs" style="clear:both;">
-        <button class="tab-btn active" id="atab-orders" onclick="adminTab('orders')">🧾 Orders</button>
-        <button class="tab-btn" id="atab-users" onclick="adminTab('users')">👥 Users</button>
-        <button class="tab-btn" id="atab-menu" onclick="adminTab('menu')">✏️ Menu</button>
-        <button class="tab-btn" id="atab-config" onclick="adminTab('config')">⚙️ Setup</button>
-        <button class="tab-btn" id="atab-variants" onclick="adminTab('variants')">🍱 Variants</button>
-        <button class="tab-btn" id="atab-promos" onclick="adminTab('promos')">🎟️ Promos</button>
-        <button class="tab-btn" id="atab-stats" onclick="adminTab('stats')">📊 Stats</button>
-      </div>
 
       <div id="aview-orders">
         <span class="refresh-link" onclick="loadOrders()">🔄 Refresh</span>
@@ -1737,8 +1754,20 @@
   function onlyNumbers(el){ el.value=el.value.replace(/\D/g,''); }
   // ═══ GLOBAL LOADING BAR — har request pe apne aap ═══
   let __busy=0;
-  function busyStart(){ __busy++; const b=document.getElementById('topBar'); if(b) b.classList.add('on'); }
-  function busyEnd(){ __busy=Math.max(0,__busy-1); if(!__busy){ const b=document.getElementById('topBar'); if(b) b.classList.remove('on'); } }
+  // Loading bar sirf tab dikhao jab call 600ms+ le — fast calls pe flash nahi
+  let __barT=null;
+  function busyStart(){
+    __busy++;
+    if(__barT) return;
+    __barT=setTimeout(()=>{ if(__busy>0){ const b=document.getElementById('topBar'); if(b) b.classList.add('on'); } }, 600);
+  }
+  function busyEnd(){
+    __busy=Math.max(0,__busy-1);
+    if(!__busy){
+      if(__barT){ clearTimeout(__barT); __barT=null; }
+      const b=document.getElementById('topBar'); if(b) b.classList.remove('on');
+    }
+  }
   (function(){
     const of=window.fetch;
     window.fetch=function(){ busyStart(); return of.apply(this,arguments).finally(busyEnd); };
@@ -1864,6 +1893,22 @@
     document.getElementById('drawerPhone').textContent = (SESSION&&SESSION.phone)?('📱 '+SESSION.phone):'';
     document.getElementById('drawerOverlay').classList.add('open');
     document.getElementById('drawer').classList.add('open');
+  }
+  // ── Admin drawer (left slide menu) ──
+  const ADMIN_SECTIONS={orders:'🧾 Orders',users:'👥 Users',menu:'✏️ Menu',config:'⚙️ Setup',variants:'🍱 Variants',promos:'🎟️ Promos',stats:'📊 Stats'};
+  function openAdminDrawer(){
+    document.getElementById('adminDrawerOverlay').classList.add('open');
+    document.getElementById('adminDrawer').classList.add('open');
+  }
+  function closeAdminDrawer(){
+    document.getElementById('adminDrawerOverlay').classList.remove('open');
+    document.getElementById('adminDrawer').classList.remove('open');
+  }
+  function adminDrawerGo(tab){
+    closeAdminDrawer();
+    adminTab(tab);
+    const t=document.getElementById('adminSectionTitle'); if(t) t.textContent=ADMIN_SECTIONS[tab]||'Admin';
+    Object.keys(ADMIN_SECTIONS).forEach(k=>{ const el=document.getElementById('adr-'+k); if(el) el.classList.toggle('active', k===tab); });
   }
   function closeDrawer(){ document.getElementById('drawerOverlay').classList.remove('open'); document.getElementById('drawer').classList.remove('open'); }
   function drawerGo(where){
@@ -2000,9 +2045,8 @@
     const gp=document.getElementById('googlePhoneBox'); if(gp)gp.classList.add('hidden');
     const e1=document.getElementById('err-authPhone'); if(e1)e1.classList.remove('show');
     const e2=document.getElementById('authGoogleErr'); if(e2)e2.classList.remove('show');
-    // Returning Google user → One Tap khud sign-in kar dega (zero click)
+    // One Tap band — sirf apna custom blue button (googleBtnBox) dikhega
     showView('authPage');
-    setTimeout(()=>{ try{ if(window.google&&google.accounts&&google.accounts.id) google.accounts.id.prompt(); }catch(e){} }, 400);
     // Password-reset link opened from email? (?reset=TOKEN)
     const urlToken=new URLSearchParams(location.search).get('reset');
     if(urlToken){ resetToken=urlToken; showAuthMode('reset'); }
