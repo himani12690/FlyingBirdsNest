@@ -42,6 +42,9 @@
       --warn:#fbbf24; --warnbg:#332508; --body-bg:#0a0a10;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
+    /* Safety net — koi bhi input/select apna explicit color na de to bhi
+       theme text color use ho (dark mode me black-on-black jaisa bug rokta hai) */
+    input, select, textarea, button { color:var(--ink); font-family:inherit; }
     body { font-family:'Segoe UI', system-ui, -apple-system, sans-serif; background:var(--body-bg); min-height:100vh; color:var(--ink); transition:background .2s; }
     .container { max-width:480px; margin:0 auto; background:var(--bg); min-height:100vh; position:relative; }
 
@@ -3522,9 +3525,8 @@
     else showPublic();
 
     // ═══════ EDGE SWIPE → DRAWER ═══════
-    // Sirf screen ke bilkul left edge (24px) se shuru hoke right swipe karne
-    // par drawer khulega. Beech screen se swipe karne par kuch nahi hota
-    // (isse content/scroll disturb nahi hota).
+    // Screen ke bilkul left edge (24px) se shuru hoke right swipe karne par
+    // drawer khulega — kisi bhi page se (Home, Menu, Cart, Orders, Profile...).
     (function(){
       let sx=0, sy=0, tracking=false;
       document.addEventListener('touchstart', function(e){
@@ -3540,9 +3542,7 @@
         const t=e.changedTouches[0]; if(!t) return;
         const dx=t.clientX-sx, dy=t.clientY-sy;
         if(dx<60 || Math.abs(dy)>60) return;
-        const onHome=!document.getElementById('homeView').classList.contains('hidden');
-        const onMenu=!document.getElementById('page1').classList.contains('hidden');
-        if(onHome||onMenu) openDrawer();
+        openDrawer();
       }, {passive:true});
     })();
 
