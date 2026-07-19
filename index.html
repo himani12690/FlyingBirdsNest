@@ -66,13 +66,13 @@
     .hero.sub-hero.no-title { padding-top:46px; padding-bottom:0; }   /* sirf top strip, title nahi */
     /* Sub-page top strip — brand + language, taaki har page pe context rahe */
     .sub-tb { position:absolute; top:10px; left:0; right:0; display:flex; align-items:center; gap:10px; padding:0 14px; }
-    .brand-ic { width:22px; height:22px; border-radius:6px; vertical-align:-5px;
+    .brand-ic { width:22px; height:22px; vertical-align:-5px;
                 margin-right:7px; display:inline-block; }
     .sub-tb .sub-brand { flex:1; min-width:0; font-size:13.5px; font-weight:900; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; }
     .sub-tb select { padding:5px 7px; font-size:11px; border:1.5px solid var(--line); border-radius:9px; background:var(--card); color:var(--ink); font-weight:700; }
     .back-link { position:fixed; bottom:80px; left:16px; display:inline-flex; align-items:center; gap:5px; font-size:13.5px; font-weight:800; color:#fff; background:var(--accent); border:none; font-family:inherit; padding:11px 18px; border-radius:24px; cursor:pointer; z-index:120; box-shadow:0 6px 16px rgba(99,102,241,0.35); }
-    .hero .logo { margin-bottom:6px; }
-    .hero .logo img { width:64px; height:64px; border-radius:16px; display:block; margin:0 auto; }
+    .hero .logo { margin-bottom:10px; }
+    .hero .logo img { width:88px; height:88px; display:block; margin:0 auto; }
     .hero h1 { font-size:21px; font-weight:900; margin-bottom:2px; color:var(--ink); letter-spacing:-0.3px; }
     .hero .tagline { font-size:13px; color:var(--muted); margin-bottom:8px; }
     .hero-badge { display:inline-block; background:var(--accent-soft); color:var(--accent-dark); padding:5px 13px; border-radius:50px; font-size:11.5px; font-weight:700; margin:3px; }
@@ -117,10 +117,9 @@
     .lp-top { display:flex; justify-content:space-between; align-items:center; }
     .lp-top .lang-switch select { padding:5px 7px; font-size:11px; }
     .lp-logo { margin-top:6px; }
-    .lp-logo img { width:76px; height:76px; border-radius:20px; display:block; margin:0 auto; }
+    .lp-logo img { width:80px; height:80px; display:block; margin:0 auto; }
     .lp-greet { display:inline-block; margin:6px auto 0; padding:6px 15px; background:var(--accent-soft); border-radius:20px; font-size:12.5px; font-weight:800; color:var(--accent-dark); }
     .lp-greet:empty { display:none; }
-    .lp-brand { font-size:24px; font-weight:900; letter-spacing:0.3px; }
     .lp-tag { font-size:12.5px; color:var(--muted); margin-top:6px; line-height:1.5; }
     .lp-loc { font-size:10.5px; color:var(--muted); margin-top:8px; }
     .lp-sec-t { font-size:14px; font-weight:900; color:var(--ink); margin:18px 0 10px; }
@@ -176,7 +175,7 @@
     .pub-tr select { border:1.5px solid var(--line); border-radius:8px; padding:5px 6px; font-size:10.5px; font-weight:700; background:var(--card); }
     .pub-login { font-size:11.5px; font-weight:800; color:var(--accent-dark); border:1.5px solid var(--accent); border-radius:18px; padding:6px 13px; cursor:pointer; background:var(--card); }
     .pub-hero { background:transparent; padding:14px 18px 18px; color:var(--ink); text-align:center; }
-    .pub-logo img { width:72px; height:72px; border-radius:18px; display:block; margin:0 auto; }
+    .pub-logo img { width:76px; height:76px; display:block; margin:0 auto; }
     .pub-hero h1 { font-size:23px; font-weight:900; margin-top:2px; }
     .pub-hero p { font-size:12.5px; color:var(--muted); margin-top:6px; line-height:1.5; }
     .pub-cta { margin-top:14px; background:var(--accent); color:#fff; border:none; border-radius:14px; padding:13px 34px; font-size:15px; font-weight:900; cursor:pointer; box-shadow:0 6px 18px rgba(99,102,241,0.3); }
@@ -193,8 +192,8 @@
     .cmp-head .ch-us { background:var(--accent-soft); }
     .cmp-head .ch-th { background:var(--bg); }
     .cmp-ic { width:34px; height:34px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; font-size:17px; }
-    .cmp-ic.usi { background:var(--accent); color:#fff; overflow:hidden; }
-    .cmp-ic.usi img { width:100%; height:100%; object-fit:cover; }
+    .cmp-ic.usi { background:none; }
+    .cmp-ic.usi img { width:100%; height:100%; object-fit:contain; }
     .cmp-ic.thi { background:#c9ced6; color:#fff; }
     .cmp-ic + .cmp-ic { margin-left:4px; }
     .cmp-nm { font-size:11.5px; font-weight:900; margin-top:6px; }
@@ -712,7 +711,7 @@
   <style>
   #bootLoader{position:fixed;inset:0;background:var(--bg);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:'Segoe UI',system-ui,sans-serif;transition:opacity .25s;}
   #bootLoader.gone{opacity:0;pointer-events:none;}
-  #bootLoader .bl-logo img{width:72px;height:72px;border-radius:18px;display:block;}
+  #bootLoader .bl-logo img{width:76px;height:76px;display:block;}
   #bootLoader .bl-spin{width:34px;height:34px;border:3.5px solid #e7e9f0;border-top-color:#6366f1;border-radius:50%;animation:blsp .8s linear infinite;}
   @keyframes blsp{to{transform:rotate(360deg)}}
   .mini-spin-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px 0;color:#9a9fb0;font-size:12.5px;font-weight:700;}
@@ -721,15 +720,15 @@
   #authTransition{position:fixed;inset:0;background:var(--bg);z-index:99998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:'Segoe UI',system-ui,sans-serif;transition:opacity .25s;}
   #authTransition.hidden{display:none;}
   #authTransition.gone{opacity:0;pointer-events:none;}
-  #authTransition .bl-logo img{width:72px;height:72px;border-radius:18px;display:block;}
+  #authTransition .bl-logo img{width:76px;height:76px;display:block;}
   #authTransition .bl-spin{width:34px;height:34px;border:3.5px solid #e7e9f0;border-top-color:#6366f1;border-radius:50%;animation:blsp .8s linear infinite;}
   #authTransition .bl-t{font-size:15px;font-weight:800;color:var(--ink);}
   #authTransition .bl-t.welcome{color:var(--accent);font-size:17px;}
   </style>
 </head>
 <body>
-<div id="bootLoader"><div class="bl-logo"><img src="icon-512.png" alt="Nest &amp; Nosh"></div><div class="bl-spin"></div><div class="bl-t">Loading…</div></div>
-<div id="authTransition" class="hidden"><div class="bl-logo"><img src="icon-512.png" alt="Nest &amp; Nosh"></div><div class="bl-spin"></div><div class="bl-t" id="authTransitionText">Signing in…</div></div>
+<div id="bootLoader"><div class="bl-logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div><div class="bl-spin"></div><div class="bl-t">Loading…</div></div>
+<div id="authTransition" class="hidden"><div class="bl-logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div><div class="bl-spin"></div><div class="bl-t" id="authTransitionText">Signing in…</div></div>
 <div class="container">
 
   <!-- ══════ SIDE DRAWER ══════ -->
@@ -788,15 +787,14 @@
   <!-- ══════ PUBLIC LANDING (before login) ══════ -->
   <div id="pubView" class="hidden">
     <div class="pub-tb">
-      <div class="pub-br"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div>
+      <div class="pub-br"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div>
       <div class="pub-tr">
         <select id="langSelPub" class="js-lang" onchange="setLang(this.value)"></select>
         <button class="pub-login" onclick="showAuth()" data-i="pubLogin"></button>
       </div>
     </div>
     <div class="pub-hero">
-      <div class="pub-logo"><img src="icon-512.png" alt="Nest &amp; Nosh"></div>
-      <h1>Nest & Nosh</h1>
+      <div class="pub-logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div>
       <p data-i="lpTagline"></p>
       <button class="pub-cta" onclick="goOrderNow()" data-i="pubCta"></button>
       <div class="pub-sub">📍 Ahmedabad · Home &amp; Office delivery <span class="fssai-line" style="font-size:10px;"></span></div>
@@ -809,7 +807,7 @@
       </div>
       <div class="cmp">
         <div class="cmp-head">
-          <div class="ch-us"><span class="cmp-ic usi"><img src="icon-192.png" alt=""></span><div class="cmp-nm" data-i="cmpUs"></div></div>
+          <div class="ch-us"><span class="cmp-ic usi"><img src="logo-round.png" alt=""></span><div class="cmp-nm" data-i="cmpUs"></div></div>
           <div class="ch-th"><span class="cmp-ic thi">🛵</span><span class="cmp-ic thi">📱</span><div class="cmp-nm" data-i="cmpThem"></div></div>
         </div>
         <div class="cmp-row"><div class="cr-u" data-i="cmpU1"></div><div class="cr-t" data-i="cmpT1"></div></div>
@@ -831,8 +829,7 @@
   <div id="authPage" class="hidden">
     <div class="hero">
       <div class="lang-switch"><select id="langSelAuth" class="js-lang" onchange="setLang(this.value)"></select></div>
-      <div class="logo"><img src="icon-512.png" alt="Nest &amp; Nosh"></div>
-      <h1>Nest & Nosh</h1>
+      <div class="logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div>
       <p class="tagline" data-i="tagline"></p>
       <span class="hero-badge" data-i="secureLogin"></span>
     </div>
@@ -946,8 +943,7 @@
     <div class="lp-hero">
       <div class="lp-top"><span class="hamburger" onclick="openDrawer()">☰</span></div>
       <div class="lp-greet" id="lpGreet"></div>
-      <div class="lp-logo"><img src="icon-512.png" alt="Nest &amp; Nosh"></div>
-      <h1 class="lp-brand">Nest & Nosh</h1>
+      <div class="lp-logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div>
       <p class="lp-tag" data-i="lpTagline"></p>
       <div class="lp-loc">📍 Ahmedabad · Home &amp; Office delivery <span class="fssai-line" style="font-size:10px;"></span></div>
     </div>
@@ -976,7 +972,7 @@
     <div class="menu-topbar">
       <span class="hamburger" onclick="openDrawer()">☰</span>
       <div class="mt-title">
-        <div class="mt-name"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div>
+        <div class="mt-name"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div>
         <div class="mt-user" id="profileName" style="display:none;"></div>
       </div>
       
@@ -1036,7 +1032,7 @@
   <!-- ══════ CART VIEW ══════ -->
   <div id="cartView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div></div>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
       <h1 style="font-size:20px;" data-i="yourCart"></h1>
     </div>
     <div class="section pad-sticky">
@@ -1055,7 +1051,7 @@
   <!-- ══════ SUBSCRIPTION VIEW ══════ -->
   <div id="subView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div></div>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
       <h1 style="font-size:20px;" data-i="subTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="subSub"></p>
     </div>
@@ -1069,7 +1065,7 @@
   <!-- ══════ MY ORDERS VIEW ══════ -->
   <div id="ordersView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div></div>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
       <h1 style="font-size:20px;" data-i="myOrders"></h1>
     </div>
     <div class="section">
@@ -1086,7 +1082,7 @@
   <!-- ══════ ABOUT + CONTACT (merged) ══════ -->
   <div id="aboutView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div></div>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
       <h1 style="font-size:20px;" data-i="aboutTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="aboutSub"></p>
     </div>
@@ -1219,7 +1215,7 @@
   <!-- ══════ ADMIN LOGIN ══════ -->
   <!-- ══════ PROFILE ══════ -->
   <div id="profileView" class="hidden">
-    <div class="hero sub-hero no-title"><div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div></div></div>
+    <div class="hero sub-hero no-title"><div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div></div>
     <div class="section">
       <div class="pf-card">
         <div class="pf-avwrap disabled" id="pfAvaWrap">
