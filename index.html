@@ -2131,7 +2131,13 @@
   // 1-tap quick add: default variant + default sabzi + default time, sheet khole bina
   // ADD par hi check karte hain (menu render par card achanak nahi badalta).
   // Button spinner dikhata hai jab tak server se confirm nahi ho jaata.
+  // ADD ka check chal raha ho to meal panel re-render na ho — warna
+  // loadPublicStats/image-onload beech me spinner wipe kar dete the.
+  let addChecking=false;
+  let orderedMap={};           // 'YYYY-MM-DD|lunch' -> { status }
+  let orderedMapReady=false;   // load ho chuka ho to ADD par koi wait nahi
   function showAlreadyOrderedCard(m, info){
+    addChecking=false;
     const box=document.getElementById('mealPanel'); if(!box)return;
     box.innerHTML=`<div class="already-card">
       <div class="ac-ic">✅</div>
@@ -2143,15 +2149,30 @@
   function quickAdd(m, ev){
     if(ev&&ev.stopPropagation){ ev.stopPropagation(); }
     if(!isLoggedIn()){ showAuth(); return; }
+
+    // Data pehle se load hai (menu khulte hi prefetch ho jaata hai) → koi
+    // spinner nahi, turant faisla. Yehi 99% case hai.
+    if(orderedMapReady){
+      const already = alreadyOrdered(selDateStr(), m);
+      if(already){ showAlreadyOrderedCard(m, already); return; }
+      doQuickAdd(m);
+      refreshOrderedMap();   // background me taaza karte raho
+      return;
+    }
+
+    // Data abhi tak nahi aaya (bahut slow network) — tabhi spinner
     const btn = ev && ev.currentTarget ? ev.currentTarget : null;
     const oldTxt = btn ? btn.innerHTML : '';
     if(btn){ btn.innerHTML='<span class="spin"></span>'; btn.style.pointerEvents='none'; }
+    addChecking=true;
     refreshOrderedMap().then(()=>{
+      addChecking=false;
       const already = alreadyOrdered(selDateStr(), m);
       if(already){ showAlreadyOrderedCard(m, already); return; }
       if(btn){ btn.innerHTML=oldTxt; btn.style.pointerEvents=''; }
       doQuickAdd(m);
     }).catch(()=>{
+      addChecking=false;
       if(btn){ btn.innerHTML=oldTxt; btn.style.pointerEvents=''; }
       doQuickAdd(m);   // network fail — server checkout par waise bhi rok lega
     });
@@ -2208,6 +2229,7 @@
     document.getElementById('profileName').textContent='👤 '+(SESSION.name||'');
     const lg=document.getElementById('lpGreet'); if(lg){ const fn=(SESSION.name||'').split(' ')[0]; lg.textContent=fn?('👋 Hi, '+fn+' — welcome back!'):''; }
     updateNavAvatar();
+    refreshOrderedMap();   // background prefetch — ADD par turant faisla ho sake
     const v=restore?storeGet('fbt_view'):null;     // showLanding se PEHLE padho (warna overwrite)
     showLanding(); ensureMode(); refreshAvailability(); renderCart(); loadPublicStats(selDateStr());
     if(restore){                                   // refresh ke baad wahi page wapas kholo
@@ -2437,6 +2459,7 @@
 
   // ═══════ MENU AS CARDS ═══════
   function renderMealPanel(){
+    if(addChecking) return;
     const box=document.getElementById('mealPanel'); if(!box)return;
     const m=activeMeal; const av=mealsAvail(dateOffset)[m];
     if(!av.ok){ box.innerHTML=`<div class="menu-closed">⏰ ${av.why}</div>`; return; }
@@ -2574,16 +2597,26 @@
     const m=sheetMeal, b=builder[m];
     if(m!=='breakfast' && !b.sabzi){ showToast('⚠️ '+t('selectSabzi'),'warning'); return; }
     if(capacityReached(m,selDateStr())){ showToast('🔴 '+t('soldOutTitle'),'error'); closeMealSheet(); renderMealPanel(); return; }
+    // Data ready hai → turant, koi spinner nahi
+    if(orderedMapReady){
+      const already=alreadyOrdered(selDateStr(), m);
+      if(already){ closeMealSheet(); showAlreadyOrderedCard(m, already); return; }
+      shAddToCartConfirmed();
+      refreshOrderedMap();
+      return;
+    }
     // Server se confirm karo ki is date+meal ka order pehle se to nahi
     const btn=document.getElementById('shAddBtn');
     const oldTxt=btn?btn.innerHTML:'';
     if(btn){ btn.innerHTML='<span class="spin"></span>'; btn.disabled=true; }
+    addChecking=true;
     refreshOrderedMap().then(()=>{
+      addChecking=false;
       if(btn){ btn.innerHTML=oldTxt; btn.disabled=false; }
       const already=alreadyOrdered(selDateStr(), m);
       if(already){ closeMealSheet(); showAlreadyOrderedCard(m, already); return; }
       shAddToCartConfirmed();
-    }).catch(()=>{ if(btn){ btn.innerHTML=oldTxt; btn.disabled=false; } shAddToCartConfirmed(); });
+    }).catch(()=>{ addChecking=false; if(btn){ btn.innerHTML=oldTxt; btn.disabled=false; } shAddToCartConfirmed(); });
   }
   function shAddToCartConfirmed(){
     const m=sheetMeal, b=builder[m];
@@ -2663,7 +2696,7 @@
     prefillCustomer();
     showView('page2');
   }
-  function goToPage1(){ showView('page1'); refreshAvailability(); }
+  function goToPage1(){ showView('page1'); refreshAvailability(); refreshOrderedMap(); }   // background prefetch
 
   function prefillCustomer(){
     // Google se login kiya aur number abhi tak nahi diya — yahin editable field
@@ -3017,7 +3050,6 @@
   // ═══ Already-ordered map ═══
   // Menu par pehle hi bata dete hain ki is date + meal ka order ho chuka hai,
   // taaki user poora flow bharke checkout par "duplicate" reject na khaye.
-  let orderedMap={};   // 'YYYY-MM-DD|lunch' -> { status }
   function mealOfOrder(o){
     if(Number(o.breakfastQty)>0) return 'breakfast';
     if(Number(o.lunchQty)>0)     return 'lunch';
@@ -3025,7 +3057,7 @@
     return '';
   }
   function refreshOrderedMap(){
-    if(!isLoggedIn()){ orderedMap={}; return Promise.resolve(); }
+    if(!isLoggedIn()){ orderedMap={}; orderedMapReady=false; return Promise.resolve(); }
     return fetch(GOOGLE_SCRIPT_URL+'?action=myOrders&token='+encodeURIComponent(SESSION.token))
       .then(r=>r.json()).then(j=>{
         const map={};
@@ -3037,6 +3069,7 @@
           });
         }
         orderedMap=map;
+        orderedMapReady=true;
       }).catch(()=>{});
   }
   function alreadyOrdered(dateStr, meal){ return orderedMap[dateStr+'|'+meal]||null; }
