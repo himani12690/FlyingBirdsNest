@@ -105,16 +105,16 @@
     .info-strip .is-x { margin-left:auto; cursor:pointer; color:var(--muted); font-weight:800; padding:0 4px; }
     .sub-push { background:var(--accent-soft); border:1.5px dashed var(--accent); border-radius:11px; padding:10px 12px; font-size:12px; font-weight:800; color:var(--accent-dark); margin:0 0 14px; cursor:pointer; }
     /* Home landing */
-    .lp-hero { background:linear-gradient(150deg,var(--accent),var(--accent-dark)); padding:18px 18px 26px; color:#fff; text-align:center; border-radius:0 0 26px 26px; }
+    .lp-hero { background:transparent; padding:14px 18px 20px; color:var(--ink); text-align:center; border-radius:0; }
     .lp-top { display:flex; justify-content:space-between; align-items:center; }
     .lp-top .lang-switch select { padding:5px 7px; font-size:11px; }
     .lp-logo { font-size:52px; margin-top:4px; }
-    .lp-greet { display:inline-block; margin:6px auto 0; padding:5px 14px; background:rgba(255,255,255,.18); border-radius:20px; font-size:12.5px; font-weight:800; color:#fff; }
+    .lp-greet { display:inline-block; margin:6px auto 0; padding:6px 15px; background:var(--accent-soft); border-radius:20px; font-size:12.5px; font-weight:800; color:var(--accent-dark); }
     .lp-greet:empty { display:none; }
     .lp-brand { font-size:24px; font-weight:900; letter-spacing:0.3px; }
-    .lp-tag { font-size:12.5px; opacity:0.92; margin-top:6px; line-height:1.5; }
-    .lp-cta { margin-top:16px; background:var(--card); color:var(--accent-dark); border:none; border-radius:14px; padding:14px 36px; font-size:15px; font-weight:900; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,0.18); }
-    .lp-loc { font-size:10.5px; opacity:0.85; margin-top:12px; }
+    .lp-tag { font-size:12.5px; color:var(--muted); margin-top:6px; line-height:1.5; }
+    .lp-cta { margin-top:16px; background:var(--accent); color:#fff; border:none; border-radius:14px; padding:14px 36px; font-size:15px; font-weight:900; cursor:pointer; box-shadow:0 6px 18px rgba(99,102,241,0.3); }
+    .lp-loc { font-size:10.5px; color:var(--muted); margin-top:12px; }
     .lp-sec-t { font-size:14px; font-weight:900; color:var(--ink); margin:18px 0 10px; }
     .hm-card { display:flex; align-items:center; gap:12px; background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:11px 13px; margin-bottom:9px; cursor:pointer; }
     .hm-ph { width:52px; height:52px; border-radius:12px; background:linear-gradient(135deg,#f0f2f8,#e2e6f0); display:flex; align-items:center; justify-content:center; font-size:26px; overflow:hidden; flex-shrink:0; }
@@ -385,6 +385,10 @@
                   padding:6px 5px; z-index:150; box-shadow:0 8px 26px rgba(0,0,0,0.16); }
     .bn-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; padding:7px 3px 6px; cursor:pointer; position:relative; border:none; background:none; border-radius:20px; transition:background .18s; }
     .bn-item.active { background:var(--accent-soft); }
+    /* Profile nav = user ka initial avatar (Telegram jaisa), plain icon nahi */
+    .bn-av { width:23px; height:23px; border-radius:50%; display:flex; align-items:center;
+             justify-content:center; font-size:11px; font-weight:900; color:#fff;
+             background:linear-gradient(135deg,var(--accent),#8b93ff); flex-shrink:0; }
     .bn-item .bn-ic { width:23px; height:23px; color:var(--muted); transition:color .15s; }
     .bn-item .bn-lbl { font-size:9.5px; font-weight:700; color:var(--muted); }
     .bn-item.active .bn-ic { color:var(--accent); }
@@ -921,7 +925,7 @@
   <!-- ══════ HOME LANDING ══════ -->
   <div id="homeView" class="hidden">
     <div class="lp-hero">
-      <div class="lp-top"><span class="hamburger" style="color:#fff;" onclick="openDrawer()">☰</span><div class="lang-switch" style="position:static;"><select id="langSelHome" onchange="setLang(this.value)"></select></div></div>
+      <div class="lp-top"><span class="hamburger" onclick="openDrawer()">☰</span><div class="lang-switch" style="position:static;"><select id="langSelHome" onchange="setLang(this.value)"></select></div></div>
       <div class="lp-greet" id="lpGreet"></div>
       <div class="lp-logo">🍱</div>
       <h1 class="lp-brand">Flying Birds Tiffin</h1>
@@ -956,7 +960,7 @@
       <span class="hamburger" onclick="openDrawer()">☰</span>
       <div class="mt-title">
         <div class="mt-name">🍱 Flying Birds Tiffin</div>
-        <div class="mt-user" id="profileName"></div>
+        <div class="mt-user" id="profileName" style="display:none;"></div>
       </div>
       <div class="lang-switch" style="position:static;"><select id="langSel" onchange="setLang(this.value)"></select></div>
       <span class="cart-badge" onclick="showCartPage()">🛒<span class="cnt zero" id="cartBadge">0</span></span>
@@ -1055,8 +1059,7 @@
       <div class="section-title" style="display:flex;justify-content:flex-end;"><span class="refresh-link" onclick="const hd=document.getElementById('histDate');loadMyOrders(hd&&hd.value?hd.value:fmtYMD(dateWithOffset(0)));" data-i="refresh"></span></div>
       <div class="cust-label" data-i="viewPast"></div>
       <div class="hist-row" style="margin-bottom:14px;">
-        <input type="date" id="histDate" style="background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:11px;padding:11px;">
-        <button class="add-cart-btn" style="width:auto;padding:11px 18px;margin:0;" onclick="viewHistory()" data-i="view"></button>
+        <input type="date" id="histDate" onchange="viewHistory()" style="width:100%;background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:11px;padding:12px;">
       </div>
       <div id="myOrdersList"></div>
     </div>
@@ -1095,7 +1098,7 @@
     <button class="bn-item" id="bn-menu" onclick="navTo('menu')"><svg class="ic bn-ic"><use href="#ic-menu"/></svg><span class="bn-lbl" data-i="navMenuShort"></span></button>
     <button class="bn-item" id="bn-cart" onclick="navTo('cart')"><svg class="ic bn-ic"><use href="#ic-cart"/></svg><span class="bn-badge zero" id="bnCartBadge">0</span><span class="bn-lbl" data-i="navCartShort"></span></button>
     <button class="bn-item" id="bn-orders" onclick="navTo('orders')"><svg class="ic bn-ic"><use href="#ic-orders"/></svg><span class="bn-lbl" data-i="navOrdersShort"></span></button>
-    <button class="bn-item" id="bn-profile" onclick="navTo('profile')"><svg class="ic bn-ic"><use href="#ic-user"/></svg><span class="bn-lbl" data-i="navProfileShort"></span></button>
+    <button class="bn-item" id="bn-profile" onclick="navTo('profile')"><span class="bn-av" id="bnAvatar">?</span><span class="bn-lbl" data-i="navProfileShort"></span></button>
   </div>
 
   <!-- ══════ PAGE 2 : CHECKOUT ══════ -->
@@ -1508,7 +1511,7 @@
       deliveryDate:'📅 Delivery Date',
       cutoffNote:'🕒 Order Cut-off Times (IST)\n• Breakfast — order by 10:00 PM the night before\n• Lunch — order by 9:00 AM same day\n• Dinner — order by 3:00 PM same day\nAfter cut-off, order for the next available day.',
       selectMeals:'🍽️ Select Your Meals', yourCart:'Your Cart', clearCart:'Clear', cartEmpty:'Your cart is empty. Add meals above to get started.',
-      myOrders:'My Orders', refresh:'🔄 Refresh', viewPast:'🗓️ View orders from a previous date', view:'View',
+      myOrders:'My Orders', refresh:'🔄 Refresh', viewPast:'🗓️ Select delivery date', view:'View',
       cartTotal:'CART TOTAL', checkout:'Checkout →', viewCart:'View Cart →', logout:'Logout',
       checkoutTitle:'📦 Delivery Details', checkoutSub:'Final step — confirm your order', backMenu:'← Back to Menu',
       autofillNote:'✓ Your saved address has been auto-filled', township:'🏢 Township', society:'🏘️ Society', flat:'🏠 Flat Number',
@@ -1564,7 +1567,7 @@
       deliveryDate:'📅 Delivery Date',
       cutoffNote:'🕒 Order Cut-off Time (IST)\n• Breakfast — ek raat pehle 10:00 PM tak\n• Lunch — usi din 9:00 AM tak\n• Dinner — usi din 3:00 PM tak\nCut-off ke baad agle available din ke liye order karein.',
       selectMeals:'🍽️ Apne Meals Chunein', yourCart:'Aapki Cart', clearCart:'Clear', cartEmpty:'Cart khali hai. Upar se meals add karein.',
-      myOrders:'Mere Orders', refresh:'🔄 Refresh', viewPast:'🗓️ Purani date ke orders dekhein', view:'View',
+      myOrders:'Mere Orders', refresh:'🔄 Refresh', viewPast:'🗓️ Delivery date chunein', view:'View',
       cartTotal:'CART TOTAL', checkout:'Checkout →', viewCart:'Cart Dekhein →', logout:'Logout',
       checkoutTitle:'📦 Delivery Details', checkoutSub:'Last step — order confirm karein', backMenu:'← Menu par wapas',
       autofillNote:'✓ Aapka saved address auto-fill ho gaya', township:'🏢 Township', society:'🏘️ Society', flat:'🏠 Flat Number',
@@ -1598,7 +1601,7 @@
       deliveryDate:'📅 डिलीवरी की तारीख़',
       cutoffNote:'🕒 ऑर्डर कट-ऑफ समय (IST)\n• नाश्ता — एक रात पहले 10:00 PM तक\n• लंच — उसी दिन 9:00 AM तक\n• डिनर — उसी दिन 3:00 PM तक\nकट-ऑफ के बाद अगले उपलब्ध दिन के लिए ऑर्डर करें।',
       selectMeals:'🍽️ अपने मील चुनें', yourCart:'आपकी कार्ट', clearCart:'खाली करें', cartEmpty:'कार्ट खाली है। ऊपर से मील जोड़ें।',
-      myOrders:'मेरे ऑर्डर', refresh:'🔄 रिफ़्रेश', viewPast:'🗓️ पुरानी तारीख़ के ऑर्डर देखें', view:'देखें',
+      myOrders:'मेरे ऑर्डर', refresh:'🔄 रिफ़्रेश', viewPast:'🗓️ डिलीवरी तारीख़ चुनें', view:'देखें',
       cartTotal:'कुल राशि', checkout:'चेकआउट →', viewCart:'कार्ट देखें →', logout:'लॉगआउट',
       checkoutTitle:'📦 डिलीवरी जानकारी', checkoutSub:'आख़िरी कदम — ऑर्डर कन्फ़र्म करें', backMenu:'← मेन्यू पर वापस',
       autofillNote:'✓ आपका सेव किया पता अपने-आप भर गया', township:'🏢 टाउनशिप', society:'🏘️ सोसायटी', flat:'🏠 फ़्लैट नंबर',
@@ -1632,7 +1635,7 @@
       deliveryDate:'📅 ડિલિવરી તારીખ',
       cutoffNote:'🕒 ઓર્ડર કટ-ઓફ સમય (IST)\n• નાસ્તો — એક રાત પહેલા 10:00 PM સુધી\n• લંચ — તે જ દિવસે 9:00 AM સુધી\n• ડિનર — તે જ દિવસે 3:00 PM સુધી\nકટ-ઓફ પછી આગલા ઉપલબ્ધ દિવસ માટે ઓર્ડર કરો.',
       selectMeals:'🍽️ તમારા મીલ પસંદ કરો', yourCart:'તમારી કાર્ટ', clearCart:'ખાલી કરો', cartEmpty:'કાર્ટ ખાલી છે. ઉપરથી મીલ ઉમેરો.',
-      myOrders:'મારા ઓર્ડર', refresh:'🔄 રિફ્રેશ', viewPast:'🗓️ જૂની તારીખના ઓર્ડર જુઓ', view:'જુઓ',
+      myOrders:'મારા ઓર્ડર', refresh:'🔄 રિફ્રેશ', viewPast:'🗓️ ડિલિવરી તારીખ પસંદ કરો', view:'જુઓ',
       cartTotal:'કુલ રકમ', checkout:'ચેકઆઉટ →', viewCart:'કાર્ટ જુઓ →', logout:'લોગઆઉટ',
       checkoutTitle:'📦 ડિલિવરી વિગતો', checkoutSub:'છેલ્લું પગલું — ઓર્ડર કન્ફર્મ કરો', backMenu:'← મેન્યુ પર પાછા',
       autofillNote:'✓ તમારું સાચવેલ સરનામું ઓટો-ફિલ થયું', township:'🏢 ટાઉનશિપ', society:'🏘️ સોસાયટી', flat:'🏠 ફ્લેટ નંબર',
@@ -2125,11 +2128,18 @@
       hp.innerHTML=pr?`<div class="home-promo" onclick="showHomePage()">🎟️ <b>${pr.code}</b> — ${pr.label}${pr.firstOnly?(' · 🆕 '+t('promoNewTag')):''}${pr.minOrder?(' · Min ₹'+pr.minOrder):''}<br><small>${t('promoUseAtCheckout')}</small></div>`:'';
     }
   }
+  // Bottom-nav ka profile avatar — user ke naam ka pehla letter
+  function updateNavAvatar(){
+    const el=document.getElementById('bnAvatar'); if(!el)return;
+    const n=(SESSION&&SESSION.name)||'';
+    el.textContent = n ? n.trim().charAt(0).toUpperCase() : '?';
+  }
   function renderProfile(){
     const nm=document.getElementById('pfName'); if(!nm)return;
     const name=(SESSION&&SESSION.name)||'';
     nm.textContent=name||'—';
     const av=document.getElementById('pfAva'); if(av)av.textContent=(name||'?').charAt(0).toUpperCase();
+    updateNavAvatar();
     const ph=document.getElementById('pfPhone'); if(ph)ph.textContent=(SESSION&&SESSION.phone)?('📞 +91 '+SESSION.phone):'';
     const sel=document.getElementById('pfSociety');
     if(sel){ const saved=storeGet('fbt_addr')||{}; sel.innerHTML=CFG.societies.map(s=>`<option value="${s}" ${saved.society===s?'selected':''}>${s}</option>`).join(''); const fl=document.getElementById('pfFlat'); if(fl)fl.value=saved.flatNo||''; }
@@ -2198,6 +2208,7 @@
   function enterApp(restore){
     document.getElementById('profileName').textContent='👤 '+(SESSION.name||'');
     const lg=document.getElementById('lpGreet'); if(lg){ const fn=(SESSION.name||'').split(' ')[0]; lg.textContent=fn?('👋 Hi, '+fn+' — welcome back!'):''; }
+    updateNavAvatar();
     const v=restore?storeGet('fbt_view'):null;     // showLanding se PEHLE padho (warna overwrite)
     showLanding(); ensureMode(); refreshAvailability(); renderCart(); loadPublicStats(selDateStr());
     if(restore){                                   // refresh ke baad wahi page wapas kholo
@@ -3625,7 +3636,7 @@
           .then(r=>r.json())
           .then(j=>{
             if(j.status==='invalid_session'){ forceLogout(); }
-            else if(j.status==='success'&&j.name){ SESSION.name=j.name; storeSet('fbt_session',SESSION); document.getElementById('profileName').textContent='👤 '+j.name; const lg=document.getElementById('lpGreet'); if(lg){ const fn=j.name.split(' ')[0]; lg.textContent='👋 Hi, '+fn+' — welcome back!'; } }
+            else if(j.status==='success'&&j.name){ SESSION.name=j.name; storeSet('fbt_session',SESSION); document.getElementById('profileName').textContent='👤 '+j.name; const lg=document.getElementById('lpGreet'); if(lg){ const fn=j.name.split(' ')[0]; lg.textContent='👋 Hi, '+fn+' — welcome back!'; } updateNavAvatar(); }
           })
           .catch(()=>{ /* network error — session localStorage me hai, andar rehne do */ });
       }
