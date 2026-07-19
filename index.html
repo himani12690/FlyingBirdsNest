@@ -63,6 +63,7 @@
     /* HERO — clean flat header with proper top-left back button */
     .hero { background:var(--card); padding:20px 20px 18px; text-align:center; color:var(--ink); position:relative; border-bottom:1px solid var(--line); }
     .hero.sub-hero { padding-top:52px; }
+    .hero.sub-hero.no-title { padding-top:46px; padding-bottom:0; }   /* sirf top strip, title nahi */
     /* Sub-page top strip — brand + language, taaki har page pe context rahe */
     .sub-tb { position:absolute; top:10px; left:0; right:0; display:flex; align-items:center; gap:10px; padding:0 14px; }
     .sub-tb .sub-brand { flex:1; min-width:0; font-size:13.5px; font-weight:900; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; }
@@ -405,9 +406,12 @@
     .drawer { position:fixed; top:0; left:0; bottom:0; width:270px; max-width:80%; background:var(--card); z-index:201; transform:translateX(-100%); transition:transform .3s ease; box-shadow:4px 0 24px rgba(0,0,0,0.2); display:flex; flex-direction:column; }
     .drawer.open { transform:translateX(0); }
     .drawer-head { background:transparent; color:var(--ink); padding:22px 18px 16px; border-bottom:1px solid var(--line); }
-    .drawer-head .dh-av { width:56px; height:56px; border-radius:50%; display:flex; align-items:center;
-                          justify-content:center; font-size:22px; font-weight:900; color:#fff;
+    .drawer-head { display:flex; align-items:center; gap:13px; }
+    .drawer-head .dh-av { width:52px; height:52px; flex-shrink:0; border-radius:50%; display:flex; align-items:center;
+                          justify-content:center; font-size:21px; font-weight:900; color:#fff;
                           background:linear-gradient(135deg,var(--accent),#8b93ff); }
+    .drawer-head .dh-nm { font-size:15.5px; font-weight:900; color:var(--ink); min-width:0;
+                          white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .drawer-menu { padding:10px 0; flex:1; }
     .drawer-item { display:flex; align-items:center; gap:14px; padding:15px 20px; font-size:15px; font-weight:700; color:var(--ink); cursor:pointer; }
     .drawer-item:hover { background:var(--accent-soft); }
@@ -726,6 +730,7 @@
   <div class="drawer" id="drawer">
     <div class="drawer-head">
       <div class="dh-av" id="drawerAva">?</div>
+      <div class="dh-nm" id="drawerName"></div>
     </div>
     <div class="drawer-menu">
       <div class="drawer-item" onclick="drawerGo('home')"><svg class="ic di-icon"><use href="#ic-home"/></svg><span data-i="navHome"></span></div>
@@ -915,7 +920,7 @@
   <!-- ══════ HOME LANDING ══════ -->
   <div id="homeView" class="hidden">
     <div class="lp-hero">
-      <div class="lp-top"><span class="hamburger" onclick="openDrawer()">☰</span><div class="lang-switch" style="position:static;"><select id="langSelHome" class="js-lang" onchange="setLang(this.value)"></select></div></div>
+      <div class="lp-top"><span class="hamburger" onclick="openDrawer()">☰</span></div>
       <div class="lp-greet" id="lpGreet"></div>
       <div class="lp-logo">🍱</div>
       <h1 class="lp-brand">Flying Birds Tiffin</h1>
@@ -951,7 +956,7 @@
         <div class="mt-name">🍱 Flying Birds Tiffin</div>
         <div class="mt-user" id="profileName" style="display:none;"></div>
       </div>
-      <div class="lang-switch" style="position:static;"><select id="langSel" class="js-lang" onchange="setLang(this.value)"></select></div>
+      
       <span class="cart-badge" onclick="showCartPage()">🛒<span class="cnt zero" id="cartBadge">0</span></span>
     </div>
 
@@ -1008,7 +1013,7 @@
   <!-- ══════ CART VIEW ══════ -->
   <div id="cartView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div><select id="langSelCart" class="js-lang" onchange="setLang(this.value)"></select></div>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div></div>
       <h1 style="font-size:20px;" data-i="yourCart"></h1>
     </div>
     <div class="section pad-sticky">
@@ -1027,7 +1032,7 @@
   <!-- ══════ SUBSCRIPTION VIEW ══════ -->
   <div id="subView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div><select id="langSelOrders" class="js-lang" onchange="setLang(this.value)"></select></div>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div></div>
       <h1 style="font-size:20px;" data-i="subTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="subSub"></p>
     </div>
@@ -1041,7 +1046,7 @@
   <!-- ══════ MY ORDERS VIEW ══════ -->
   <div id="ordersView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div><select id="langSelSub" class="js-lang" onchange="setLang(this.value)"></select></div>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div></div>
       <h1 style="font-size:20px;" data-i="myOrders"></h1>
     </div>
     <div class="section">
@@ -1058,7 +1063,7 @@
   <!-- ══════ ABOUT + CONTACT (merged) ══════ -->
   <div id="aboutView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div><select id="langSelAbout" class="js-lang" onchange="setLang(this.value)"></select></div>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div></div>
       <h1 style="font-size:20px;" data-i="aboutTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="aboutSub"></p>
     </div>
@@ -1186,7 +1191,7 @@
   <!-- ══════ ADMIN LOGIN ══════ -->
   <!-- ══════ PROFILE ══════ -->
   <div id="profileView" class="hidden">
-    <div class="hero sub-hero"><div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div></div><h1 style="font-size:20px;" data-i="pfTitle"></h1></div>
+    <div class="hero sub-hero no-title"><div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div></div></div>
     <div class="section">
       <div class="pf-card">
         <div class="pf-avwrap disabled" id="pfAvaWrap">
@@ -1997,8 +2002,11 @@
 
   // ═══════ DRAWER ═══════
   function openDrawer(){
+    const n=(SESSION&&SESSION.name)||'';
     const av=document.getElementById('drawerAva');
-    if(av){ const n=(SESSION&&SESSION.name)||''; av.textContent = n ? n.trim().charAt(0).toUpperCase() : '?'; }
+    if(av) av.textContent = n ? n.trim().charAt(0).toUpperCase() : '?';
+    const nm=document.getElementById('drawerName');
+    if(nm) nm.textContent = n || 'Guest';
     document.getElementById('drawerOverlay').classList.add('open');
     document.getElementById('drawer').classList.add('open');
   }
@@ -2078,9 +2086,6 @@
     if(isLoggedIn()){ enterApp(); return; }
     showView('pubView');
     initGoogleButton();
-    const ls=document.getElementById('langSelPub'), src=document.getElementById('langSel');
-    if(ls&&src&&!ls.options.length) ls.innerHTML=src.innerHTML;
-    if(ls) ls.value=LANG;
     document.querySelectorAll('.fssai-line').forEach(e=>{ e.textContent = CFG.fssai ? ('FSSAI Reg. No: '+CFG.fssai) : ''; });
   }
   function showProfilePage(){ showView('profileView'); renderProfile(); }
@@ -2088,8 +2093,6 @@
   function renderHome(){
     const hv=document.getElementById('homeView'); if(!hv)return;
     renderModeChip();
-    const ls=document.getElementById('langSelHome'); const src=document.getElementById('langSel');
-    if(ls&&src&&!ls.options.length){ ls.innerHTML=src.innerHTML; } if(ls) ls.value=LANG;
     const hp=document.getElementById('homePromo');
     if(hp){
       const pr=(CFG.promos||[])[0];
@@ -2111,8 +2114,6 @@
     const ph=document.getElementById('pfPhone'); if(ph)ph.textContent=(SESSION&&SESSION.phone)?('📞 +91 '+SESSION.phone):'';
     const sel=document.getElementById('pfSociety');
     if(sel){ const saved=storeGet('fbt_addr')||{}; sel.innerHTML=CFG.societies.map(s=>`<option value="${s}" ${saved.society===s?'selected':''}>${s}</option>`).join(''); const fl=document.getElementById('pfFlat'); if(fl)fl.value=saved.flatNo||''; }
-    const lp=document.getElementById('langSelProfile'); const src2=document.getElementById('langSel');
-    if(lp&&src2&&!lp.options.length){ lp.innerHTML=src2.innerHTML; } if(lp) lp.value=LANG;
     const ts=document.getElementById('themeSelProfile'); if(ts) ts.value = storeGet('fbt_theme') || 'system';
   }
   function savePfAddr(){
