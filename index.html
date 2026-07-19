@@ -91,10 +91,6 @@
     .upi-pay-box .upb-link { display:inline-block; margin-top:12px; font-size:12.5px; font-weight:800; color:var(--accent-dark); text-decoration:none; }
     .cod-note { background:var(--okbg); border:1.5px dashed var(--ok); border-radius:13px; padding:14px; font-size:12.5px; font-weight:700; color:#166534; line-height:1.6; text-align:center; }
     .upi-pay-box .upb-note { font-size:11px; color:var(--muted); margin-top:12px; line-height:1.5; }
-    #topBar { position:fixed; top:0; left:0; right:0; height:2px; background:transparent; z-index:999; pointer-events:none; opacity:0; transition:opacity .2s; }
-    #topBar.on { opacity:1; }
-    #topBar.on::after { content:''; position:absolute; left:0; top:0; height:100%; width:30%; background:linear-gradient(90deg,transparent,var(--accent)); animation:tb 1.1s infinite ease-in-out; }
-    @keyframes tb { 0%{left:-38%;} 100%{left:100%;} }
     .spin { display:inline-block; width:13px; height:13px; border:2px solid rgba(255,255,255,0.45); border-top-color:#fff; border-radius:50%; animation:sp .7s linear infinite; vertical-align:-2px; }
     button.is-busy { opacity:0.75; cursor:progress; }
     button.is-busy .spin { border-color:rgba(0,0,0,0.18); border-top-color:currentColor; }
@@ -272,7 +268,7 @@
     .menu-topbar .mt-user { font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .menu-topbar .lang-switch select { padding:5px 7px; font-size:11px; }
     .menu-topbar .cart-badge { position:relative; font-size:21px; cursor:pointer; }
-    .menu-scroll { padding:12px 14px 4px; }
+    .menu-scroll { padding:12px 14px 152px; }
     .menu-dt { display:flex; gap:10px; margin-bottom:12px; }
     .menu-dt .mdt-cell { flex:1; }
     .menu-dt .mdt-lbl { font-size:10px; font-weight:800; color:var(--accent-dark); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:5px; display:block; }
@@ -394,6 +390,7 @@
     .bn-item.active .bn-lbl { color:var(--accent-dark); }
     .bn-item .bn-badge { position:absolute; top:3px; right:calc(50% - 17px); background:var(--danger); color:#fff; font-size:9px; font-weight:800; min-width:15px; height:15px; border-radius:8px; display:flex; align-items:center; justify-content:center; padding:0 3px; }
     .bn-badge.zero { display:none; }
+    .sticky-bar.no-nav { bottom:14px; }   /* jin pages pe bottom-nav nahi hai (checkout) */
     .has-bottom-nav { padding-bottom:88px; }
     .ps-right { display:flex; align-items:center; gap:14px; }
     .cart-badge { position:relative; font-size:20px; cursor:pointer; }
@@ -417,6 +414,9 @@
     .drawer-foot { padding:16px 20px; border-top:1px solid #eee; font-size:11px; color:var(--muted); }
 
     .section { padding:20px 16px; }
+    /* Jab floating nav (bottom 14 + ~52h) aur sticky bar (bottom 82 + ~55h)
+       dono ho, content ko itni jagah chahiye warna neeche ka hissa chhup jata hai */
+    .section.pad-sticky { padding-bottom:152px; }
     .section-title { font-size:17px; font-weight:800; color:var(--ink); margin-bottom:12px; }
 
     label.fld { display:block; font-size:13px; font-weight:700; color:var(--ink); margin-bottom:7px; }
@@ -529,9 +529,9 @@
     .form-group { margin-bottom:16px; }
     .form-group label { display:block; font-size:13px; font-weight:700; color:var(--ink); margin-bottom:6px; }
     .form-group input, .form-group select { width:100%; padding:13px 15px; border:2px solid var(--line); border-radius:12px; font-size:15px; font-weight:600; color:var(--ink); background:var(--card); outline:none; }
-    .form-group input.valid, .form-group select.valid { border-color:var(--ok); background:#f0fff8; }
-    .form-group input.error, .form-group select.error { border-color:var(--danger); background:var(--dangerbg); }
-    .form-group input[readonly] { background:var(--line); color:var(--muted); border-color:#ddd; }
+    .form-group input.valid, .form-group select.valid { border-color:var(--ok); background:var(--okbg); color:var(--ink); }
+    .form-group input.error, .form-group select.error { border-color:var(--danger); background:var(--dangerbg); color:var(--ink); }
+    .form-group input[readonly] { background:var(--line); color:var(--muted); border-color:var(--line); }
     .field-error { display:none; color:var(--danger); font-size:12px; font-weight:600; margin-top:5px; }
     .field-error.show { display:block; }
     .saved-note { font-size:12px; color:#00a085; font-weight:700; background:#e8fff7; border:1px solid #b8f2e0; border-radius:8px; padding:8px 12px; margin-bottom:14px; display:none; }
@@ -920,7 +920,7 @@
       <p class="lp-tag" data-i="lpTagline"></p>
       <div class="lp-loc">📍 Ahmedabad · Home &amp; Office delivery <span class="fssai-line" style="font-size:10px;"></span></div>
     </div>
-    <div class="section" style="padding-top:16px;padding-bottom:96px;">
+    <div class="section pad-sticky" style="padding-top:16px;">
       <div id="modeChip"></div>
       <div id="homePromo"></div>
       <div class="lp-sec-t" data-i="lpWhy"></div>
@@ -1009,7 +1009,7 @@
       <span class="hamburger" style="position:absolute;left:14px;top:14px;" onclick="openDrawer()">☰</span>
       <h1 style="font-size:20px;" data-i="yourCart"></h1>
     </div>
-    <div class="section">
+    <div class="section pad-sticky">
       <div class="section-title" style="display:flex;justify-content:flex-end;"><span class="refresh-link" onclick="clearCart()" data-i="clearCart"></span></div>
       <div id="cartList"></div>
     </div>
@@ -1095,7 +1095,7 @@
       <p class="tagline" style="margin:0;" data-i="checkoutSub"></p>
     </div>
 
-    <div class="section" id="orderFormWrap">
+    <div class="section" id="orderFormWrap" style="padding-bottom:104px;">
       
       <div class="summary-card" id="summaryCard"></div>
       <div class="saved-note" id="savedNote" data-i="autofillNote"></div>
@@ -1172,7 +1172,7 @@
 
     <div class="footer">📞 7043491481 · Flying Birds Tiffin Services<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
 
-    <div class="sticky-bar" id="page2Bar">
+    <div class="sticky-bar no-nav" id="page2Bar">
       <div class="bar-total">
         <div class="lbl" data-i="cartTotal"></div>
         <div class="amt" id="barTotal2">₹0</div>
@@ -1392,7 +1392,6 @@
     <button class="nob-btn" onclick="dismissNewOrder()">✓ Dismiss &amp; View Orders</button>
   </div>
 </div>
-<div id="topBar"></div>
   <!-- ══════ DELIVERY MODE CHOOSER (order se pehle) ══════ -->
   <div class="sheet-overlay hidden" id="modeModal">
     <div class="sheet" style="max-width:400px;">
@@ -1881,26 +1880,6 @@
     __toastT=setTimeout(()=>{ el.classList.remove('show'); __toastT=null; },3800);
   }
   function onlyNumbers(el){ el.value=el.value.replace(/\D/g,''); }
-  // ═══ GLOBAL LOADING BAR — har request pe apne aap ═══
-  let __busy=0;
-  // Loading bar sirf tab dikhao jab call 600ms+ le — fast calls pe flash nahi
-  let __barT=null;
-  function busyStart(){
-    __busy++;
-    if(__barT) return;
-    __barT=setTimeout(()=>{ if(__busy>0){ const b=document.getElementById('topBar'); if(b) b.classList.add('on'); } }, 600);
-  }
-  function busyEnd(){
-    __busy=Math.max(0,__busy-1);
-    if(!__busy){
-      if(__barT){ clearTimeout(__barT); __barT=null; }
-      const b=document.getElementById('topBar'); if(b) b.classList.remove('on');
-    }
-  }
-  (function(){
-    const of=window.fetch;
-    window.fetch=function(){ busyStart(); return of.apply(this,arguments).finally(busyEnd); };
-  })();
   // Button ko turant "working" dikhao (double-tap bhi rukta hai)
   function btnBusy(el, on, label){
     if(!el)return;
