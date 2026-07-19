@@ -1038,7 +1038,7 @@
   <!-- ══════ SUBSCRIPTION VIEW ══════ -->
   <div id="subView" class="hidden">
     <div class="hero sub-hero">
-      
+      <span class="hamburger" style="position:absolute;left:14px;top:14px;" onclick="openDrawer()">☰</span>
       <h1 style="font-size:20px;" data-i="subTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="subSub"></p>
     </div>
@@ -1069,7 +1069,7 @@
   <!-- ══════ ABOUT + CONTACT (merged) ══════ -->
   <div id="aboutView" class="hidden">
     <div class="hero sub-hero">
-      
+      <span class="hamburger" style="position:absolute;left:14px;top:14px;" onclick="openDrawer()">☰</span>
       <h1 style="font-size:20px;" data-i="aboutTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="aboutSub"></p>
     </div>
@@ -2084,7 +2084,9 @@
     try{ if(['pubView','authPage','homeView','page1','cartView','ordersView','subView','aboutView','profileView','adminPanel'].indexOf(id)>=0) storeSet('fbt_view',id); }catch(e){}
     ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel'].forEach(v=>document.getElementById(v).classList.toggle('hidden', v!==id)); window.scrollTo(0,0); updateBottomNav(id); }
   // Bottom nav shows only on the 4 main customer screens
-  const BN_SCREENS={ homeView:'land', page1:'menu', cartView:'cart', ordersView:'orders', profileView:'profile' };
+  // subView / aboutView bhi nav dikhayenge — inka apna tab nahi hai isliye
+  // koi item highlight nahi hoga, lekin navigation hamesha available rahegi.
+  const BN_SCREENS={ homeView:'land', page1:'menu', cartView:'cart', ordersView:'orders', profileView:'profile', subView:'', aboutView:'' };
   function updateBottomNav(viewId){
     const ps=document.querySelector('.pub-sticky'); if(ps) ps.style.display = (viewId==='pubView')?'flex':'none';
     const bn=document.getElementById('bottomNav'); if(!bn)return;
