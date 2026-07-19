@@ -94,6 +94,9 @@
     .upi-pay-box .upb-apps a { flex:1; background:var(--card); border:1.5px solid var(--line); border-radius:10px; padding:10px 4px; font-size:11.5px; font-weight:800; color:var(--accent-dark); text-decoration:none; }
     .upi-pay-box .upb-ref { font-size:10.5px; color:var(--muted); margin-top:10px; letter-spacing:0.3px; }
     .upi-pay-box .upb-link { display:inline-block; margin-top:12px; font-size:12.5px; font-weight:800; color:var(--accent-dark); text-decoration:none; }
+    .coupon-warn { background:var(--warnbg); border:1.5px solid var(--warn); color:var(--warn);
+                   border-radius:12px; padding:12px 14px; font-size:12.5px; font-weight:700;
+                   line-height:1.6; margin-bottom:12px; text-align:left; }
     .cod-note { background:var(--okbg); border:1.5px dashed var(--ok); border-radius:13px; padding:14px; font-size:12.5px; font-weight:700; color:#166534; line-height:1.6; text-align:center; }
     .upi-pay-box .upb-note { font-size:11px; color:var(--muted); margin-top:12px; line-height:1.5; }
     .spin { display:inline-block; width:13px; height:13px; border:2px solid rgba(255,255,255,0.45); border-top-color:#fff; border-radius:50%; animation:sp .7s linear infinite; vertical-align:-2px; }
@@ -1183,6 +1186,7 @@
       <div class="big" style="font-size:38px;">✅</div>
       <h2 data-i="successTitle"></h2>
       <p id="successMsg" style="margin-bottom:14px;"></p>
+      <div id="couponWarnBox" class="coupon-warn hidden"></div>
       <div id="upiPayBox" class="upi-pay-box hidden"></div>
       <div class="success-note" data-i="successConfirmNote"></div>
       <div class="sub-push" onclick="showSubPage()"><span data-i="subPushLine"></span> →</div>
@@ -1230,7 +1234,7 @@
       <div class="pf-row" onclick="showSubPage()"><span class="ic-tile tile-orange"><svg class="ic"><use href="#ic-repeat"/></svg></span><span data-i="navSub"></span><i>›</i></div>
       <div class="pf-row" onclick="showAboutPage()"><span class="ic-tile tile-green"><svg class="ic"><use href="#ic-info"/></svg></span><span data-i="navAbout"></span><i>›</i></div>
       <div class="lp-sec-t" data-i="pfLang"></div>
-      <select class="sh-select" id="langSelProfile" class="js-lang" onchange="setLang(this.value)"></select>
+      <select class="sh-select js-lang" id="langSelProfile" onchange="setLang(this.value)"></select>
       <div class="lp-sec-t">🎨 Theme</div>
       <select class="sh-select" id="themeSelProfile" onchange="setTheme(this.value)">
         <option value="system">📱 System Default</option>
@@ -2780,7 +2784,18 @@
     let tot=0;
     items.forEach(it=>{ const lt=unitPrice(it)*it.qty; tot+=lt; msg+=`${MEAL_META[it.meal].emoji} *${mealTitle(it.meal)} × ${it.qty}* — ₹${lt}\n`; const dsc=cartLineDesc(it); if(dsc)msg+=`   • ${dsc}\n`; });
     if(addr.note) msg+=`📝 *Note:* ${addr.note}\n`;
-    msg+=`━━━━━━━━━━━━━━\n💰 *Total: ₹${tot}*\n💳 *Payment:* ${addr.payment==='COD'?'Cash on Delivery':'UPI on Delivery'}`;
+    // Delivery fee + discount bhi jodo — pehle sirf items ka subtotal jaata tha
+    const fee=deliveryFee();
+    tot+=fee;
+    msg+=`━━━━━━━━━━━━━━\n🛵 *${t('deliveryLbl')}:* ₹${fee}\n`;
+    // Coupon sirf sabse pehli date par lagta hai (server bhi wahi karta hai)
+    const firstDate=[...new Set(cart.map(x=>x.deliveryDate))].sort()[0];
+    if(appliedPromo && dateStr===firstDate){
+      const dsc=promoDiscountNow();
+      tot=Math.max(0,tot-dsc);
+      msg+=`🎟️ *${appliedPromo.code}:* −₹${dsc}\n`;
+    }
+    msg+=`💰 *Total: ₹${tot}*\n💳 *Payment:* ${addr.payment==='COD'?'Cash on Delivery':'UPI on Delivery'}`;
     return msg;
   }
 
@@ -2870,6 +2885,15 @@
         if(dup) m+=(LANG==='en')?` ${dup} date(s) already had an order.`:` ${dup} date par pehle se order maujood tha.`;
         if(promoLine) m+=' 🎟️ '+promoLine+' applied.';
         document.getElementById('successMsg').textContent=m;
+        // Server ne coupon reject kiya to CHUPKE se mat jao — saaf dikhao,
+        // warna user ko laga rehta hai discount mila hai
+        const cwBox=document.getElementById('couponWarnBox');
+        if(cwBox){
+          if(couponWarn){
+            cwBox.className='coupon-warn';
+            cwBox.innerHTML=`🎟️ <b>Coupon not applied</b><br><span>${esc(couponWarn)}</span><br><span>Amount charged: <b>₹${serverTotal}</b></span>`;
+          } else { cwBox.className='coupon-warn hidden'; cwBox.innerHTML=''; }
+        }
         // Server-returned total (authoritative) — exactly jo charge hua
         const grandTotal=serverTotal;
         cart=[]; editingRow=null; appliedPromo=null; saveCart(); payRef=makePayRef();
