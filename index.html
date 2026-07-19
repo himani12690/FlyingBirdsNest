@@ -66,10 +66,13 @@
     .hero.sub-hero.no-title { padding-top:46px; padding-bottom:0; }   /* sirf top strip, title nahi */
     /* Sub-page top strip — brand + language, taaki har page pe context rahe */
     .sub-tb { position:absolute; top:10px; left:0; right:0; display:flex; align-items:center; gap:10px; padding:0 14px; }
+    .brand-ic { width:22px; height:22px; border-radius:6px; vertical-align:-5px;
+                margin-right:7px; display:inline-block; }
     .sub-tb .sub-brand { flex:1; min-width:0; font-size:13.5px; font-weight:900; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; }
     .sub-tb select { padding:5px 7px; font-size:11px; border:1.5px solid var(--line); border-radius:9px; background:var(--card); color:var(--ink); font-weight:700; }
     .back-link { position:fixed; bottom:80px; left:16px; display:inline-flex; align-items:center; gap:5px; font-size:13.5px; font-weight:800; color:#fff; background:var(--accent); border:none; font-family:inherit; padding:11px 18px; border-radius:24px; cursor:pointer; z-index:120; box-shadow:0 6px 16px rgba(99,102,241,0.35); }
-    .hero .logo { font-size:38px; margin-bottom:4px; }
+    .hero .logo { margin-bottom:6px; }
+    .hero .logo img { width:64px; height:64px; border-radius:16px; display:block; margin:0 auto; }
     .hero h1 { font-size:21px; font-weight:900; margin-bottom:2px; color:var(--ink); letter-spacing:-0.3px; }
     .hero .tagline { font-size:13px; color:var(--muted); margin-bottom:8px; }
     .hero-badge { display:inline-block; background:var(--accent-soft); color:var(--accent-dark); padding:5px 13px; border-radius:50px; font-size:11.5px; font-weight:700; margin:3px; }
@@ -113,7 +116,8 @@
     .lp-hero { background:transparent; padding:14px 18px 20px; color:var(--ink); text-align:center; border-radius:0; }
     .lp-top { display:flex; justify-content:space-between; align-items:center; }
     .lp-top .lang-switch select { padding:5px 7px; font-size:11px; }
-    .lp-logo { font-size:52px; margin-top:4px; }
+    .lp-logo { margin-top:6px; }
+    .lp-logo img { width:76px; height:76px; border-radius:20px; display:block; margin:0 auto; }
     .lp-greet { display:inline-block; margin:6px auto 0; padding:6px 15px; background:var(--accent-soft); border-radius:20px; font-size:12.5px; font-weight:800; color:var(--accent-dark); }
     .lp-greet:empty { display:none; }
     .lp-brand { font-size:24px; font-weight:900; letter-spacing:0.3px; }
@@ -172,7 +176,7 @@
     .pub-tr select { border:1.5px solid var(--line); border-radius:8px; padding:5px 6px; font-size:10.5px; font-weight:700; background:var(--card); }
     .pub-login { font-size:11.5px; font-weight:800; color:var(--accent-dark); border:1.5px solid var(--accent); border-radius:18px; padding:6px 13px; cursor:pointer; background:var(--card); }
     .pub-hero { background:transparent; padding:14px 18px 18px; color:var(--ink); text-align:center; }
-    .pub-logo { font-size:42px; }
+    .pub-logo img { width:72px; height:72px; border-radius:18px; display:block; margin:0 auto; }
     .pub-hero h1 { font-size:23px; font-weight:900; margin-top:2px; }
     .pub-hero p { font-size:12.5px; color:var(--muted); margin-top:6px; line-height:1.5; }
     .pub-cta { margin-top:14px; background:var(--accent); color:#fff; border:none; border-radius:14px; padding:13px 34px; font-size:15px; font-weight:900; cursor:pointer; box-shadow:0 6px 18px rgba(99,102,241,0.3); }
@@ -189,7 +193,8 @@
     .cmp-head .ch-us { background:var(--accent-soft); }
     .cmp-head .ch-th { background:var(--bg); }
     .cmp-ic { width:34px; height:34px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; font-size:17px; }
-    .cmp-ic.usi { background:var(--accent); color:#fff; }
+    .cmp-ic.usi { background:var(--accent); color:#fff; overflow:hidden; }
+    .cmp-ic.usi img { width:100%; height:100%; object-fit:cover; }
     .cmp-ic.thi { background:#c9ced6; color:#fff; }
     .cmp-ic + .cmp-ic { margin-left:4px; }
     .cmp-nm { font-size:11.5px; font-weight:900; margin-top:6px; }
@@ -282,7 +287,8 @@
     .menu-dt select { width:100%; padding:11px 10px; border:1.5px solid var(--line); border-radius:12px; font-size:13px; font-weight:700; background:var(--card); color:var(--ink); }
 
     /* Menu cards (Zomato-style) */
-    .mcard { background:var(--card); margin-bottom:12px; border-radius:16px; border:1.5px solid var(--line); padding:13px; display:flex; gap:13px; cursor:pointer; }
+    .mcard { background:var(--card); margin-bottom:12px; border-radius:16px; border:1.5px solid var(--line); padding:13px; cursor:pointer; }
+    .mc-body { display:flex; gap:13px; }
     .mcard:active { box-shadow:0 4px 14px rgba(99,102,241,0.15); }
     .mc-left { flex:1; min-width:0; }
     .veg-mark { width:15px; height:15px; border:1.5px solid var(--ok); border-radius:3px; display:flex; align-items:center; justify-content:center; margin-bottom:6px; }
@@ -291,14 +297,18 @@
     .mc-price { font-size:14.5px; font-weight:900; color:var(--ink); margin-bottom:5px; }
     .mc-price small { font-size:11px; color:var(--muted); font-weight:700; }
     .mc-desc { font-size:11.5px; color:var(--muted); line-height:1.45; }
-    .mc-right { width:112px; flex-shrink:0; position:relative; }
+    .mc-right { width:112px; flex-shrink:0; }
     .mc-photo { width:112px; height:104px; border-radius:14px; object-fit:cover; background:linear-gradient(135deg,#f0f2f8,#e2e6f0); display:flex; align-items:center; justify-content:center; font-size:38px; }
-    .mc-add { position:absolute; bottom:-9px; left:50%; transform:translateX(-50%); background:var(--card); border:1.5px solid var(--accent); color:var(--accent-dark); font-weight:900; font-size:12.5px; padding:7px 24px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); white-space:nowrap; }
-    .mc-cust { position:absolute; bottom:-27px; left:50%; transform:translateX(-50%); white-space:nowrap;
-                display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:800;
-                color:var(--accent-dark); background:var(--accent-soft); border:1px solid var(--accent);
-                border-radius:14px; padding:4px 11px; cursor:pointer; }
-    .mcard { margin-bottom:32px; }
+    .mc-actions { display:flex; align-items:center; justify-content:space-between; gap:10px;
+                  margin-top:13px; padding-top:12px; border-top:1px solid var(--line); }
+    /* PRIMARY — bhara hua accent button, aankh sabse pehle yahin jati hai */
+    .mc-add { background:var(--accent); border:none; color:#fff; font-weight:900; font-size:14px;
+              font-family:inherit; padding:11px 30px; border-radius:12px; cursor:pointer;
+              white-space:nowrap; box-shadow:0 4px 12px rgba(99,102,241,0.28); }
+    .mc-add:active { transform:translateY(1px); }
+    /* SECONDARY — sirf text, taaki ADD se compete na kare */
+    .mc-cust { background:none; border:none; font-family:inherit; font-size:12.5px; font-weight:800;
+               color:var(--accent-dark); padding:10px 4px; cursor:pointer; white-space:nowrap; }
     .menu-closed { text-align:center; padding:40px 20px; color:var(--muted); font-size:13px; font-weight:600; background:var(--card); border-radius:14px; border:1.5px solid var(--line); }
     .already-card { text-align:center; padding:34px 20px; background:var(--card); border-radius:14px; border:1.5px solid var(--ok); }
     .already-card .ac-ic { font-size:38px; }
@@ -702,7 +712,7 @@
   <style>
   #bootLoader{position:fixed;inset:0;background:var(--bg);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:'Segoe UI',system-ui,sans-serif;transition:opacity .25s;}
   #bootLoader.gone{opacity:0;pointer-events:none;}
-  #bootLoader .bl-logo{font-size:44px;}
+  #bootLoader .bl-logo img{width:72px;height:72px;border-radius:18px;display:block;}
   #bootLoader .bl-spin{width:34px;height:34px;border:3.5px solid #e7e9f0;border-top-color:#6366f1;border-radius:50%;animation:blsp .8s linear infinite;}
   @keyframes blsp{to{transform:rotate(360deg)}}
   .mini-spin-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px 0;color:#9a9fb0;font-size:12.5px;font-weight:700;}
@@ -711,15 +721,15 @@
   #authTransition{position:fixed;inset:0;background:var(--bg);z-index:99998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:'Segoe UI',system-ui,sans-serif;transition:opacity .25s;}
   #authTransition.hidden{display:none;}
   #authTransition.gone{opacity:0;pointer-events:none;}
-  #authTransition .bl-logo{font-size:44px;}
+  #authTransition .bl-logo img{width:72px;height:72px;border-radius:18px;display:block;}
   #authTransition .bl-spin{width:34px;height:34px;border:3.5px solid #e7e9f0;border-top-color:#6366f1;border-radius:50%;animation:blsp .8s linear infinite;}
   #authTransition .bl-t{font-size:15px;font-weight:800;color:var(--ink);}
   #authTransition .bl-t.welcome{color:var(--accent);font-size:17px;}
   </style>
 </head>
 <body>
-<div id="bootLoader"><div class="bl-logo">🍱</div><div class="bl-spin"></div><div class="bl-t">Loading…</div></div>
-<div id="authTransition" class="hidden"><div class="bl-logo">🍱</div><div class="bl-spin"></div><div class="bl-t" id="authTransitionText">Signing in…</div></div>
+<div id="bootLoader"><div class="bl-logo"><img src="icon-512.png" alt="Nest &amp; Nosh"></div><div class="bl-spin"></div><div class="bl-t">Loading…</div></div>
+<div id="authTransition" class="hidden"><div class="bl-logo"><img src="icon-512.png" alt="Nest &amp; Nosh"></div><div class="bl-spin"></div><div class="bl-t" id="authTransitionText">Signing in…</div></div>
 <div class="container">
 
   <!-- ══════ SIDE DRAWER ══════ -->
@@ -778,14 +788,14 @@
   <!-- ══════ PUBLIC LANDING (before login) ══════ -->
   <div id="pubView" class="hidden">
     <div class="pub-tb">
-      <div class="pub-br">🍱 Nest & Nosh</div>
+      <div class="pub-br"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div>
       <div class="pub-tr">
         <select id="langSelPub" class="js-lang" onchange="setLang(this.value)"></select>
         <button class="pub-login" onclick="showAuth()" data-i="pubLogin"></button>
       </div>
     </div>
     <div class="pub-hero">
-      <div class="pub-logo">🍱</div>
+      <div class="pub-logo"><img src="icon-512.png" alt="Nest &amp; Nosh"></div>
       <h1>Nest & Nosh</h1>
       <p data-i="lpTagline"></p>
       <button class="pub-cta" onclick="goOrderNow()" data-i="pubCta"></button>
@@ -799,7 +809,7 @@
       </div>
       <div class="cmp">
         <div class="cmp-head">
-          <div class="ch-us"><span class="cmp-ic usi">🍱</span><div class="cmp-nm" data-i="cmpUs"></div></div>
+          <div class="ch-us"><span class="cmp-ic usi"><img src="icon-192.png" alt=""></span><div class="cmp-nm" data-i="cmpUs"></div></div>
           <div class="ch-th"><span class="cmp-ic thi">🛵</span><span class="cmp-ic thi">📱</span><div class="cmp-nm" data-i="cmpThem"></div></div>
         </div>
         <div class="cmp-row"><div class="cr-u" data-i="cmpU1"></div><div class="cr-t" data-i="cmpT1"></div></div>
@@ -821,7 +831,7 @@
   <div id="authPage" class="hidden">
     <div class="hero">
       <div class="lang-switch"><select id="langSelAuth" class="js-lang" onchange="setLang(this.value)"></select></div>
-      <div class="logo">🍱</div>
+      <div class="logo"><img src="icon-512.png" alt="Nest &amp; Nosh"></div>
       <h1>Nest & Nosh</h1>
       <p class="tagline" data-i="tagline"></p>
       <span class="hero-badge" data-i="secureLogin"></span>
@@ -936,7 +946,7 @@
     <div class="lp-hero">
       <div class="lp-top"><span class="hamburger" onclick="openDrawer()">☰</span></div>
       <div class="lp-greet" id="lpGreet"></div>
-      <div class="lp-logo">🍱</div>
+      <div class="lp-logo"><img src="icon-512.png" alt="Nest &amp; Nosh"></div>
       <h1 class="lp-brand">Nest & Nosh</h1>
       <p class="lp-tag" data-i="lpTagline"></p>
       <div class="lp-loc">📍 Ahmedabad · Home &amp; Office delivery <span class="fssai-line" style="font-size:10px;"></span></div>
@@ -966,7 +976,7 @@
     <div class="menu-topbar">
       <span class="hamburger" onclick="openDrawer()">☰</span>
       <div class="mt-title">
-        <div class="mt-name">🍱 Nest & Nosh</div>
+        <div class="mt-name"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div>
         <div class="mt-user" id="profileName" style="display:none;"></div>
       </div>
       
@@ -1026,7 +1036,7 @@
   <!-- ══════ CART VIEW ══════ -->
   <div id="cartView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Nest & Nosh</div></div>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div></div>
       <h1 style="font-size:20px;" data-i="yourCart"></h1>
     </div>
     <div class="section pad-sticky">
@@ -1045,7 +1055,7 @@
   <!-- ══════ SUBSCRIPTION VIEW ══════ -->
   <div id="subView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Nest & Nosh</div></div>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div></div>
       <h1 style="font-size:20px;" data-i="subTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="subSub"></p>
     </div>
@@ -1059,7 +1069,7 @@
   <!-- ══════ MY ORDERS VIEW ══════ -->
   <div id="ordersView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Nest & Nosh</div></div>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div></div>
       <h1 style="font-size:20px;" data-i="myOrders"></h1>
     </div>
     <div class="section">
@@ -1076,7 +1086,7 @@
   <!-- ══════ ABOUT + CONTACT (merged) ══════ -->
   <div id="aboutView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Nest & Nosh</div></div>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div></div>
       <h1 style="font-size:20px;" data-i="aboutTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="aboutSub"></p>
     </div>
@@ -1209,7 +1219,7 @@
   <!-- ══════ ADMIN LOGIN ══════ -->
   <!-- ══════ PROFILE ══════ -->
   <div id="profileView" class="hidden">
-    <div class="hero sub-hero no-title"><div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Nest & Nosh</div></div></div>
+    <div class="hero sub-hero no-title"><div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="icon-192.png" alt="">Nest &amp; Nosh</div></div></div>
     <div class="section">
       <div class="pf-card">
         <div class="pf-avwrap disabled" id="pfAvaWrap">
@@ -2507,16 +2517,18 @@
     const photo=ph?`<img class="mc-photo" src="${ph}" alt="">`:`<div class="mc-photo">${emoji}</div>`;
     box.innerHTML=`
       <div class="mcard">
-        <div class="mc-left" onclick="openMealSheet('${m}')">
-          <div class="veg-mark"></div>
-          <div class="mc-name">${name}</div>
-          <div class="mc-price">${priceLabel}</div>
-          <div class="mc-desc">${desc}</div>
+        <div class="mc-body" onclick="openMealSheet('${m}')">
+          <div class="mc-left">
+            <div class="veg-mark"></div>
+            <div class="mc-name">${name}</div>
+            <div class="mc-price">${priceLabel}</div>
+            <div class="mc-desc">${desc}</div>
+          </div>
+          <div class="mc-right">${photo}</div>
         </div>
-        <div class="mc-right">
-          <div onclick="openMealSheet('${m}')">${photo}</div>
-          <div class="mc-add" onclick="quickAdd('${m}',event)">${t('addToCart2')} +</div>
-          ${vs.length>1?`<div class="mc-cust" onclick="openMealSheet('${m}')">⚙️ ${t('customizeBtn')} ›</div>`:''}
+        <div class="mc-actions">
+          ${vs.length>1?`<button class="mc-cust" onclick="event.stopPropagation();openMealSheet('${m}')">⚙️ ${t('customizeBtn')}</button>`:'<span></span>'}
+          <button class="mc-add" onclick="quickAdd('${m}',event)">${t('addToCart2')} +</button>
         </div>
       </div>`;
   }
