@@ -63,6 +63,10 @@
     /* HERO — clean flat header with proper top-left back button */
     .hero { background:var(--card); padding:20px 20px 18px; text-align:center; color:var(--ink); position:relative; border-bottom:1px solid var(--line); }
     .hero.sub-hero { padding-top:52px; }
+    /* Sub-page top strip — brand + language, taaki har page pe context rahe */
+    .sub-tb { position:absolute; top:10px; left:0; right:0; display:flex; align-items:center; gap:10px; padding:0 14px; }
+    .sub-tb .sub-brand { flex:1; min-width:0; font-size:13.5px; font-weight:900; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; }
+    .sub-tb select { padding:5px 7px; font-size:11px; border:1.5px solid var(--line); border-radius:9px; background:var(--card); color:var(--ink); font-weight:700; }
     .back-link { position:fixed; bottom:80px; left:16px; display:inline-flex; align-items:center; gap:5px; font-size:13.5px; font-weight:800; color:#fff; background:var(--accent); border:none; font-family:inherit; padding:11px 18px; border-radius:24px; cursor:pointer; z-index:120; box-shadow:0 6px 16px rgba(99,102,241,0.35); }
     .hero .logo { font-size:38px; margin-bottom:4px; }
     .hero h1 { font-size:21px; font-weight:900; margin-bottom:2px; color:var(--ink); letter-spacing:-0.3px; }
@@ -400,10 +404,10 @@
     .drawer-overlay.open { opacity:1; pointer-events:auto; }
     .drawer { position:fixed; top:0; left:0; bottom:0; width:270px; max-width:80%; background:var(--card); z-index:201; transform:translateX(-100%); transition:transform .3s ease; box-shadow:4px 0 24px rgba(0,0,0,0.2); display:flex; flex-direction:column; }
     .drawer.open { transform:translateX(0); }
-    .drawer-head { background:var(--accent); color:#fff; padding:22px 18px; }
-    .drawer-head .dh-logo { font-size:34px; }
-    .drawer-head .dh-name { font-size:16px; font-weight:800; margin-top:6px; }
-    .drawer-head .dh-phone { font-size:12.5px; opacity:0.9; margin-top:2px; }
+    .drawer-head { background:transparent; color:var(--ink); padding:22px 18px 16px; border-bottom:1px solid var(--line); }
+    .drawer-head .dh-av { width:56px; height:56px; border-radius:50%; display:flex; align-items:center;
+                          justify-content:center; font-size:22px; font-weight:900; color:#fff;
+                          background:linear-gradient(135deg,var(--accent),#8b93ff); }
     .drawer-menu { padding:10px 0; flex:1; }
     .drawer-item { display:flex; align-items:center; gap:14px; padding:15px 20px; font-size:15px; font-weight:700; color:var(--ink); cursor:pointer; }
     .drawer-item:hover { background:var(--accent-soft); }
@@ -721,9 +725,7 @@
 
   <div class="drawer" id="drawer">
     <div class="drawer-head">
-      <div class="dh-logo">🍱</div>
-      <div class="dh-name" id="drawerName">Guest</div>
-      <div class="dh-phone" id="drawerPhone"></div>
+      <div class="dh-av" id="drawerAva">?</div>
     </div>
     <div class="drawer-menu">
       <div class="drawer-item" onclick="drawerGo('home')"><svg class="ic di-icon"><use href="#ic-home"/></svg><span data-i="navHome"></span></div>
@@ -764,7 +766,7 @@
     <div class="pub-tb">
       <div class="pub-br">🍱 Flying Birds</div>
       <div class="pub-tr">
-        <select id="langSelPub" onchange="setLang(this.value)"></select>
+        <select id="langSelPub" class="js-lang" onchange="setLang(this.value)"></select>
         <button class="pub-login" onclick="showAuth()" data-i="pubLogin"></button>
       </div>
     </div>
@@ -804,7 +806,7 @@
 
   <div id="authPage" class="hidden">
     <div class="hero">
-      <div class="lang-switch"><select id="langSelAuth" onchange="setLang(this.value)"></select></div>
+      <div class="lang-switch"><select id="langSelAuth" class="js-lang" onchange="setLang(this.value)"></select></div>
       <div class="logo">🍱</div>
       <h1>Flying Birds Tiffin</h1>
       <p class="tagline" data-i="tagline"></p>
@@ -913,7 +915,7 @@
   <!-- ══════ HOME LANDING ══════ -->
   <div id="homeView" class="hidden">
     <div class="lp-hero">
-      <div class="lp-top"><span class="hamburger" onclick="openDrawer()">☰</span><div class="lang-switch" style="position:static;"><select id="langSelHome" onchange="setLang(this.value)"></select></div></div>
+      <div class="lp-top"><span class="hamburger" onclick="openDrawer()">☰</span><div class="lang-switch" style="position:static;"><select id="langSelHome" class="js-lang" onchange="setLang(this.value)"></select></div></div>
       <div class="lp-greet" id="lpGreet"></div>
       <div class="lp-logo">🍱</div>
       <h1 class="lp-brand">Flying Birds Tiffin</h1>
@@ -949,7 +951,7 @@
         <div class="mt-name">🍱 Flying Birds Tiffin</div>
         <div class="mt-user" id="profileName" style="display:none;"></div>
       </div>
-      <div class="lang-switch" style="position:static;"><select id="langSel" onchange="setLang(this.value)"></select></div>
+      <div class="lang-switch" style="position:static;"><select id="langSel" class="js-lang" onchange="setLang(this.value)"></select></div>
       <span class="cart-badge" onclick="showCartPage()">🛒<span class="cnt zero" id="cartBadge">0</span></span>
     </div>
 
@@ -1006,7 +1008,7 @@
   <!-- ══════ CART VIEW ══════ -->
   <div id="cartView" class="hidden">
     <div class="hero sub-hero">
-      <span class="hamburger" style="position:absolute;left:14px;top:14px;" onclick="openDrawer()">☰</span>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div><select id="langSelCart" class="js-lang" onchange="setLang(this.value)"></select></div>
       <h1 style="font-size:20px;" data-i="yourCart"></h1>
     </div>
     <div class="section pad-sticky">
@@ -1025,7 +1027,7 @@
   <!-- ══════ SUBSCRIPTION VIEW ══════ -->
   <div id="subView" class="hidden">
     <div class="hero sub-hero">
-      <span class="hamburger" style="position:absolute;left:14px;top:14px;" onclick="openDrawer()">☰</span>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div><select id="langSelOrders" class="js-lang" onchange="setLang(this.value)"></select></div>
       <h1 style="font-size:20px;" data-i="subTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="subSub"></p>
     </div>
@@ -1039,7 +1041,7 @@
   <!-- ══════ MY ORDERS VIEW ══════ -->
   <div id="ordersView" class="hidden">
     <div class="hero sub-hero">
-      <span class="hamburger" style="position:absolute;left:14px;top:14px;" onclick="openDrawer()">☰</span>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div><select id="langSelSub" class="js-lang" onchange="setLang(this.value)"></select></div>
       <h1 style="font-size:20px;" data-i="myOrders"></h1>
     </div>
     <div class="section">
@@ -1056,7 +1058,7 @@
   <!-- ══════ ABOUT + CONTACT (merged) ══════ -->
   <div id="aboutView" class="hidden">
     <div class="hero sub-hero">
-      <span class="hamburger" style="position:absolute;left:14px;top:14px;" onclick="openDrawer()">☰</span>
+      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div><select id="langSelAbout" class="js-lang" onchange="setLang(this.value)"></select></div>
       <h1 style="font-size:20px;" data-i="aboutTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="aboutSub"></p>
     </div>
@@ -1146,8 +1148,8 @@
         <div class="field-error" id="err-name" data-i="errName"></div>
       </div>
       <div class="form-group">
-        <label data-i="verifiedMobile"></label>
-        <input type="tel" id="phoneNo" readonly>
+        <label id="phoneNoLbl" data-i="verifiedMobile"></label>
+        <input type="tel" id="phoneNo" maxlength="10" readonly>
       </div>
       <div class="form-group">
         <label data-i="payMethod"></label>
@@ -1184,7 +1186,7 @@
   <!-- ══════ ADMIN LOGIN ══════ -->
   <!-- ══════ PROFILE ══════ -->
   <div id="profileView" class="hidden">
-    <div class="hero sub-hero"><span class="hamburger" style="position:absolute;left:14px;top:14px;" onclick="openDrawer()">☰</span><h1 style="font-size:20px;" data-i="pfTitle"></h1></div>
+    <div class="hero sub-hero"><div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand">🍱 Flying Birds Tiffin</div></div><h1 style="font-size:20px;" data-i="pfTitle"></h1></div>
     <div class="section">
       <div class="pf-card">
         <div class="pf-avwrap disabled" id="pfAvaWrap">
@@ -1209,7 +1211,7 @@
       <div class="pf-row" onclick="showSubPage()"><span class="ic-tile tile-orange"><svg class="ic"><use href="#ic-repeat"/></svg></span><span data-i="navSub"></span><i>›</i></div>
       <div class="pf-row" onclick="showAboutPage()"><span class="ic-tile tile-green"><svg class="ic"><use href="#ic-info"/></svg></span><span data-i="navAbout"></span><i>›</i></div>
       <div class="lp-sec-t" data-i="pfLang"></div>
-      <select class="sh-select" id="langSelProfile" onchange="setLang(this.value)"></select>
+      <select class="sh-select" id="langSelProfile" class="js-lang" onchange="setLang(this.value)"></select>
       <div class="lp-sec-t">🎨 Theme</div>
       <select class="sh-select" id="themeSelProfile" onchange="setTheme(this.value)">
         <option value="system">📱 System Default</option>
@@ -1723,8 +1725,7 @@
     LANG = l;
     try { localStorage.setItem('fbt_lang', l); } catch(e){}
     document.documentElement.lang = (l === 'hinglish' ? 'en' : l);
-    document.getElementById('langSel').value = l;
-    document.getElementById('langSelAuth').value = l;
+    document.querySelectorAll('select.js-lang').forEach(s => { s.value = l; });
     applyLang();
   }
   function applyLang() {
@@ -1736,9 +1737,8 @@
     if (isLoggedIn()) { const hd=document.getElementById('histDate'); loadMyOrders(hd&&hd.value?hd.value:fmtYMD(dateWithOffset(0))); }
   }
   function initLangSelectors() {
-    ['langSel','langSelAuth'].forEach(id => {
-      document.getElementById(id).innerHTML = Object.keys(LANGS).map(k => `<option value="${k}">${LANGS[k]}</option>`).join('');
-    });
+    const opts = Object.keys(LANGS).map(k => `<option value="${k}">${LANGS[k]}</option>`).join('');
+    document.querySelectorAll('select.js-lang').forEach(s => { s.innerHTML = opts; s.value = LANG; });
   }
 
   // ═══════ IST TIME ═══════
@@ -1997,8 +1997,8 @@
 
   // ═══════ DRAWER ═══════
   function openDrawer(){
-    document.getElementById('drawerName').textContent = (SESSION&&SESSION.name)||'Guest';
-    document.getElementById('drawerPhone').textContent = (SESSION&&SESSION.phone)?('📱 '+SESSION.phone):'';
+    const av=document.getElementById('drawerAva');
+    if(av){ const n=(SESSION&&SESSION.name)||''; av.textContent = n ? n.trim().charAt(0).toUpperCase() : '?'; }
     document.getElementById('drawerOverlay').classList.add('open');
     document.getElementById('drawer').classList.add('open');
   }
@@ -2622,7 +2622,16 @@
   function goToPage1(){ showView('page1'); refreshAvailability(); }
 
   function prefillCustomer(){
-    document.getElementById('phoneNo').value=SESSION.phone;
+    // Google se login kiya aur number abhi tak nahi diya — yahin editable field
+    // dikhao. Ek baar order karte hi number profile me save ho jayega.
+    const ph=document.getElementById('phoneNo');
+    ph.value=SESSION.phone||'';
+    const needsPhone=!SESSION.phone;
+    ph.readOnly=!needsPhone;
+    ph.placeholder=needsPhone?'10-digit mobile number':'';
+    if(needsPhone) ph.setAttribute('oninput','onlyNumbers(this)'); else ph.removeAttribute('oninput');
+    const lbl=document.getElementById('phoneNoLbl');
+    if(lbl) lbl.innerHTML = needsPhone ? '📱 Mobile Number <span style="color:var(--danger)">*</span>' : t('verifiedMobile');
     if(!document.getElementById('customerName').value) document.getElementById('customerName').value=SESSION.name||'';
     const c=storeGet('fbt_addr'); let filled=false;
     if(c){ if(c.society){ document.getElementById('society').value=c.society; filled=true; } if(c.flatNo){ document.getElementById('flatNo').value=c.flatNo; filled=true; } }
@@ -2680,10 +2689,21 @@
     const okN=validateName();
     const okLoc=(deliveryType==='office') ? (validateCompany() & validateEmpId()) : (validateSociety() & validateFlat());
     if(!okLoc||!okN){ showToast(t('completeFields'),'warning'); return; }
+    // Google login me number nahi liya tha — pehle order par yahin se lo
+    let orderPhone = SESSION.phone;
+    if(!orderPhone){
+      const el=document.getElementById('phoneNo');
+      orderPhone=(el.value||'').replace(/\D/g,'');
+      if(!/^[6-9]\d{9}$/.test(orderPhone)){
+        el.classList.add('error'); el.focus();
+        showToast('📱 '+t('errPhone'),'warning'); return;
+      }
+      el.classList.remove('error');
+    }
     const isOff=(deliveryType==='office');
     const addr={ society: isOff?document.getElementById('company').value:document.getElementById('society').value,
                  flatNo: isOff?document.getElementById('empId').value.trim():document.getElementById('flatNo').value.trim(),
-                 name:document.getElementById('customerName').value.trim(), phone:SESSION.phone,
+                 name:document.getElementById('customerName').value.trim(), phone:orderPhone,
                  note:document.getElementById('orderNote')?document.getElementById('orderNote').value.trim():'', payment:payment };
     saveAddr(addr);
 
@@ -2698,7 +2718,7 @@
     const payloads=groups.map(({dstr, meal})=>{
       const lines=cart.filter(it=>it.deliveryDate===dstr && it.meal===meal);
       const p={ action:'order', token:SESSION.token, deliveryDate:dstr, deliveryLabel:lines[0].deliveryLabel, day:lines[0].day,
-        society:addr.society, flatNo:addr.flatNo, deliveryType:deliveryType, name:addr.name, note:addr.note, payment:addr.payment, scheme:CFG.township,
+        society:addr.society, flatNo:addr.flatNo, deliveryType:deliveryType, name:addr.name, phone:addr.phone, note:addr.note, payment:addr.payment, scheme:CFG.township,
         editRow:(editingRow && lines[0].__editRow===editingRow)?editingRow:undefined,
         items:lines.map(it=>({meal:it.meal,tiffinType:it.tiffinType||'',qty:it.qty,sabzi:it.sabzi||'',butterRoti:!!it.butterRoti,extraRoti:it.extraRoti||0,dahi:!!it.dahi,extraSabzi:!!it.extraSabzi,timeSlot:it.timeSlot||''})) };
       // Coupon sirf pehle order (earliest date ka pehla meal) par
@@ -2732,7 +2752,11 @@
     (async ()=>{
       for(const {dstr,meal,p} of payloads){
         try{ const j=await apiPost(p);
-          if(j.status==='success') { ok++; serverTotal+=Number(j.total)||0; if(j.couponRejected) couponWarn=j.couponRejected; if(j.promo) promoLine=j.promo; results.push({dstr,ok:true}); }
+          if(j.status==='success') { ok++; serverTotal+=Number(j.total)||0; if(j.couponRejected) couponWarn=j.couponRejected; if(j.promo) promoLine=j.promo; results.push({dstr,ok:true});
+            // Pehle order par diya hua number ab profile me save ho chuka hai —
+            // local session bhi update kar do taaki dobara na poocha jaye.
+            if(!SESSION.phone && addr.phone){ SESSION.phone=addr.phone; storeSet('fbt_session',SESSION); }
+          }
           else if(j.status==='duplicate') { dup++; results.push({dstr,dup:true}); }
           else if(j.status==='invalid_session') { sessionDead=true; break; }
           else { fail++; results.push({dstr,fail:true}); }
