@@ -99,6 +99,8 @@
     .spin { display:inline-block; width:13px; height:13px; border:2px solid rgba(255,255,255,0.45); border-top-color:#fff; border-radius:50%; animation:sp .7s linear infinite; vertical-align:-2px; }
     button.is-busy { opacity:0.75; cursor:progress; }
     button.is-busy .spin { border-color:rgba(0,0,0,0.18); border-top-color:currentColor; }
+    /* Light background wale buttons (ADD) par white spinner dikhta hi nahi */
+    .mc-add .spin { border-color:rgba(0,0,0,0.15); border-top-color:var(--accent); }
     @keyframes sp { to{ transform:rotate(360deg); } }
     .paid-badge { background:var(--okbg); color:var(--ok); font-size:9.5px; font-weight:800; padding:2px 8px; border-radius:9px; }
     .info-strip { display:flex; align-items:center; gap:8px; background:var(--accent-soft); border:1.5px solid var(--line); border-radius:11px; padding:9px 12px; font-size:11px; color:var(--accent-dark); font-weight:700; margin-bottom:10px; line-height:1.4; }
@@ -2127,9 +2129,34 @@
   }
   function showHomePage(){ showView('page1'); refreshAvailability(); }
   // 1-tap quick add: default variant + default sabzi + default time, sheet khole bina
+  // ADD par hi check karte hain (menu render par card achanak nahi badalta).
+  // Button spinner dikhata hai jab tak server se confirm nahi ho jaata.
+  function showAlreadyOrderedCard(m, info){
+    const box=document.getElementById('mealPanel'); if(!box)return;
+    box.innerHTML=`<div class="already-card">
+      <div class="ac-ic">✅</div>
+      <div class="ac-t">${t('alreadyOrderedT').replace('{meal}', mealTitle(m))}</div>
+      <div class="ac-s">${STATUS_LABEL[info.status]||info.status}</div>
+      <button class="add-cart-btn" style="max-width:240px;margin:14px auto 0;" onclick="showOrdersPage()">${t('alreadyOrderedBtn')}</button>
+    </div>`;
+  }
   function quickAdd(m, ev){
     if(ev&&ev.stopPropagation){ ev.stopPropagation(); }
     if(!isLoggedIn()){ showAuth(); return; }
+    const btn = ev && ev.currentTarget ? ev.currentTarget : null;
+    const oldTxt = btn ? btn.innerHTML : '';
+    if(btn){ btn.innerHTML='<span class="spin"></span>'; btn.style.pointerEvents='none'; }
+    refreshOrderedMap().then(()=>{
+      const already = alreadyOrdered(selDateStr(), m);
+      if(already){ showAlreadyOrderedCard(m, already); return; }
+      if(btn){ btn.innerHTML=oldTxt; btn.style.pointerEvents=''; }
+      doQuickAdd(m);
+    }).catch(()=>{
+      if(btn){ btn.innerHTML=oldTxt; btn.style.pointerEvents=''; }
+      doQuickAdd(m);   // network fail — server checkout par waise bhi rok lega
+    });
+  }
+  function doQuickAdd(m){
     const b=freshBuilder()[m];
     if(cart.find(it=>it.deliveryDate===selDateStr()&&it.meal===m)){ openMealSheet(m); return; }  // already hai → customize
     const v=findVariant(m,b.tiffinType);
@@ -2181,7 +2208,6 @@
     document.getElementById('profileName').textContent='👤 '+(SESSION.name||'');
     const lg=document.getElementById('lpGreet'); if(lg){ const fn=(SESSION.name||'').split(' ')[0]; lg.textContent=fn?('👋 Hi, '+fn+' — welcome back!'):''; }
     updateNavAvatar();
-    refreshOrderedMap().then(renderMealPanel);   // menu par "already ordered" state ke liye
     const v=restore?storeGet('fbt_view'):null;     // showLanding se PEHLE padho (warna overwrite)
     showLanding(); ensureMode(); refreshAvailability(); renderCart(); loadPublicStats(selDateStr());
     if(restore){                                   // refresh ke baad wahi page wapas kholo
@@ -2418,17 +2444,6 @@
       box.innerHTML=`<div class="menu-closed">🔴 ${t('soldOutTitle')}<br><span style="font-weight:400;font-size:11.5px;">${t('soldOutSub')}</span></div>`;
       return;
     }
-    // Is date + meal ka order pehle se hai — yahin rok do, checkout tak mat jaane do
-    const already=alreadyOrdered(selDateStr(), m);
-    if(already){
-      box.innerHTML=`<div class="already-card">
-        <div class="ac-ic">✅</div>
-        <div class="ac-t">${t('alreadyOrderedT').replace('{meal}', mealTitle(m))}</div>
-        <div class="ac-s">${STATUS_LABEL[already.status]||already.status}</div>
-        <button class="add-cart-btn" style="max-width:240px;margin:14px auto 0;" onclick="showOrdersPage()">${t('alreadyOrderedBtn')}</button>
-      </div>`;
-      return;
-    }
     const name=mealTitle(m);
     const vs=variantsFor(m);
     const pr=priceRange(m);
@@ -2559,6 +2574,19 @@
     const m=sheetMeal, b=builder[m];
     if(m!=='breakfast' && !b.sabzi){ showToast('⚠️ '+t('selectSabzi'),'warning'); return; }
     if(capacityReached(m,selDateStr())){ showToast('🔴 '+t('soldOutTitle'),'error'); closeMealSheet(); renderMealPanel(); return; }
+    // Server se confirm karo ki is date+meal ka order pehle se to nahi
+    const btn=document.getElementById('shAddBtn');
+    const oldTxt=btn?btn.innerHTML:'';
+    if(btn){ btn.innerHTML='<span class="spin"></span>'; btn.disabled=true; }
+    refreshOrderedMap().then(()=>{
+      if(btn){ btn.innerHTML=oldTxt; btn.disabled=false; }
+      const already=alreadyOrdered(selDateStr(), m);
+      if(already){ closeMealSheet(); showAlreadyOrderedCard(m, already); return; }
+      shAddToCartConfirmed();
+    }).catch(()=>{ if(btn){ btn.innerHTML=oldTxt; btn.disabled=false; } shAddToCartConfirmed(); });
+  }
+  function shAddToCartConfirmed(){
+    const m=sheetMeal, b=builder[m];
     const v=findVariant(m,b.tiffinType);
     const lineId = selDateStr()+'|'+m+'|'+b.tiffinType;
     const item={ id:lineId, deliveryDate:selDateStr(), deliveryLabel:fmtLabel(selDate()), day:selDayKey().charAt(0).toUpperCase()+selDayKey().slice(1), meal:m, qty:b.qty, timeSlot:b.timeSlot, tiffinType:b.tiffinType, variantName:v.name };
@@ -2635,7 +2663,7 @@
     prefillCustomer();
     showView('page2');
   }
-  function goToPage1(){ showView('page1'); refreshAvailability(); refreshOrderedMap().then(renderMealPanel); }
+  function goToPage1(){ showView('page1'); refreshAvailability(); }
 
   function prefillCustomer(){
     // Google se login kiya aur number abhi tak nahi diya — yahin editable field
@@ -3097,7 +3125,7 @@
   async function cancelMyOrder(row,dd,createdIso){ if(!isLoggedIn()){ showAuth(); return; } if(!canCancel({deliveryDate:dd,createdIso:createdIso||''})){ showToast(t('cancelClosed'),'error'); return; }
     const ok = await showConfirm({ icon:'🗑️', title:t('cancelOrder').replace(/^✖\s*/,''), body:t('confirmCancel'), yes:t('cancelOrder').replace(/^✖\s*/,''), no:t('limitClose'), danger:true });
     if(!ok) return;
-    apiPost({action:'cancelOrder',token:SESSION.token,row:row}).then(j=>{ if(j.status==='success'){ showToast(t('orderCancelled'),'success'); loadMyOrders(); refreshOrderedMap().then(renderMealPanel); } else if(j.status==='invalid_session')forceLogout(); else showToast(j.message||'Could not cancel.','error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
+    apiPost({action:'cancelOrder',token:SESSION.token,row:row}).then(j=>{ if(j.status==='success'){ showToast(t('orderCancelled'),'success'); loadMyOrders(); refreshOrderedMap(); renderMealPanel(); } else if(j.status==='invalid_session')forceLogout(); else showToast(j.message||'Could not cancel.','error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
 
   // ═══════ ADMIN ═══════
   let adminCreds=null, adminMenuWorking=null, adminPrevDay='monday', adminOrders=[], adminUsers=[], orderFilter='All';
