@@ -1459,6 +1459,18 @@
 <script>
   // ═══════ CONFIG ═══════
   const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwdMXlSwNdqO84OspsUe2jAEeDL-hbwjwLcKL-fo6YObB6Se-dvTxX2iS5BMz2t8bV6/exec';
+  // ═══════ MULTI-TENANT: VENDOR ID ═══════
+  // Har vendor ka apna link: yourapp.com/?v=vendorSlug — link na ho to DEFAULT_VENDOR chalta hai
+  // (isliye maujooda users/links bilkul bhi nahi tootenge). Phase 2 mein backend isi vendorId se
+  // Sheets (Orders/Menu/Config) filter karega.
+  const DEFAULT_VENDOR_ID = 'nestandnosh';
+  const VENDOR_ID = (function(){
+    try{
+      const q = new URLSearchParams(location.search).get('v');
+      return (q && q.trim()) ? q.trim().toLowerCase() : DEFAULT_VENDOR_ID;
+    }catch(e){ return DEFAULT_VENDOR_ID; }
+  })();
+  const IS_DEFAULT_VENDOR = (VENDOR_ID === DEFAULT_VENDOR_ID);
   const OWNER_WHATSAPP = '917043491481';
   // Google Cloud Console → APIs & Services → Credentials → OAuth Client ID (Web application)
   // → Authorized JavaScript origins me apna Netlify domain add karo → yahan paste karo.
@@ -1897,9 +1909,13 @@
   function selDayKey(){ return weekdayKey(selDate()); }
 
   // ═══════ STORAGE + SESSION ═══════
-  function storeSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
-  function storeGet(k){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
-  function storeDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
+  // Multi-tenant: non-default vendor ki keys namespace ho jaati hain (vendorId_key) —
+  // taaki 2 vendors ka data same device pe mix na ho. Default vendor (abhi ke live users)
+  // bilkul same purani keys use karta rehta hai, koi migration/breakage nahi.
+  function nsKey(k){ return IS_DEFAULT_VENDOR ? k : (VENDOR_ID+'_'+k); }
+  function storeSet(k,v){ try{ localStorage.setItem(nsKey(k),JSON.stringify(v)); }catch(e){} }
+  function storeGet(k){ try{ const v=localStorage.getItem(nsKey(k)); return v?JSON.parse(v):null; }catch(e){ return null; } }
+  function storeDel(k){ try{ localStorage.removeItem(nsKey(k)); }catch(e){} }
   let SESSION = storeGet('fbt_session');
   function isLoggedIn(){ return !!(SESSION && SESSION.token && SESSION.phone); }
 
@@ -1925,7 +1941,7 @@
     if(j && j.code){ const k='srv_'+j.code; const s=t(k); if(s && s!==k) return s; }
     return (j && j.message) || t('errNetwork');
   }
-  function apiPost(p){ return fetch(GOOGLE_SCRIPT_URL,{method:'POST',body:JSON.stringify(p)}).then(r=>r.json()); }
+  function apiPost(p){ const body=Object.assign({},p,{vendorId:VENDOR_ID}); return fetch(GOOGLE_SCRIPT_URL,{method:'POST',body:JSON.stringify(body)}).then(r=>r.json()); }
 
   function unitPrice(meal, cfg) {
     const P = CFG.prices;
@@ -2518,7 +2534,7 @@
   const statsCache={};
   function loadPublicStats(dateStr){
     if(GOOGLE_SCRIPT_URL.indexOf('http')!==0) return;
-    fetch(GOOGLE_SCRIPT_URL+'?action=publicstats&date='+dateStr).then(r=>r.json()).then(j=>{
+    fetch(GOOGLE_SCRIPT_URL+'?action=publicstats&date='+dateStr+'&vendorId='+VENDOR_ID).then(r=>r.json()).then(j=>{
       if(j.status==='success'){ statsCache[dateStr]=j.stats; renderStatsBanner(); renderMealPanel(); }
     }).catch(()=>{});
   }
@@ -3063,7 +3079,7 @@
   function loadSub(){
     document.getElementById('subActiveBox').innerHTML='<div class="mini-spin-wrap"><div class="mini-spin"></div><span>Loading…</span></div>';
     document.getElementById('subFormBox').innerHTML='';
-    fetch(GOOGLE_SCRIPT_URL+'?action=mySub&token='+encodeURIComponent(SESSION.token)).then(r=>r.json()).then(j=>{
+    fetch(GOOGLE_SCRIPT_URL+'?action=mySub&token='+encodeURIComponent(SESSION.token)+'&vendorId='+VENDOR_ID).then(r=>r.json()).then(j=>{
       if(j.status==='invalid_session'){ forceLogout(); return; }
       renderSubActive(j.sub); renderSubForm(j.sub);
     }).catch(()=>{ document.getElementById('subActiveBox').innerHTML='<div style="color:var(--muted);font-size:13px;">Network error.</div>'; });
@@ -3187,7 +3203,7 @@
   }
   function refreshOrderedMap(){
     if(!isLoggedIn()){ orderedMap={}; orderedMapReady=false; upcomingOrders=null; return Promise.resolve(); }
-    return fetch(GOOGLE_SCRIPT_URL+'?action=myOrders&token='+encodeURIComponent(SESSION.token))
+    return fetch(GOOGLE_SCRIPT_URL+'?action=myOrders&token='+encodeURIComponent(SESSION.token)+'&vendorId='+VENDOR_ID)
       .then(r=>r.json()).then(j=>{
         const map={};
         if(j.status==='success'){
@@ -3297,7 +3313,7 @@
     }
 
     box.innerHTML='<div class="mini-spin-wrap"><div class="mini-spin"></div><span>Loading…</span></div>';
-    let url=GOOGLE_SCRIPT_URL+'?action=myOrders&token='+encodeURIComponent(SESSION.token); if(dateOpt)url+='&date='+encodeURIComponent(dateOpt);
+    let url=GOOGLE_SCRIPT_URL+'?action=myOrders&token='+encodeURIComponent(SESSION.token)+'&vendorId='+VENDOR_ID; if(dateOpt)url+='&date='+encodeURIComponent(dateOpt);
     fetch(url).then(r=>r.json()).then(j=>{
       if(j.status==='success'){
         renderMyOrders(j.orders||[], isHist);
@@ -3897,7 +3913,7 @@
       // PAKKA 'invalid_session' bole. Network error/timeout pe andar hi rehne do
       // (warna offline ya slow net pe logged-in user bewajah login page dekhega).
       if(GOOGLE_SCRIPT_URL.indexOf('http')===0){
-        fetch(GOOGLE_SCRIPT_URL+'?action=me&token='+encodeURIComponent(SESSION.token))
+        fetch(GOOGLE_SCRIPT_URL+'?action=me&token='+encodeURIComponent(SESSION.token)+'&vendorId='+VENDOR_ID)
           .then(r=>r.json())
           .then(j=>{
             if(j.status==='invalid_session'){ forceLogout(); }
@@ -3959,7 +3975,7 @@
     });
 
     if(GOOGLE_SCRIPT_URL.indexOf('http')===0){
-      fetch(GOOGLE_SCRIPT_URL+'?action=bootstrap').then(r=>r.json()).then(j=>{
+      fetch(GOOGLE_SCRIPT_URL+'?action=bootstrap&vendorId='+VENDOR_ID).then(r=>r.json()).then(j=>{
         if(j.status==='success'){ if(j.menu&&j.menu.monday){ MENU=j.menu; storeSet('fbt_menu',MENU); } if(j.config&&j.config.prices){ CFG=j.config; CFG.promos=j.promos||[]; storeSet('fbt_cfg',CFG); applyConfigToUI(); preloadImgs(); } else if(j.promos){ CFG.promos=j.promos; storeSet('fbt_cfg',CFG); } const pg=document.getElementById('page1'); if(pg&&!pg.classList.contains('hidden')){ renderMenuDateTime&&renderMenuDateTime(); renderMealPanel(); } const hv=document.getElementById('homeView'); if(hv&&!hv.classList.contains('hidden')) renderHome(); if(!document.getElementById('cartView').classList.contains('hidden')) renderCart(); }
       }).catch(()=>{});
     }
