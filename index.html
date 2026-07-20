@@ -2886,8 +2886,12 @@
   }
   function saveAddr(d){
     const a=storeGet('fbt_addr')||{};
-    const isOff=(d.deliveryType||deliveryType)==='office';
-    const out={ deliveryType:(d.deliveryType||deliveryType),
+    // Delivery mode (Home/Office) sirf tab badlo jab explicitly diya gaya ho (chooseMode se) —
+    // warna jo pehle se save tha wahi rakho. Isse Profile pe "Save Address" karne se
+    // galti se poora app ka mode reset nahi hota.
+    const mode=(d.deliveryType==='home'||d.deliveryType==='office')?d.deliveryType:(a.deliveryType||deliveryType);
+    const isOff=(mode==='office');
+    const out={ deliveryType:mode,
       society: isOff?(a.society||''):(d.society||''), flatNo: isOff?(a.flatNo||''):(d.flatNo||''),
       company: isOff?(d.society||d.company||''):(a.company||''), empId: isOff?(d.flatNo||d.empId||''):(a.empId||'') };
     storeSet('fbt_addr',out);
@@ -2950,7 +2954,7 @@
     if(!okLoc||!okN){ showToast(t('completeFields'),'warning'); return; }
     const orderPhone = SESSION.phone;
     const isOff=(deliveryType==='office');
-    const addr={ society: isOff?document.getElementById('company').value:document.getElementById('society').value,
+    const addr={ deliveryType:deliveryType, society: isOff?document.getElementById('company').value:document.getElementById('society').value,
                  flatNo: isOff?document.getElementById('empId').value.trim():document.getElementById('flatNo').value.trim(),
                  name:document.getElementById('customerName').value.trim(), phone:orderPhone,
                  note:document.getElementById('orderNote')?document.getElementById('orderNote').value.trim():'', payment:payment };
@@ -3998,6 +4002,7 @@
     }
     const cl=storeGet('fbt_lang'); if(cl&&T[cl])LANG=cl;
     const cm=storeGet('fbt_menu'); if(cm&&cm.monday)MENU=cm;
+    const savedAddr=storeGet('fbt_addr'); if(savedAddr&&(savedAddr.deliveryType==='home'||savedAddr.deliveryType==='office')) deliveryType=savedAddr.deliveryType;
     const cc=storeGet('fbt_cfg'); if(cc&&cc.prices)CFG=cc;
 
     initLangSelectors();
