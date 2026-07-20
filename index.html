@@ -244,8 +244,8 @@
     .pf-row i { margin-left:auto; font-style:normal; color:var(--muted); }
     .bulk-bar { display:flex; gap:8px; margin:0 0 12px; flex-wrap:wrap; }
     .bulk-bar button { flex:1; min-width:46%; padding:12px 8px; border-radius:11px; border:1.5px solid var(--line); font-size:12px; font-weight:800; cursor:pointer; }
-    .bulk-bar .bb-prep { border-color:var(--accent); color:var(--accent-dark); background:var(--accent-soft); }
-    .bulk-bar .bb-done { border-color:var(--ok); color:var(--ok); background:var(--okbg); }
+    .bulk-bar .bb-prep { border-color:var(--accent); color:#fff; background:var(--accent); font-weight:900; box-shadow:0 3px 10px rgba(99,102,241,0.35); }
+    .bulk-bar .bb-done { border-color:var(--ok); color:#fff; background:var(--ok); font-weight:900; box-shadow:0 3px 10px rgba(22,163,74,0.3); }
     .promo-box { margin-top:12px; }
     .promo-input { display:flex; gap:8px; }
     .promo-input input { flex:1; padding:11px 12px; border:1.5px solid var(--line); border-radius:11px; font-size:13px; font-weight:700; text-transform:uppercase; }
@@ -665,6 +665,32 @@
     .dchip:disabled { opacity:0.45; cursor:not-allowed; background:var(--bg); }
     .chip { display:inline-block; padding:7px 12px; border-radius:20px; background:var(--line); color:var(--muted); font-size:11.5px; font-weight:800; cursor:pointer; margin:0 6px 8px 0; }
     .chip.sel { background:var(--accent); color:#fff; }
+    #filterChips { display:flex; flex-wrap:nowrap; overflow-x:auto; gap:0; padding-bottom:2px; }
+    #filterChips .chip { flex:0 0 auto; white-space:nowrap; }
+    #filterChips .chip[data-f="Pending"].sel { background:var(--warn); color:#fff; }
+    #filterChips .chip[data-f="Preparing"].sel { background:#0d47a1; color:#fff; }
+    #filterChips .chip[data-f="Delivered"].sel { background:var(--ok); color:#fff; }
+    #filterChips .chip[data-f="Cancelled"].sel { background:var(--danger); color:#fff; }
+    /* Order card: done/cancelled orders dim ho jaate hain, active orders pe attention rahe */
+    .oc.oc-done { opacity:0.55; }
+    .oc.oc-done .oc-quick { display:none; }
+    /* One-tap status buttons — modal khole bina seedha next status */
+    .oc-quick { margin-top:10px; display:flex; gap:8px; }
+    .oc-quick button { flex:1; border:none; border-radius:10px; padding:9px 6px; font-size:11.5px; font-weight:800; cursor:pointer; }
+    .oc-quick .qk-prep { background:#e3f2fd; color:#0d47a1; }
+    .oc-quick .qk-done { background:var(--okbg); color:var(--ok); }
+    /* Phone ab tappable button jaisa dikhega, plain link nahi */
+    .oc-call { display:inline-flex; align-items:center; gap:5px; background:var(--accent-soft); color:var(--accent-dark); font-weight:800; padding:5px 11px; border-radius:14px; text-decoration:none; font-size:12px; }
+    /* Aaj ka collection total — cash planning ke liye */
+    .money-bar { display:flex; gap:8px; margin:4px 0 14px; }
+    .money-bar .mb-cell { flex:1; background:var(--card); border:1.5px solid var(--line); border-radius:12px; padding:10px 8px; text-align:center; }
+    .money-bar .mb-n { font-size:16px; font-weight:900; color:var(--ink); }
+    .money-bar .mb-l { font-size:10px; font-weight:700; color:var(--muted); margin-top:1px; }
+    /* Kitchen breakdown — tap se expand, cooking ke waqt exact detail chahiye */
+    .ks-toggle { text-align:center; font-size:11.5px; font-weight:800; color:var(--accent-dark); cursor:pointer; padding-top:2px; }
+    .ks-detail { display:none; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); font-size:12px; color:var(--ink); line-height:1.7; }
+    .ks-detail.show { display:block; }
+    .ks-detail .ks-drow b { color:var(--accent-dark); }
     .kitchen-card { background:var(--card); border:1.5px solid var(--line); border-radius:16px; padding:16px; margin:4px 0 16px; }
     .ks-head { font-size:14px; font-weight:900; color:var(--ink); margin-bottom:12px; }
     .ks-head .ks-sub { font-size:11px; font-weight:700; color:var(--muted); background:var(--bg); padding:3px 9px; border-radius:12px; margin-left:6px; }
@@ -1291,6 +1317,7 @@
         <select class="sh-select" id="ordSocFilter" onchange="setSocFilter(this.value)" style="margin-bottom:10px;"></select>
         <div class="bulk-bar" id="bulkBar"></div>
         <div class="kitchen-card" id="kitchenSummary">Loading...</div>
+        <div class="money-bar" id="moneyBar"></div>
         <div id="filterChips">
           <span class="chip sel" data-f="All" onclick="setOrderFilter('All')">All</span>
           <span class="chip" data-f="Pending" onclick="setOrderFilter('Pending')">🟡 Pending</span>
@@ -1298,7 +1325,7 @@
           <span class="chip" data-f="Delivered" onclick="setOrderFilter('Delivered')">🟢 Delivered</span>
           <span class="chip" data-f="Cancelled" onclick="setOrderFilter('Cancelled')">🔴 Cancelled</span>
         </div>
-        <div id="ordersList"><div style="text-align:center;color:var(--muted);padding:20px;">Loading...</div></div>
+        <div id="ordersList" style="padding-bottom:12px;"><div style="text-align:center;color:var(--muted);padding:20px;">Loading...</div></div>
       </div>
 
       <div id="aview-users" class="hidden">
@@ -3584,26 +3611,63 @@
   }
   function renderKitchen(){
     const active=adminOrders.filter(o=>(o.status==='Pending'||o.status==='Preparing')&&socMatch(o));
-    let bQty=0,lQty=0,dQty=0;
-    active.forEach(o=>{ bQty+=Number(o.breakfastQty)||0; lQty+=Number(o.lunchQty)||0; dQty+=Number(o.dinnerQty)||0; });
+    let bQty=0; const detail={lunch:{qty:0,mini:0,full:0,sabzi:{}},dinner:{qty:0,mini:0,full:0,sabzi:{}}};
+    active.forEach(o=>{
+      bQty+=Number(o.breakfastQty)||0;
+      ['lunch','dinner'].forEach(m=>{
+        const q=Number(o[m+'Qty'])||0; if(!q)return; const s=detail[m]; s.qty+=q;
+        const tstr=String(o[m+'Tiffin']||''); const mm=tstr.match(/(\d+)\s*Mini/i); const mf=tstr.match(/(\d+)\s*Full/i);
+        if(mm)s.mini+=Number(mm[1]); if(mf)s.full+=Number(mf[1]); if(!mm&&!mf)s.full+=q;
+        const sb=(o[m+'Sabzi']&&String(o[m+'Sabzi']).trim())||"Chef's choice"; s.sabzi[sb]=(s.sabzi[sb]||0)+q;
+      });
+    });
+    const lQty=detail.lunch.qty, dQty=detail.dinner.qty;
+    const sabziLine=(obj)=>Object.keys(obj).map(k=>`<b>${obj[k]}×</b> ${esc(k)}`).join(', ')||'—';
+    const hasDetail=lQty||dQty;
     document.getElementById('kitchenSummary').innerHTML=`
       <div class="ks-head">👨‍🍳 Kitchen Summary <span class="ks-sub">Pending + Preparing${socFilter!=='All'?(' · '+socFilter):''}</span></div>
       <div class="ks-grid">
         <div class="ks-cell"><div class="ks-n">${bQty}</div><div class="ks-l">🌅 Breakfast</div></div>
         <div class="ks-cell"><div class="ks-n">${lQty}</div><div class="ks-l">☀️ Lunch</div></div>
         <div class="ks-cell"><div class="ks-n">${dQty}</div><div class="ks-l">🌙 Dinner</div></div>
-      </div>`;
+      </div>
+      ${hasDetail?`<div class="ks-toggle" onclick="this.nextElementSibling.classList.toggle('show')">👇 Cooking Detail Dekho</div>
+      <div class="ks-detail">
+        ${lQty?`<div class="ks-drow">☀️ <b>Lunch:</b> 🥗${detail.lunch.mini} Mini · 🍱${detail.lunch.full} Full<br>${sabziLine(detail.lunch.sabzi)}</div>`:''}
+        ${dQty?`<div class="ks-drow" style="margin-top:8px;">🌙 <b>Dinner:</b> 🥗${detail.dinner.mini} Mini · 🍱${detail.dinner.full} Full<br>${sabziLine(detail.dinner.sabzi)}</div>`:''}
+      </div>`:''}`;
+  }
+  const STATUS_PRIORITY={Pending:0,Preparing:1,Delivered:2,Cancelled:3};   // active pehle, nipte hue neeche
+  function renderMoneyBar(list){
+    const box=document.getElementById('moneyBar'); if(!box)return;
+    const live=list.filter(o=>o.status!=='Cancelled');
+    let cod=0,upi=0;
+    live.forEach(o=>{ const amt=Number(o.total)||0; if(String(o.payment).toUpperCase()==='COD') cod+=amt; else upi+=amt; });
+    box.innerHTML=`
+      <div class="mb-cell"><div class="mb-n">₹${cod}</div><div class="mb-l">💵 COD to collect</div></div>
+      <div class="mb-cell"><div class="mb-n">₹${upi}</div><div class="mb-l">📲 UPI (paid)</div></div>
+      <div class="mb-cell"><div class="mb-n">₹${cod+upi}</div><div class="mb-l">💰 Total</div></div>`;
   }
   function socMatch(o){ return socFilter==='All' || o.society===socFilter; }
   function renderOrders(){
-    const list=adminOrders.filter(o=>(orderFilter==='All'||o.status===orderFilter)&&socMatch(o)); const box=document.getElementById('ordersList');
+    const list=adminOrders.filter(o=>(orderFilter==='All'||o.status===orderFilter)&&socMatch(o))
+      .slice().sort((a,b)=> (STATUS_PRIORITY[a.status]-STATUS_PRIORITY[b.status]) || String(a.time||'').localeCompare(String(b.time||'')));
+    const box=document.getElementById('ordersList');
     renderBulkBar();
+    renderMoneyBar(adminOrders.filter(o=>socMatch(o)));
     if(!list.length){ box.innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;">No orders ('+orderFilter+(socFilter!=='All'?(' · '+socFilter):'')+').</div>'; return; }
-    box.innerHTML=list.map(o=>`<div class="oc" onclick="openOrderModal(${o.row})"><div class="oc-top"><span class="oc-name">${esc(o.name)}</span><span class="oc-status st-${o.status}">${STATUS_LABEL[o.status]||o.status}</span></div>
-      <div class="oc-meal-box">${orderMealsText(o)}${o.note&&o.note!=='None'?'<br><span style="color:var(--muted);">📝 '+esc(o.note)+'</span>':''}${o.promo?'<br><span style="color:var(--ok);font-weight:800;">🎟️ '+esc(o.promo)+'</span>':''}</div>
-      <div class="oc-info"><span>${o.deliveryType==='office'?`🏢 ${esc(o.society)} · Emp ${esc(o.flat)}`:`🏠 ${esc(o.society)} ${esc(o.flat)}`}</span><span>📞 <a href="tel:+91${o.phone}" onclick="event.stopPropagation()">${o.phone}</a></span></div>
-      <div class="oc-info"><span>🕐 ${o.time}</span><span>💳 ${o.payment}${o.paymentStatus==='Paid'?(o.status==='Cancelled'?' <span class="paid-badge" style="background:var(--dangerbg);color:var(--danger);">REFUND DUE</span>':' <span class="paid-badge">PAID</span>'):''} · 💰 <b>${o.total}</b></span></div>
-      <div class="oc-tap-hint">👆 Tap for details & status update</div></div>`).join('');
+    box.innerHTML=list.map(o=>{
+      const done=(o.status==='Delivered'||o.status==='Cancelled');
+      let quick='';
+      if(o.status==='Pending') quick=`<div class="oc-quick"><button class="qk-prep" onclick="event.stopPropagation();updateStatus(${o.row},'Preparing')">👨‍🍳 Start Preparing</button></div>`;
+      else if(o.status==='Preparing') quick=`<div class="oc-quick"><button class="qk-done" onclick="event.stopPropagation();updateStatus(${o.row},'Delivered')">✅ Mark Delivered</button></div>`;
+      return `<div class="oc ${done?'oc-done':''}" onclick="openOrderModal(${o.row})">
+        <div class="oc-top"><span class="oc-name">${esc(o.name)}</span><span class="oc-status st-${o.status}">${STATUS_LABEL[o.status]||o.status}</span></div>
+        <div class="oc-meal-box">${orderMealsText(o)}${o.note&&o.note!=='None'?'<br><span style="color:var(--muted);">📝 '+esc(o.note)+'</span>':''}${o.promo?'<br><span style="color:var(--ok);font-weight:800;">🎟️ '+esc(o.promo)+'</span>':''}</div>
+        <div class="oc-info"><span>${o.deliveryType==='office'?`🏢 ${esc(o.society)} · Emp ${esc(o.flat)}`:`🏠 ${esc(o.society)} ${esc(o.flat)}`}</span><a class="oc-call" href="tel:+91${o.phone}" onclick="event.stopPropagation()">📞 ${o.phone}</a></div>
+        <div class="oc-info"><span>🕐 ${o.time}</span><span>💳 ${o.payment}${o.paymentStatus==='Paid'?(o.status==='Cancelled'?' <span class="paid-badge" style="background:var(--dangerbg);color:var(--danger);">REFUND DUE</span>':' <span class="paid-badge">PAID</span>'):''} · 💰 <b>${o.total}</b></span></div>
+        ${quick}</div>`;
+    }).join('');
   }
 
   // ═══════ ADMIN ORDER DETAILS MODAL ═══════
