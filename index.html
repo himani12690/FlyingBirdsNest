@@ -353,7 +353,6 @@
     .sh-qty button { width:36px; height:44px; border:none; background:var(--card); color:var(--accent-dark); font-size:20px; font-weight:900; cursor:pointer; }
     .sh-qty .qn { width:30px; text-align:center; font-size:15px; font-weight:800; }
     .sh-add { flex:1; background:var(--accent); color:#fff; border:none; border-radius:12px; padding:14px; font-size:15px; font-weight:900; cursor:pointer; }
-    .hamburger { font-size:22px; cursor:pointer; line-height:1; padding:2px 4px; }
     /* Admin variants editor */
     .var-meal-tabs { display:flex; gap:8px; margin-bottom:12px; }
     .var-meal-tabs button { flex:1; padding:9px 4px; border:1.5px solid var(--line); border-radius:10px; background:var(--card); font-size:12px; font-weight:800; color:var(--muted); cursor:pointer; }
@@ -427,19 +426,16 @@
     .drawer-overlay.open { opacity:1; pointer-events:auto; }
     .drawer { position:fixed; top:0; left:0; bottom:0; width:270px; max-width:80%; background:var(--card); z-index:201; transform:translateX(-100%); transition:transform .3s ease; box-shadow:4px 0 24px rgba(0,0,0,0.2); display:flex; flex-direction:column; }
     .drawer.open { transform:translateX(0); }
-    .drawer-head { background:transparent; color:var(--ink); padding:22px 18px 16px; border-bottom:1px solid var(--line); }
-    .drawer-head { display:flex; align-items:center; gap:13px; }
-    .drawer-head .dh-av { width:52px; height:52px; flex-shrink:0; border-radius:50%; display:flex; align-items:center;
-                          justify-content:center; font-size:21px; font-weight:900; color:#fff;
-                          background:linear-gradient(135deg,var(--accent),#8b93ff); }
-    .drawer-head .dh-nm { font-size:15.5px; font-weight:900; color:var(--ink); min-width:0;
-                          white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    /* Sirf ADMIN drawer bacha hai — customer side par bottom nav hi sab kuch hai */
+    .drawer-head { background:var(--accent); color:#fff; padding:22px 18px; }
+    .drawer-head .dh-logo { font-size:30px; line-height:1; }
+    .drawer-head .dh-name { font-size:16px; font-weight:900; margin-top:8px; }
+    .drawer-head .dh-phone { font-size:12px; opacity:.9; margin-top:2px; }
     .drawer-menu { padding:10px 0; flex:1; }
     .drawer-item { display:flex; align-items:center; gap:14px; padding:15px 20px; font-size:15px; font-weight:700; color:var(--ink); cursor:pointer; }
     .drawer-item:hover { background:var(--accent-soft); }
     .drawer-item .di-icon { width:22px; height:22px; color:var(--ink); opacity:.75; }
     .drawer-item.danger .di-icon { color:var(--danger); opacity:1; }
-    .drawer-item .di-badge { margin-left:auto; background:var(--danger); color:#fff; font-size:11px; font-weight:800; min-width:20px; height:20px; border-radius:10px; display:flex; align-items:center; justify-content:center; padding:0 5px; }
     .drawer-item.danger { color:var(--danger); }
     .drawer-foot { padding:16px 20px; border-top:1px solid #eee; font-size:11px; color:var(--muted); }
 
@@ -738,36 +734,6 @@
 <div id="authTransition" class="hidden"><div class="bl-logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div><div class="bl-spin"></div><div class="bl-t" id="authTransitionText">Signing in…</div></div>
 <div class="container">
 
-  <!-- ══════ SIDE DRAWER ══════ -->
-  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
-<!-- ══════ ICON SPRITE — stroke icons (emoji ki jagah, Telegram jaisa clean look) ══════ -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="ic-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
-  <symbol id="ic-menu" viewBox="0 0 24 24"><path d="M3 2v7a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V2"/><path d="M6 2v20"/><path d="M18 2a3 3 0 0 0-3 3v7h3v10"/></symbol>
-  <symbol id="ic-cart" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2.2l2.6 12.1a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L21 7H5.2"/></symbol>
-  <symbol id="ic-orders" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1.2"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16.5h6"/></symbol>
-  <symbol id="ic-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
-  <symbol id="ic-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
-  <symbol id="ic-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5V11"/><path d="M12 7.6h.01"/></symbol>
-  <symbol id="ic-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol>
-</svg>
-
-  <div class="drawer" id="drawer">
-    <div class="drawer-head">
-      <div class="dh-av" id="drawerAva">?</div>
-      <div class="dh-nm" id="drawerName"></div>
-    </div>
-    <div class="drawer-menu">
-      <div class="drawer-item" onclick="drawerGo('home')"><svg class="ic di-icon"><use href="#ic-home"/></svg><span data-i="navHome"></span></div>
-      <div class="drawer-item" onclick="drawerGo('cart')"><svg class="ic di-icon"><use href="#ic-cart"/></svg><span data-i="navCart"></span><span class="di-badge zero" id="drawerCartBadge" style="display:none;">0</span></div>
-      <div class="drawer-item" onclick="drawerGo('past')"><svg class="ic di-icon"><use href="#ic-orders"/></svg><span data-i="navPast"></span></div>
-      <div class="drawer-item" onclick="drawerGo('sub')"><svg class="ic di-icon"><use href="#ic-repeat"/></svg><span data-i="navSub"></span></div>
-      <div class="drawer-item" onclick="drawerGo('about')"><svg class="ic di-icon"><use href="#ic-info"/></svg><span data-i="navAbout"></span></div>
-      <div class="drawer-item danger" onclick="drawerGo('logout')"><svg class="ic di-icon"><use href="#ic-logout"/></svg><span data-i="logout"></span></div>
-    </div>
-    <div class="drawer-foot">Nest & Nosh · v6</div>
-  </div>
-
   <!-- ══════ ADMIN DRAWER ══════ -->
   <div class="drawer-overlay" id="adminDrawerOverlay" onclick="closeAdminDrawer()"></div>
   <div class="drawer" id="adminDrawer">
@@ -948,7 +914,7 @@
   <!-- ══════ HOME LANDING ══════ -->
   <div id="homeView" class="hidden">
     <div class="lp-hero">
-      <div class="lp-top"><span class="hamburger" onclick="openDrawer()">☰</span></div>
+      <div class="lp-top"></div>
       <div class="lp-greet" id="lpGreet"></div>
       <div class="lp-logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div>
       <p class="lp-tag" data-i="lpTagline"></p>
@@ -977,7 +943,7 @@
   <!-- ══════ PAGE 1 : MENU (simplified) ══════ -->
   <div id="page1" class="hidden">
     <div class="menu-topbar">
-      <span class="hamburger" onclick="openDrawer()">☰</span>
+      
       <div class="mt-title">
         <div class="mt-name"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div>
         <div class="mt-user" id="profileName" style="display:none;"></div>
@@ -1039,7 +1005,7 @@
   <!-- ══════ CART VIEW ══════ -->
   <div id="cartView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
+      <div class="sub-tb"><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
       <h1 style="font-size:20px;" data-i="yourCart"></h1>
     </div>
     <div class="section pad-sticky">
@@ -1058,7 +1024,7 @@
   <!-- ══════ SUBSCRIPTION VIEW ══════ -->
   <div id="subView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
+      <div class="sub-tb"><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
       <h1 style="font-size:20px;" data-i="subTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="subSub"></p>
     </div>
@@ -1072,7 +1038,7 @@
   <!-- ══════ MY ORDERS VIEW ══════ -->
   <div id="ordersView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
+      <div class="sub-tb"><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
       <h1 style="font-size:20px;" data-i="myOrders"></h1>
     </div>
     <div class="section">
@@ -1089,7 +1055,7 @@
   <!-- ══════ ABOUT + CONTACT (merged) ══════ -->
   <div id="aboutView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
+      <div class="sub-tb"><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
       <h1 style="font-size:20px;" data-i="aboutTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="aboutSub"></p>
     </div>
@@ -1222,7 +1188,7 @@
   <!-- ══════ ADMIN LOGIN ══════ -->
   <!-- ══════ PROFILE ══════ -->
   <div id="profileView" class="hidden">
-    <div class="hero sub-hero no-title"><div class="sub-tb"><span class="hamburger" onclick="openDrawer()">☰</span><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div></div>
+    <div class="hero sub-hero no-title"><div class="sub-tb"><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div></div>
     <div class="section">
       <div class="pf-card">
         <div class="pf-avwrap disabled" id="pfAvaWrap">
@@ -2052,16 +2018,6 @@
   function pickPromo(code){ const i=document.getElementById('promoCode'); if(i){ i.value=code; applyPromo(); } }
   function removePromo(){ appliedPromo=null; renderCart(); if(!document.getElementById('page2').classList.contains('hidden')){ renderSummary(); document.getElementById('barTotal2').textContent='₹'+cartTotalDisplay(); } }
 
-  // ═══════ DRAWER ═══════
-  function openDrawer(){
-    const n=(SESSION&&SESSION.name)||'';
-    const av=document.getElementById('drawerAva');
-    if(av) av.textContent = n ? n.trim().charAt(0).toUpperCase() : '?';
-    const nm=document.getElementById('drawerName');
-    if(nm) nm.textContent = n || 'Guest';
-    document.getElementById('drawerOverlay').classList.add('open');
-    document.getElementById('drawer').classList.add('open');
-  }
   // ── Admin drawer (left slide menu) ──
   const ADMIN_SECTIONS={orders:'🧾 Orders',users:'👥 Users',menu:'✏️ Menu',config:'⚙️ Setup',variants:'🍱 Variants',promos:'🎟️ Promos',stats:'📊 Stats'};
   function openAdminDrawer(){
@@ -2078,23 +2034,11 @@
     const t=document.getElementById('adminSectionTitle'); if(t) t.textContent=ADMIN_SECTIONS[tab]||'Admin';
     Object.keys(ADMIN_SECTIONS).forEach(k=>{ const el=document.getElementById('adr-'+k); if(el) el.classList.toggle('active', k===tab); });
   }
-  function closeDrawer(){ document.getElementById('drawerOverlay').classList.remove('open'); document.getElementById('drawer').classList.remove('open'); }
-  function drawerGo(where){
-    closeDrawer();
-    if(where==='logout'){ logout(); return; }
-    if(where==='cart'){ showCartPage(); }
-    else if(where==='past'){ showOrdersPage(); }
-    else if(where==='sub'){ showSubPage(); }
-    else if(where==='about'){ showAboutPage(); }
-    
-    else{ showLanding(); }
-  }
   function saveCart(){ try{ storeSet('fbt_cart', cart); storeSet('fbt_promo', appliedPromo||null); }catch(e){} }
   function updateCartBadge(){
     saveCart();
     const n=cart.reduce((s,it)=>s+it.qty,0);
     const b=document.getElementById('cartBadge'); if(b){ b.textContent=n; b.classList.toggle('zero',n===0); }
-    const d=document.getElementById('drawerCartBadge'); if(d){ d.textContent=n; d.style.display=n===0?'none':'flex'; }
     const bnb=document.getElementById('bnCartBadge'); if(bnb){ bnb.textContent=n; bnb.classList.toggle('zero',n===0); }
     const mb=document.getElementById('miniBar'); if(mb) mb.style.display=n===0?'none':'flex';
     const bt=document.getElementById('barTotal'); if(bt) bt.textContent='₹'+cartTotalDisplay();
@@ -3910,11 +3854,14 @@
     // jahan bhi ho). Drawer khula ho to kahin bhi LEFT swipe karne se
     // wapas band ho jaata hai.
     (function(){
+      // Customer side par drawer hai hi nahi — bottom nav sab kuch cover karta hai.
+      // Ye gesture sirf ADMIN panel ke drawer ke liye hai.
       let sx=0, sy=0, tracking=false, wasOpen=false;
       document.addEventListener('touchstart', function(e){
         if(e.touches.length!==1){ tracking=false; return; }
-        const d1=document.getElementById('drawer'), d2=document.getElementById('adminDrawer');
-        wasOpen = !!((d1 && d1.classList.contains('open')) || (d2 && d2.classList.contains('open')));
+        if(document.getElementById('adminPanel').classList.contains('hidden')){ tracking=false; return; }
+        const d=document.getElementById('adminDrawer');
+        wasOpen = !!(d && d.classList.contains('open'));
         const x=e.touches[0].clientX;
         if(!wasOpen && x>24){ tracking=false; return; }   // band drawer: sirf edge se khulega
         sx=x; sy=e.touches[0].clientY; tracking=true;
@@ -3924,16 +3871,8 @@
         const t=e.changedTouches[0]; if(!t) return;
         const dx=t.clientX-sx, dy=t.clientY-sy;
         if(Math.abs(dy)>60) return;
-        const d1=document.getElementById('drawer'), d2=document.getElementById('adminDrawer');
-        if(wasOpen){
-          if(dx>-60) return;   // clean left-swipe chahiye band karne ke liye
-          if(d1 && d1.classList.contains('open')) closeDrawer();
-          if(d2 && d2.classList.contains('open')) closeAdminDrawer();
-        } else {
-          if(dx<60) return;    // clean right-swipe chahiye kholne ke liye
-          const onAdmin=!document.getElementById('adminPanel').classList.contains('hidden');
-          if(onAdmin) openAdminDrawer(); else openDrawer();
-        }
+        if(wasOpen){ if(dx<-60) closeAdminDrawer(); }
+        else { if(dx>60) openAdminDrawer(); }
       }, {passive:true});
     })();
 
@@ -3946,8 +3885,8 @@
       if(sheet && !sheet.classList.contains('hidden')){ closeMealSheet(); history.pushState({fbt:true},''); return; }
       const om=document.getElementById('orderModal');
       if(om && !om.classList.contains('hidden')){ closeOrderModal(); history.pushState({fbt:true},''); return; }
-      const drawer=document.getElementById('drawer');
-      if(drawer && drawer.classList.contains('open')){ closeDrawer(); history.pushState({fbt:true},''); return; }
+      const adr=document.getElementById('adminDrawer');
+      if(adr && adr.classList.contains('open')){ closeAdminDrawer(); history.pushState({fbt:true},''); return; }
       const onHome=!document.getElementById('homeView').classList.contains('hidden');
       const onAuth=!document.getElementById('authPage').classList.contains('hidden')||!document.getElementById('pubView').classList.contains('hidden');
       const onAdmin=!document.getElementById('adminPanel').classList.contains('hidden');
