@@ -207,6 +207,8 @@
     .pub-close b { font-size:16px; font-weight:900; color:var(--ink); display:block; }
     .pub-close p { font-size:12px; color:var(--muted); margin-top:7px; line-height:1.6; }
     .pub-chip { display:inline-block; margin:14px 0 4px; background:var(--okbg); color:#166534; font-size:11.5px; font-weight:800; border-radius:20px; padding:8px 16px; line-height:1.4; }
+    .loc-refresh { background:none; border:none; font-family:inherit; color:var(--accent-dark);
+                   font-size:13px; font-weight:900; cursor:pointer; padding:2px 5px; line-height:1; }
     .pub-foot { margin-top:26px; padding-top:16px; border-top:1px solid var(--line);
                  text-align:center; font-size:11.5px; color:var(--muted); line-height:1.7; }
     .pub-sticky { position:fixed; bottom:0; left:0; right:0; background:var(--card); border-top:1.5px solid var(--line); padding:10px 14px; display:flex; gap:9px; align-items:center; max-width:480px; margin:0 auto; z-index:30; }
@@ -799,7 +801,7 @@
       <div class="pub-logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div>
       <p data-i="lpTagline"></p>
       <button class="pub-cta" onclick="goOrderNow()" data-i="pubCta"></button>
-      <div class="pub-sub">📍 Ahmedabad · Home &amp; Office delivery <span class="fssai-line" style="font-size:10px;"></span></div>
+      <div class="pub-sub">📍 <span class="loc-place">Ahmedabad</span><button class="loc-refresh hidden" onclick="refreshLocation(event)" title="Location refresh karein">↻</button> · Home &amp; Office delivery <span class="fssai-line" style="font-size:10px;"></span></div>
     </div>
     <div class="section" style="padding-bottom:92px;">
       <div class="pub-hook">
@@ -947,7 +949,7 @@
       <div class="lp-greet" id="lpGreet"></div>
       <div class="lp-logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div>
       <p class="lp-tag" data-i="lpTagline"></p>
-      <div class="lp-loc">📍 Ahmedabad · Home &amp; Office delivery <span class="fssai-line" style="font-size:10px;"></span></div>
+      <div class="lp-loc">📍 <span class="loc-place">Ahmedabad</span><button class="loc-refresh hidden" onclick="refreshLocation(event)" title="Location refresh karein">↻</button> · Home &amp; Office delivery <span class="fssai-line" style="font-size:10px;"></span></div>
     </div>
     <div class="section pad-sticky" style="padding-top:16px;">
       <div id="modeChip"></div>
@@ -1071,7 +1073,7 @@
       <h1 style="font-size:20px;" data-i="myOrders"></h1>
     </div>
     <div class="section">
-      <div class="section-title" style="display:flex;justify-content:flex-end;"><span class="refresh-link" onclick="const hd=document.getElementById('histDate');loadMyOrders(hd&&hd.value?hd.value:fmtYMD(dateWithOffset(0)));" data-i="refresh"></span></div>
+      <div class="section-title" style="display:flex;justify-content:flex-end;"><span class="refresh-link" onclick="const hd=document.getElementById('histDate');loadMyOrders(hd&&hd.value?hd.value:fmtYMD(dateWithOffset(0)), true);" data-i="refresh"></span></div>
       <div class="cust-label" data-i="viewPast"></div>
       <div class="hist-row" style="margin-bottom:14px;">
         <input type="date" id="histDate" onchange="viewHistory()" style="width:100%;background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:11px;padding:12px;">
@@ -1487,6 +1489,15 @@
   // → Authorized JavaScript origins me apna Netlify domain add karo → yahan paste karo.
   // ⚠️ Backend (apps-script) mein GOOGLE_CLIENT_ID bhi EXACTLY yehi hona chahiye.
   const GOOGLE_CLIENT_ID = '326762302482-d6c9l5k804u0oavcrrrqik7cadsvdneq.apps.googleusercontent.com';
+
+  // ── Location auto-detect (optional) ──
+  // Home page par "📍 Ahmedabad" ki jagah user ke aas-paas ka naam dikhata hai.
+  // Setup: Google Cloud Console (wahi project jisme OAuth hai) → APIs & Services
+  //   → Library → "Geocoding API" enable karo → Credentials → Create API key
+  //   → key ko restrict karo: HTTP referrers = himani12690.github.io/*
+  //     aur API restrictions = Geocoding API (warna koi bhi tumhari key use kar lega)
+  // Khaali chhod doge to kuch nahi tootega — "Ahmedabad" hi dikhta rahega.
+  const MAPS_API_KEY = '';
 
   // Dynamic config (admin editable, synced from backend)
   function defaultVariantsFE(){
@@ -2128,6 +2139,74 @@
   }
   function showProfilePage(){ showView('profileView'); renderProfile(); }
   function goMenuMeal(m){ showHomePage(); const av=mealsAvail(dateOffset); if(av[m]&&av[m].ok) selectMeal(m); }
+  // ═══════ LOCATION AUTO-DETECT (optional, non-blocking) ═══════
+  // Home page ki "📍 Ahmedabad" line ko user ke aas-paas ke naam se replace karta hai.
+  // Har cheez optional hai — permission deny, API key na ho, ya network fail ho jaye
+  // to line waisi hi rehti hai. Order flow par ISKA KOI ASAR NAHI.
+  const LOC_CACHE_KEY = 'fbt_locname';
+  const LOC_TTL_MS = 24 * 60 * 60 * 1000;  // 24 ghante — har user ka din me ~1 hi API call
+
+  function setLocLine(txt){
+    document.querySelectorAll('.loc-place').forEach(el => { el.textContent = txt; });
+  }
+
+  // Google ke result me se sabse kaam ka naam chuno:
+  // pehle building/society (premise), phir mohalla (neighborhood/sublocality)
+  function pickPlaceName(results){
+    if(!results || !results.length) return '';
+    const wanted = ['premise','point_of_interest','establishment','neighborhood',
+                    'sublocality_level_1','sublocality','locality'];
+    for(const type of wanted){
+      const hit = results.find(r => (r.types||[]).indexOf(type) >= 0);
+      if(hit){
+        const comp = (hit.address_components||[]).find(x => (x.types||[]).indexOf(type) >= 0);
+        if(comp && comp.long_name) return comp.long_name;
+      }
+    }
+    // kuch na mile to pehle result ka pehla hissa
+    const parts = String(results[0].formatted_address||'').split(',');
+    return parts[0] ? parts[0].trim() : '';
+  }
+
+  let __locBusy=false;
+  function refreshLocation(ev){
+    if(ev&&ev.stopPropagation) ev.stopPropagation();
+    if(__locBusy) return;                          // double-tap se do requests na jaayein
+    __locBusy=true;
+    document.querySelectorAll('.loc-refresh').forEach(b=>{ b.textContent='⏳'; });
+    detectLocation(true, ()=>{                     // cache ignore karke naya lo
+      __locBusy=false;
+      document.querySelectorAll('.loc-refresh').forEach(b=>{ b.textContent='↻'; });
+    });
+  }
+  function detectLocation(force, done){
+    if(!MAPS_API_KEY){ if(done) done(); return; }    // key nahi → chup-chaap skip
+    if(!navigator.geolocation){ if(done) done(); return; }
+
+    if(!force){
+      const cached = storeGet(LOC_CACHE_KEY);
+      if(cached && cached.name && (Date.now() - (cached.at||0) < LOC_TTL_MS)){
+        setLocLine(cached.name); if(done) done(); return;   // 24 ghante purana result chalega
+      }
+    }
+
+    navigator.geolocation.getCurrentPosition(pos => {
+      const { latitude:lat, longitude:lng } = pos.coords;
+      fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${MAPS_API_KEY}`)
+        .then(r => r.json())
+        .then(j => {
+          if(j.status !== 'OK') return;             // OVER_QUERY_LIMIT / denied → chhod do
+          const name = pickPlaceName(j.results);
+          if(!name) return;
+          setLocLine(name);
+          storeSet(LOC_CACHE_KEY, { name: name, at: Date.now() });
+        })
+        .catch(()=>{})                              // network fail → line waisi hi
+        .finally(()=>{ if(done) done(); });
+    }, ()=>{ if(done) done(); },                    // permission deny → spinner band karo
+       { enableHighAccuracy:true, timeout:8000, maximumAge: force?0:300000 });
+  }
+
   function renderHome(){
     const hv=document.getElementById('homeView'); if(!hv)return;
     renderModeChip();
@@ -2164,6 +2243,7 @@
   let addChecking=false;
   let orderedMap={};           // 'YYYY-MM-DD|lunch' -> { status }
   let orderedMapReady=false;   // load ho chuka ho to ADD par koi wait nahi
+  let upcomingOrders=null;     // aaj se aage ke saare orders — My Orders yahin se serve hota hai
   function showAlreadyOrderedCard(m, info){
     addChecking=false;
     const box=document.getElementById('mealPanel'); if(!box)return;
@@ -3100,7 +3180,7 @@
     return '';
   }
   function refreshOrderedMap(){
-    if(!isLoggedIn()){ orderedMap={}; orderedMapReady=false; return Promise.resolve(); }
+    if(!isLoggedIn()){ orderedMap={}; orderedMapReady=false; upcomingOrders=null; return Promise.resolve(); }
     return fetch(GOOGLE_SCRIPT_URL+'?action=myOrders&token='+encodeURIComponent(SESSION.token))
       .then(r=>r.json()).then(j=>{
         const map={};
@@ -3110,6 +3190,9 @@
             const m=mealOfOrder(o); if(!m) return;
             map[o.deliveryDate+'|'+m]={ status:o.status };
           });
+          // Poori list bhi rakho — My Orders page yahi se serve hoga,
+          // dobara API call karne ki zaroorat nahi (same endpoint tha)
+          upcomingOrders = j.orders || [];
         }
         orderedMap=map;
         orderedMapReady=true;
@@ -3191,17 +3274,41 @@
     updateCartBadge(); showToast('✏️ '+t('editLoaded'),'success'); showCartPage();
   }
   function dateOffsetFromStr(dstr){ for(let o=0;o<=2;o++){ if(dateWithOffsetStr(o)===dstr) return o; } return 0; }
-  function loadMyOrders(dateOpt){
+  function loadMyOrders(dateOpt, force){
     if(!isLoggedIn())return; const box=document.getElementById('myOrdersList'); if(!box)return;
+    const today=fmtYMD(dateWithOffset(0));
+    const isHist=!!(dateOpt && dateOpt < today);
+
+    // ── Cache se serve karo ──
+    // refreshOrderedMap() pehle hi "aaj se aage ke saare orders" le aata hai
+    // (bilkul yahi endpoint). Toh dobara call karne ki zaroorat nahi — bas
+    // us list ko date se filter kar do. Naya order/cancel hone par cache
+    // khud refresh hota hai, aur Refresh button force=true bhejta hai.
+    if(!force && upcomingOrders && !isHist){
+      const list = dateOpt ? upcomingOrders.filter(o=>o.deliveryDate===dateOpt) : upcomingOrders;
+      renderMyOrders(list, false);
+      return;
+    }
+
     box.innerHTML='<div class="mini-spin-wrap"><div class="mini-spin"></div><span>Loading…</span></div>';
     let url=GOOGLE_SCRIPT_URL+'?action=myOrders&token='+encodeURIComponent(SESSION.token); if(dateOpt)url+='&date='+encodeURIComponent(dateOpt);
-    fetch(url).then(r=>r.json()).then(j=>{ if(j.status==='success')renderMyOrders(j.orders||[], !!(dateOpt && dateOpt < fmtYMD(dateWithOffset(0)))); else if(j.status==='invalid_session')forceLogout(); else box.innerHTML='<div style="color:var(--muted);font-size:13px;">Could not load orders.</div>'; }).catch(()=>{ box.innerHTML='<div style="color:var(--muted);font-size:13px;">Network error.</div>'; });
+    fetch(url).then(r=>r.json()).then(j=>{
+      if(j.status==='success'){
+        renderMyOrders(j.orders||[], isHist);
+        // Poori list mili ho (bina date ke) to cache bhi taaza kar lo
+        if(!dateOpt) upcomingOrders = j.orders || [];
+      }
+      else if(j.status==='invalid_session')forceLogout();
+      else box.innerHTML='<div style="color:var(--muted);font-size:13px;">Could not load orders.</div>';
+    }).catch(()=>{ box.innerHTML='<div style="color:var(--muted);font-size:13px;">Network error.</div>'; });
   }
   function viewHistory(){ const d=document.getElementById('histDate').value; if(!d){ showToast(t('selectDate'),'warning'); return; } loadMyOrders(d); }
   async function cancelMyOrder(row,dd,createdIso){ if(!isLoggedIn()){ showAuth(); return; } if(!canCancel({deliveryDate:dd,createdIso:createdIso||''})){ showToast(t('cancelClosed'),'error'); return; }
     const ok = await showConfirm({ icon:'🗑️', title:t('cancelOrder').replace(/^✖\s*/,''), body:t('confirmCancel'), yes:t('cancelOrder').replace(/^✖\s*/,''), no:t('limitClose'), danger:true });
     if(!ok) return;
-    apiPost({action:'cancelOrder',token:SESSION.token,row:row}).then(j=>{ if(j.status==='success'){ showToast(t('orderCancelled'),'success'); loadMyOrders(); refreshOrderedMap(); renderMealPanel(); } else if(j.status==='invalid_session')forceLogout(); else showToast(j.message||'Could not cancel.','error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
+    apiPost({action:'cancelOrder',token:SESSION.token,row:row}).then(j=>{ if(j.status==='success'){ showToast(t('orderCancelled'),'success');
+          refreshOrderedMap().then(()=>{ const hd=document.getElementById('histDate'); loadMyOrders(hd&&hd.value?hd.value:fmtYMD(dateWithOffset(0))); renderMealPanel(); });
+        } else if(j.status==='invalid_session')forceLogout(); else showToast(j.message||'Could not cancel.','error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
 
   // ═══════ ADMIN ═══════
   let adminCreds=null, adminMenuWorking=null, adminPrevDay='monday', adminOrders=[], adminUsers=[], orderFilter='All';
@@ -3724,6 +3831,10 @@
   // ═══════ INIT ═══════
   (function init(){
     initTheme();
+    if(MAPS_API_KEY){   // key na ho to button dikhana bekaar hai
+      document.querySelectorAll('.loc-refresh').forEach(b=>b.classList.remove('hidden'));
+      detectLocation();   // optional — fail ho to kuch nahi tootega
+    }
     const cl=storeGet('fbt_lang'); if(cl&&T[cl])LANG=cl;
     const cm=storeGet('fbt_menu'); if(cm&&cm.monday)MENU=cm;
     const cc=storeGet('fbt_cfg'); if(cc&&cc.prices)CFG=cc;
