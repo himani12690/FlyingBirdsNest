@@ -3542,17 +3542,19 @@
   function loadOrders(){ if(!adminCreds)return; adminDateLabels(); fillSocFilter();
     const dateStr=fmtYMD(dateWithOffset(adminDateOffset));
     document.getElementById('ordersList').innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;">Loading...</div>';
-    apiPost({action:'orders', date:dateStr, user:adminCreds.user, pass:adminCreds.pass}).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminOrders=j.orders||[]; renderOrders(); renderKitchen(); }).catch(()=>showToast(t('errNetwork'),'error')); }
+    apiPost({action:'orders', date:dateStr, user:adminCreds.user, pass:adminCreds.pass}).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminOrders=j.orders||[]; fillSocFilter(); renderOrders(); renderKitchen(); }).catch(()=>showToast(t('errNetwork'),'error')); }
   function setOrderFilter(f){ orderFilter=f; const c=document.getElementById('filterChips').children; for(let i=0;i<c.length;i++)c[i].classList.toggle('sel',c[i].getAttribute('data-f')===f); renderOrders(); }
   let socFilter='All';
   function fillSocFilter(){
     const sel=document.getElementById('ordSocFilter'); if(!sel)return;
-    const socs=(CFG.societies||[]).map(s=>({v:s,l:'🏠 '+s}));
-    const comps=(CFG.companies||[]).map(c=>({v:c.name,l:'🏢 '+c.name}));
-    const opts=[{v:'All',l:'📍 All Locations'}].concat(socs,comps);
+    const counts={}; adminOrders.forEach(o=>{ const s=o.society||'?'; counts[s]=(counts[s]||0)+1; });
+    const cLabel=(name)=> counts[name] ? (' ('+counts[name]+')') : '';
+    const socs=(CFG.societies||[]).map(s=>({v:s,l:'🏠 '+s+cLabel(s)}));
+    const comps=(CFG.companies||[]).map(c=>({v:c.name,l:'🏢 '+c.name+cLabel(c.name)}));
+    const opts=[{v:'All',l:'📍 All Locations ('+adminOrders.length+')'}].concat(socs,comps);
     sel.innerHTML=opts.map(o=>`<option value="${o.v}" ${socFilter===o.v?'selected':''}>${o.l}</option>`).join('');
   }
-  function setSocFilter(v){ socFilter=v; renderOrders(); }
+  function setSocFilter(v){ socFilter=v; renderOrders(); renderKitchen(); }
   function renderBulkBar(){
     const bar=document.getElementById('bulkBar'); if(!bar)return;
     const pend=adminOrders.filter(o=>o.status==='Pending'&&socMatch(o));
@@ -3576,23 +3578,16 @@
     }).catch(()=>showToast(t('errNetwork'),'error'));
   }
   function renderKitchen(){
-    const active=adminOrders.filter(o=>o.status==='Pending'||o.status==='Preparing');
-    const sum={bQty:0,soc:{}}; ['lunch','dinner'].forEach(m=>sum[m]={qty:0,mini:0,full:0,sabzi:{},butter:0,extraRoti:0,dahi:0,extraSabzi:0});
-    active.forEach(o=>{ sum.bQty+=Number(o.breakfastQty)||0; const s2=o.society||'?'; sum.soc[s2]=(sum.soc[s2]||0)+1;
-      ['lunch','dinner'].forEach(m=>{ const q=Number(o[m+'Qty'])||0; if(!q)return; const s=sum[m]; s.qty+=q; const tstr=String(o[m+'Tiffin']||''); const mm=tstr.match(/(\d+)\s*Mini/i); const mf=tstr.match(/(\d+)\s*Full/i); if(mm)s.mini+=Number(mm[1]); if(mf)s.full+=Number(mf[1]); if(!mm&&!mf)s.full+=q; const sb=(o[m+'Sabzi']&&String(o[m+'Sabzi']).trim())||'Chef\'s choice'; s.sabzi[sb]=(s.sabzi[sb]||0)+q; if(/Butter/i.test(String(o[m+'Roti'])))s.butter+=q; const ad=String(o[m+'Addons']||''); let exSum=0; const exAll=ad.match(/\+?(\d+)\s*Extra Roti/gi); if(exAll)exAll.forEach(x=>{const n=x.match(/(\d+)/); if(n)exSum+=Number(n[1]);}); s.extraRoti+=exSum; if(/Dahi/.test(ad))s.dahi+=q; if(/Extra Sabzi/.test(ad))s.extraSabzi+=q; }); });
-    const sl=o=>Object.keys(o).map(k=>`<b>${o[k]}×</b> ${k}`).join(', ')||'—';
-    const soc=Object.keys(sum.soc).map(k=>`${k}: <b>${sum.soc[k]}</b>`).join(' · ')||'—';
-    const addonLine=(s)=>{ const a=[]; if(s.butter)a.push('Butter '+s.butter); if(s.extraRoti)a.push('+'+s.extraRoti+' Roti'); if(s.dahi)a.push('Dahi '+s.dahi); if(s.extraSabzi)a.push('Extra Sabzi '+s.extraSabzi); return a.length?a.join(' · '):'—'; };
+    const active=adminOrders.filter(o=>(o.status==='Pending'||o.status==='Preparing')&&socMatch(o));
+    let bQty=0,lQty=0,dQty=0;
+    active.forEach(o=>{ bQty+=Number(o.breakfastQty)||0; lQty+=Number(o.lunchQty)||0; dQty+=Number(o.dinnerQty)||0; });
     document.getElementById('kitchenSummary').innerHTML=`
-      <div class="ks-head">👨‍🍳 Kitchen Summary <span class="ks-sub">Pending + Preparing</span></div>
+      <div class="ks-head">👨‍🍳 Kitchen Summary <span class="ks-sub">Pending + Preparing${socFilter!=='All'?(' · '+socFilter):''}</span></div>
       <div class="ks-grid">
-        <div class="ks-cell"><div class="ks-n">${sum.bQty}</div><div class="ks-l">🌅 Breakfast</div></div>
-        <div class="ks-cell"><div class="ks-n">${sum.lunch.qty}</div><div class="ks-l">☀️ Lunch</div></div>
-        <div class="ks-cell"><div class="ks-n">${sum.dinner.qty}</div><div class="ks-l">🌙 Dinner</div></div>
-      </div>
-      ${sum.lunch.qty?`<div class="ks-row"><span class="ks-tag">☀️ Lunch</span> 🥗${sum.lunch.mini} Mini · 🍱${sum.lunch.full} Full<br><span class="ks-dim">${sl(sum.lunch.sabzi)}</span><br><span class="ks-dim">${addonLine(sum.lunch)}</span></div>`:''}
-      ${sum.dinner.qty?`<div class="ks-row"><span class="ks-tag">🌙 Dinner</span> 🥗${sum.dinner.mini} Mini · 🍱${sum.dinner.full} Full<br><span class="ks-dim">${sl(sum.dinner.sabzi)}</span><br><span class="ks-dim">${addonLine(sum.dinner)}</span></div>`:''}
-      <div class="ks-row"><span class="ks-tag">🏘️ Societies</span> ${soc}</div>`;
+        <div class="ks-cell"><div class="ks-n">${bQty}</div><div class="ks-l">🌅 Breakfast</div></div>
+        <div class="ks-cell"><div class="ks-n">${lQty}</div><div class="ks-l">☀️ Lunch</div></div>
+        <div class="ks-cell"><div class="ks-n">${dQty}</div><div class="ks-l">🌙 Dinner</div></div>
+      </div>`;
   }
   function socMatch(o){ return socFilter==='All' || o.society===socFilter; }
   function renderOrders(){
