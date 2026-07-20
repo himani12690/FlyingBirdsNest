@@ -935,7 +935,7 @@
       <div id="modeChip"></div>
     </div>
     <div class="section pad-sticky" style="padding-top:4px;">
-      <div style="font-size:14px;font-weight:900;margin:4px 2px 10px;color:var(--ink);" data-i="lpTodays"></div>
+      <div style="font-size:14px;font-weight:900;margin:4px 2px 10px;color:var(--ink);" data-i-html="lpTodays"></div>
       <div id="homeMealRow" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;"></div>
     </div>
     <div class="sticky-bar">
@@ -2178,11 +2178,7 @@
     }catch(e){ return ''; }
   }
   function homeMealPrice(m){
-    try{
-      const vs=variantsFor(m)||[];
-      const nums=vs.map(v=>Number(v.price)).filter(n=>n>0);
-      return nums.length?Math.min(...nums):(CFG.prices&&CFG.prices[m])||0;
-    }catch(e){ return 0; }
+    try{ return (CFG.prices&&Number(CFG.prices[m]))||0; }catch(e){ return 0; }
   }
   function renderTodayMeals(){
     const box=document.getElementById('homeMealRow'); if(!box)return;
