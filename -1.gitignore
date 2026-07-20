@@ -1,0 +1,14 @@
+# Node / Playwright
+node_modules/
+tests/report/
+tests/artifacts/
+test-results/
+playwright-report/
+
+# Backend — ISME SECRETS HAIN, kabhi commit mat karna
+apps-script*.js
+*.gs
+
+# OS
+.DS_Store
+Thumbs.db
