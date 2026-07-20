@@ -1242,6 +1242,42 @@
     </div>
   </div>
 
+  <!-- ══════ SUPER ADMIN (platform owner only — kabhi kisi vendor drawer mein link nahi hoga,
+       sirf ?superadmin=1 URL se khulta hai) ══════ -->
+  <div id="superLogin" class="hidden">
+    <div class="hero" style="padding:20px;position:relative;">
+      <h1 style="font-size:20px;">🛡️ Super Admin</h1>
+      <p style="font-size:12px;color:var(--muted);margin-top:4px;">Sirf platform owner ke liye — vendors manage karo</p>
+    </div>
+    <div class="section">
+      <div class="form-group"><label>Username</label><input type="text" id="superUser"></div>
+      <div class="form-group"><label>Password</label><input type="password" id="superPass"></div>
+      <button class="admin-btn" id="superLoginBtn" onclick="superLogin()">🔓 Login</button>
+    </div>
+  </div>
+
+  <div id="superPanel" class="hidden">
+    <div class="admin-topbar">
+      <div class="atb-title">🏢 Manage Vendors</div>
+      <span class="alert-toggle" onclick="superLogout()">🚪 Logout</span>
+    </div>
+    <div class="section" style="padding-bottom:120px;">
+      <div id="superVendorList"></div>
+
+      <div class="pf-box" style="margin-top:18px;">
+        <div style="font-size:14px;font-weight:900;margin-bottom:12px;">➕ Naya Vendor Add Karo</div>
+        <div class="form-group"><label>Business Naam</label><input type="text" id="svName" placeholder="e.g. Rasoi Express"></div>
+        <div class="form-group"><label>Vendor Slug (URL — sirf lowercase letters/numbers)</label><input type="text" id="svId" placeholder="rasoiexpress"></div>
+        <div class="form-group"><label>Google Sheet ID (unki apni Sheet — copy karke ID paste karo)</label><input type="text" id="svSheetId" placeholder="Sheet URL ka ID part"></div>
+        <div class="form-group"><label>Admin Username</label><input type="text" id="svAdminUser"></div>
+        <div class="form-group"><label>Admin Password</label><input type="text" id="svAdminPass"></div>
+        <div class="form-group"><label>Notify Email (order alerts)</label><input type="email" id="svEmail" placeholder="owner@example.com"></div>
+        <div class="form-group"><label>WhatsApp (optional)</label><input type="text" id="svWhatsapp" placeholder="9XXXXXXXXX"></div>
+        <button class="admin-btn" id="svSaveBtn" onclick="saveVendorFE()">✅ Vendor Create Karo</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ══════ ADMIN PANEL ══════ -->
   <div id="adminPanel" class="hidden">
     <div class="admin-topbar">
@@ -2079,7 +2115,7 @@
   function showView(id){
     closeAllPopups();                                       // page badle to koi popup upar chipka na rahe
     try{ if(['pubView','authPage','homeView','page1','cartView','ordersView','subView','aboutView','profileView','adminPanel'].indexOf(id)>=0) storeSet('fbt_view',id); }catch(e){}
-    ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel'].forEach(v=>document.getElementById(v).classList.toggle('hidden', v!==id)); window.scrollTo(0,0); updateBottomNav(id); }
+    ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel','superLogin','superPanel'].forEach(v=>document.getElementById(v).classList.toggle('hidden', v!==id)); window.scrollTo(0,0); updateBottomNav(id); }
   // Bottom nav shows only on the 4 main customer screens
   // subView / aboutView bhi nav dikhayenge — inka apna tab nahi hai isliye
   // koi item highlight nahi hoga, lekin navigation hamesha available rahegi.
@@ -3406,6 +3442,66 @@
       .then(j=>{ if(j.status==='success'){ adminPromos=j.promos||[]; renderPromoList(); showToast('🗑️ Deleted',''); } });
   }
 
+  // ═══════ SUPER ADMIN (platform owner) ═══════
+  // Bilkul alag creds/flow — kisi vendor ke admin se koi connection nahi.
+  let superCreds=null, superVendors=[];
+  function superLogin(){
+    const u=document.getElementById('superUser').value.trim(), p=document.getElementById('superPass').value;
+    if(!u||!p){ showToast('⚠️ Username/password daalo.','warning'); return; }
+    const btn=document.getElementById('superLoginBtn'); btn.textContent='⏳ ...'; btn.disabled=true;
+    apiPost({action:'listvendors', user:u, pass:p}).then(j=>{
+      btn.textContent='🔓 Login'; btn.disabled=false;
+      if(j.status!=='success'){ showToast('❌ Invalid username or password.','error'); return; }
+      superCreds={user:u,pass:p}; storeSet('fbt_super',superCreds);
+      superVendors=j.vendors||[]; showView('superPanel'); renderSuperVendorList();
+    }).catch(()=>{ btn.textContent='🔓 Login'; btn.disabled=false; showToast(t('errNetwork'),'error'); });
+  }
+  function superLogout(){ superCreds=null; storeDel('fbt_super'); showAdminLogin(); }
+  function restoreSuperAdmin(){
+    const a=storeGet('fbt_super'); if(!a||!a.user||!a.pass) return false;
+    superCreds=a;
+    apiPost({action:'listvendors', user:a.user, pass:a.pass}).then(j=>{
+      if(j.status!=='success'){ superCreds=null; storeDel('fbt_super'); return; }
+      superVendors=j.vendors||[]; showView('superPanel'); renderSuperVendorList();
+    }).catch(()=>{ showView('superPanel'); renderSuperVendorList(); });
+    return true;
+  }
+  function renderSuperVendorList(){
+    const box=document.getElementById('superVendorList'); if(!box)return;
+    if(!superVendors.length){ box.innerHTML='<p style="color:var(--muted);font-size:12px;">Koi vendor nahi.</p>'; return; }
+    box.innerHTML=superVendors.map(v=>`
+      <div class="pf-box" style="margin-bottom:10px;display:flex;align-items:center;gap:12px;">
+        <div style="width:42px;height:42px;border-radius:50%;background:var(--accent-soft);color:var(--accent-dark);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;flex:0 0 auto;">${(v.name||'?').charAt(0).toUpperCase()}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13.5px;font-weight:800;">${v.name}${v.isDefault?' <span style="font-size:10px;color:var(--muted);">(default)</span>':''}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:1px;">?v=${v.vendorId}</div>
+          <div style="font-size:10.5px;color:var(--muted);margin-top:2px;">${v.notifyEmail||'—'}</div>
+        </div>
+        <div style="font-size:9.5px;font-weight:900;padding:3px 8px;border-radius:9px;flex:0 0 auto;${v.status==='Active'?'background:var(--okbg);color:var(--ok);':'background:var(--line);color:var(--muted);'}">${v.status||'Active'}</div>
+      </div>`).join('');
+  }
+  function saveVendorFE(){
+    if(!superCreds)return;
+    const d={ action:'savevendor', user:superCreds.user, pass:superCreds.pass,
+      name:document.getElementById('svName').value.trim(),
+      vendorId:document.getElementById('svId').value.trim().toLowerCase(),
+      sheetId:document.getElementById('svSheetId').value.trim(),
+      adminUser:document.getElementById('svAdminUser').value.trim(),
+      adminPass:document.getElementById('svAdminPass').value.trim(),
+      notifyEmail:document.getElementById('svEmail').value.trim(),
+      whatsapp:document.getElementById('svWhatsapp').value.trim() };
+    if(!d.name||!d.vendorId||!d.sheetId||!d.adminUser||!d.adminPass){ showToast('⚠️ Naam, Slug, Sheet ID, Admin login zaroori hain.','warning'); return; }
+    const btn=document.getElementById('svSaveBtn'); btn.disabled=true; btn.textContent='⏳ Saving…';
+    apiPost(d).then(j=>{
+      btn.disabled=false; btn.textContent='✅ Vendor Create Karo';
+      if(j.status==='success'){
+        superVendors=j.vendors||superVendors; renderSuperVendorList();
+        ['svName','svId','svSheetId','svAdminUser','svAdminPass','svEmail','svWhatsapp'].forEach(id=>document.getElementById(id).value='');
+        showToast('✅ Vendor add ho gaya','success');
+      } else showToast('❌ '+(j.message||'Failed'),'error');
+    }).catch(()=>{ btn.disabled=false; btn.textContent='✅ Vendor Create Karo'; showToast(t('errNetwork'),'error'); });
+  }
+
   function adminLogin(){
     const u=document.getElementById('adminUser').value.trim(), p=document.getElementById('adminPass').value;
     if(!u||!p){ showToast('⚠️ Enter username and password.','warning'); return; }
@@ -3886,6 +3982,15 @@
 
   // ═══════ INIT ═══════
   (function init(){
+    // 🛡️ Super Admin — hidden entry, kisi bhi UI mein link nahi hai. Sirf
+    // ?superadmin=1 URL se access hota hai, normal customer/vendor flow bilkul skip.
+    try{
+      if(new URLSearchParams(location.search).get('superadmin')==='1'){
+        const __bl=document.getElementById('bootLoader'); if(__bl){ __bl.classList.add('gone'); setTimeout(()=>__bl.remove(),400); }
+        if(!restoreSuperAdmin()) showView('superLogin');
+        return;
+      }
+    }catch(e){}
     initTheme();
     if(MAPS_API_KEY){   // key na ho to button dikhana bekaar hai
       document.querySelectorAll('.loc-refresh').forEach(b=>b.classList.remove('hidden'));
