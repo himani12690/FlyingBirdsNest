@@ -428,9 +428,9 @@
     .abn-item .abn-ic { font-size:19px; line-height:1; }
     .abn-item span:last-child { font-size:9.5px; font-weight:800; color:var(--muted); }
     .abn-item.active span:last-child { color:var(--accent-dark); }
-    .admin-more-sheet { position:fixed; left:13px; right:13px; bottom:78px; max-width:404px; margin:0 auto;
+    .admin-more-sheet { width:calc(100% - 26px); max-width:404px; margin-bottom:92px;
                   background:var(--card); border:1px solid var(--line); border-radius:18px;
-                  box-shadow:0 -6px 24px rgba(0,0,0,0.16); z-index:151; padding:6px; }
+                  box-shadow:0 -6px 24px rgba(0,0,0,0.16); padding:6px; }
     .admin-more-sheet .more-item { display:flex; align-items:center; gap:14px; padding:13px 14px; font-size:14px; font-weight:700; color:var(--ink); cursor:pointer; border-radius:12px; }
     .admin-more-sheet .more-item:active { background:var(--accent-soft); }
     .admin-more-sheet .more-item.danger { color:var(--danger); }
@@ -1425,12 +1425,13 @@
     </div>
     <div class="footer">⚙️ Admin · Nest & Nosh</div>
 
-    <div class="sheet-overlay hidden" id="adminMoreOverlay" onclick="closeAdminMore()"></div>
-    <div class="admin-more-sheet hidden" id="adminMoreSheet">
-      <div class="more-item" id="adr-config" onclick="adminBnGo('config')"><span class="di-icon">⚙️</span><span>Setup</span></div>
-      <div class="more-item" id="adr-variants" onclick="adminBnGo('variants')"><span class="di-icon">🍱</span><span>Variants</span></div>
-      <div class="more-item" id="adr-promos" onclick="adminBnGo('promos')"><span class="di-icon">🎟️</span><span>Promos</span></div>
-      <div class="more-item danger" onclick="closeAdminMore();adminLogout()"><span class="di-icon">🚪</span><span>Logout</span></div>
+    <div class="sheet-overlay hidden" id="adminMoreOverlay" onclick="if(event.target===this)closeAdminMore()">
+      <div class="admin-more-sheet" id="adminMoreSheet">
+        <div class="more-item" id="adr-config" onclick="adminBnGo('config')"><span class="di-icon">⚙️</span><span>Setup</span></div>
+        <div class="more-item" id="adr-variants" onclick="adminBnGo('variants')"><span class="di-icon">🍱</span><span>Variants</span></div>
+        <div class="more-item" id="adr-promos" onclick="adminBnGo('promos')"><span class="di-icon">🎟️</span><span>Promos</span></div>
+        <div class="more-item danger" onclick="closeAdminMore();adminLogout()"><span class="di-icon">🚪</span><span>Logout</span></div>
+      </div>
     </div>
     <div class="admin-bottom-nav">
       <div class="abn-item" id="abn-orders" onclick="adminBnGo('orders')"><span class="abn-ic">🧾</span><span>Orders</span></div>
@@ -2091,14 +2092,8 @@
 
   // ── Admin drawer (left slide menu) ──
   const ADMIN_SECTIONS={orders:'🧾 Orders',users:'👥 Users',menu:'✏️ Menu',config:'⚙️ Setup',variants:'🍱 Variants',promos:'🎟️ Promos',stats:'📊 Stats'};
-  function openAdminMore(){
-    document.getElementById('adminMoreOverlay').classList.remove('hidden');
-    document.getElementById('adminMoreSheet').classList.remove('hidden');
-  }
-  function closeAdminMore(){
-    document.getElementById('adminMoreOverlay').classList.add('hidden');
-    document.getElementById('adminMoreSheet').classList.add('hidden');
-  }
+  function openAdminMore(){ document.getElementById('adminMoreOverlay').classList.remove('hidden'); }
+  function closeAdminMore(){ document.getElementById('adminMoreOverlay').classList.add('hidden'); }
   const ADMIN_BN_TABS=['orders','users','menu','stats'];   // ye 4 seedhe bottom nav mein; baaki "More" sheet mein
   function adminBnGo(tab){
     closeAdminMore();
@@ -4051,7 +4046,7 @@
       if(sheet && !sheet.classList.contains('hidden')){ closeMealSheet(); history.pushState({fbt:true},''); return; }
       const om=document.getElementById('orderModal');
       if(om && !om.classList.contains('hidden')){ closeOrderModal(); history.pushState({fbt:true},''); return; }
-      const adr=document.getElementById('adminMoreSheet');
+      const adr=document.getElementById('adminMoreOverlay');
       if(adr && !adr.classList.contains('hidden')){ closeAdminMore(); history.pushState({fbt:true},''); return; }
       const onHome=!document.getElementById('homeView').classList.contains('hidden');
       const onAuth=!document.getElementById('authPage').classList.contains('hidden')||!document.getElementById('pubView').classList.contains('hidden');
