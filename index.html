@@ -418,6 +418,22 @@
     .bn-item .bn-badge { position:absolute; top:3px; right:calc(50% - 17px); background:var(--danger); color:#fff; font-size:9px; font-weight:800; min-width:15px; height:15px; border-radius:8px; display:flex; align-items:center; justify-content:center; padding:0 3px; }
     .bn-badge.zero { display:none; }
     .sticky-bar.no-nav { bottom:14px; }   /* jin pages pe bottom-nav nahi hai (checkout) */
+    /* ── Admin bottom nav (left drawer ki jagah — customer app jaisa hi feel) ── */
+    .admin-bottom-nav { position:fixed; bottom:14px; left:50%; transform:translateX(-50%);
+                  width:calc(100% - 26px); max-width:430px; background:var(--card);
+                  border:1px solid var(--line); border-radius:26px; display:flex;
+                  padding:6px 5px; z-index:150; box-shadow:0 8px 26px rgba(0,0,0,0.16); }
+    .abn-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; padding:7px 3px 6px; cursor:pointer; border-radius:20px; transition:background .18s; }
+    .abn-item.active { background:var(--accent-soft); }
+    .abn-item .abn-ic { font-size:19px; line-height:1; }
+    .abn-item span:last-child { font-size:9.5px; font-weight:800; color:var(--muted); }
+    .abn-item.active span:last-child { color:var(--accent-dark); }
+    .admin-more-sheet { position:fixed; left:13px; right:13px; bottom:78px; max-width:404px; margin:0 auto;
+                  background:var(--card); border:1px solid var(--line); border-radius:18px;
+                  box-shadow:0 -6px 24px rgba(0,0,0,0.16); z-index:151; padding:6px; }
+    .admin-more-sheet .more-item { display:flex; align-items:center; gap:14px; padding:13px 14px; font-size:14px; font-weight:700; color:var(--ink); cursor:pointer; border-radius:12px; }
+    .admin-more-sheet .more-item:active { background:var(--accent-soft); }
+    .admin-more-sheet .more-item.danger { color:var(--danger); }
     .has-bottom-nav { padding-bottom:88px; }
     .ps-right { display:flex; align-items:center; gap:14px; }
     .cart-badge { position:relative; font-size:20px; cursor:pointer; }
@@ -638,7 +654,6 @@
     .admin-topbar .atb-title { flex:1; font-size:16px; font-weight:900; }
     .admin-topbar .alert-toggle { float:none; font-size:10.5px; font-weight:800; background:rgba(255,255,255,.18); color:#fff; border-radius:16px; padding:6px 12px; cursor:pointer; }
     /* Admin drawer active item */
-    #adminDrawer .drawer-item.active { background:var(--accent-soft); color:var(--accent-dark); font-weight:900; }
     #adminPanel .back-link, #adminPanel .alert-toggle { font-size:11px; }
     .date-chips { display:flex; gap:7px; margin-top:4px; }
     .dchip { flex:1; border:1.5px solid var(--line); background:var(--card); border-radius:11px; padding:8px 4px; text-align:center; cursor:pointer; font-family:inherit; }
@@ -747,27 +762,6 @@
 <div class="container">
 
   <!-- ══════ ADMIN DRAWER ══════ -->
-  <div class="drawer-overlay" id="adminDrawerOverlay" onclick="closeAdminDrawer()"></div>
-  <div class="drawer" id="adminDrawer">
-    <div class="drawer-head">
-      <div class="dh-logo">⚙️</div>
-      <div class="dh-name">Admin Panel</div>
-      <div class="dh-phone">Nest & Nosh</div>
-    </div>
-    <div class="drawer-menu">
-      <div class="drawer-item" id="adr-orders" onclick="adminDrawerGo('orders')"><span class="di-icon">🧾</span><span>Orders</span></div>
-      <div class="drawer-item" id="adr-users" onclick="adminDrawerGo('users')"><span class="di-icon">👥</span><span>Users</span></div>
-      <div class="drawer-item" id="adr-menu" onclick="adminDrawerGo('menu')"><span class="di-icon">✏️</span><span>Menu</span></div>
-      <div class="drawer-item" id="adr-config" onclick="adminDrawerGo('config')"><span class="di-icon">⚙️</span><span>Setup</span></div>
-      <div class="drawer-item" id="adr-variants" onclick="adminDrawerGo('variants')"><span class="di-icon">🍱</span><span>Variants</span></div>
-      <div class="drawer-item" id="adr-promos" onclick="adminDrawerGo('promos')"><span class="di-icon">🎟️</span><span>Promos</span></div>
-      <div class="drawer-item" id="adr-stats" onclick="adminDrawerGo('stats')"><span class="di-icon">📊</span><span>Stats</span></div>
-      <div class="drawer-item danger" onclick="closeAdminDrawer();adminLogout()"><span class="di-icon">🚪</span><span>Logout</span></div>
-    </div>
-    <div class="drawer-foot">Admin · Nest & Nosh</div>
-  </div>
-
-
   <!-- ══════ AUTH ══════ -->
   <!-- ══════ PUBLIC LANDING (before login) ══════ -->
   <div id="pubView" class="hidden">
@@ -1281,11 +1275,10 @@
   <!-- ══════ ADMIN PANEL ══════ -->
   <div id="adminPanel" class="hidden">
     <div class="admin-topbar">
-      <div class="ham" onclick="openAdminDrawer()"><span></span><span></span><span></span></div>
       <div class="atb-title" id="adminSectionTitle">🧾 Orders</div>
       <span class="alert-toggle" id="alertToggle" onclick="toggleAlerts()">🔕 OFF</span>
     </div>
-    <div class="section">
+    <div class="section" style="padding-bottom:110px;">
 
       <div id="aview-orders">
         <span class="refresh-link" onclick="loadOrders()">🔄 Refresh</span>
@@ -1431,6 +1424,21 @@
       </div>
     </div>
     <div class="footer">⚙️ Admin · Nest & Nosh</div>
+
+    <div class="sheet-overlay hidden" id="adminMoreOverlay" onclick="closeAdminMore()"></div>
+    <div class="admin-more-sheet hidden" id="adminMoreSheet">
+      <div class="more-item" id="adr-config" onclick="adminBnGo('config')"><span class="di-icon">⚙️</span><span>Setup</span></div>
+      <div class="more-item" id="adr-variants" onclick="adminBnGo('variants')"><span class="di-icon">🍱</span><span>Variants</span></div>
+      <div class="more-item" id="adr-promos" onclick="adminBnGo('promos')"><span class="di-icon">🎟️</span><span>Promos</span></div>
+      <div class="more-item danger" onclick="closeAdminMore();adminLogout()"><span class="di-icon">🚪</span><span>Logout</span></div>
+    </div>
+    <div class="admin-bottom-nav">
+      <div class="abn-item" id="abn-orders" onclick="adminBnGo('orders')"><span class="abn-ic">🧾</span><span>Orders</span></div>
+      <div class="abn-item" id="abn-users" onclick="adminBnGo('users')"><span class="abn-ic">👥</span><span>Users</span></div>
+      <div class="abn-item" id="abn-menu" onclick="adminBnGo('menu')"><span class="abn-ic">✏️</span><span>Menu</span></div>
+      <div class="abn-item" id="abn-stats" onclick="adminBnGo('stats')"><span class="abn-ic">📊</span><span>Stats</span></div>
+      <div class="abn-item" id="abn-more" onclick="openAdminMore()"><span class="abn-ic">⋯</span><span>More</span></div>
+    </div>
   </div>
 
 </div>
@@ -2083,18 +2091,20 @@
 
   // ── Admin drawer (left slide menu) ──
   const ADMIN_SECTIONS={orders:'🧾 Orders',users:'👥 Users',menu:'✏️ Menu',config:'⚙️ Setup',variants:'🍱 Variants',promos:'🎟️ Promos',stats:'📊 Stats'};
-  function openAdminDrawer(){
-    document.getElementById('adminDrawerOverlay').classList.add('open');
-    document.getElementById('adminDrawer').classList.add('open');
+  function openAdminMore(){
+    document.getElementById('adminMoreOverlay').classList.remove('hidden');
+    document.getElementById('adminMoreSheet').classList.remove('hidden');
   }
-  function closeAdminDrawer(){
-    document.getElementById('adminDrawerOverlay').classList.remove('open');
-    document.getElementById('adminDrawer').classList.remove('open');
+  function closeAdminMore(){
+    document.getElementById('adminMoreOverlay').classList.add('hidden');
+    document.getElementById('adminMoreSheet').classList.add('hidden');
   }
-  function adminDrawerGo(tab){
-    closeAdminDrawer();
+  const ADMIN_BN_TABS=['orders','users','menu','stats'];   // ye 4 seedhe bottom nav mein; baaki "More" sheet mein
+  function adminBnGo(tab){
+    closeAdminMore();
     adminTab(tab);
     const t=document.getElementById('adminSectionTitle'); if(t) t.textContent=ADMIN_SECTIONS[tab]||'Admin';
+    ADMIN_BN_TABS.forEach(k=>{ const el=document.getElementById('abn-'+k); if(el) el.classList.toggle('active', k===tab); });
     Object.keys(ADMIN_SECTIONS).forEach(k=>{ const el=document.getElementById('adr-'+k); if(el) el.classList.toggle('active', k===tab); });
   }
   function saveCart(){ try{ storeSet('fbt_cart', cart); storeSet('fbt_promo', appliedPromo||null); }catch(e){} }
@@ -3514,7 +3524,7 @@
       btn.textContent='🔓 Login'; btn.disabled=false;
       if(j.status!=='success'){ showToast('❌ Invalid username or password.','error'); return; }
       adminCreds={user:u,pass:p}; storeSet('fbt_admin',adminCreds);
-      showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminTab('orders'); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
+      showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminBnGo('orders'); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
     }).catch(()=>{ btn.textContent='🔓 Login'; btn.disabled=false; showToast(t('errNetwork'),'error'); });
   }
   // Refresh ke baad admin panel tabhi restore karo jab refresh se pehle admin panel hi khula tha.
@@ -3524,8 +3534,8 @@
     if(storeGet('fbt_view')!=='adminPanel') return false;   // customer/public page par tha => admin mat kholo
     apiPost({action:'stats', user:a.user, pass:a.pass}).then(j=>{
       if(j.status!=='success'){ adminCreds=null; storeDel('fbt_admin'); return; }
-      showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminTab('orders'); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
-    }).catch(()=>{ /* offline: creds set, panel dikha do */ showView('adminPanel'); initMenuEditor(); initConfigEditor(); adminTab('orders'); });
+      showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminBnGo('orders'); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
+    }).catch(()=>{ /* offline: creds set, panel dikha do */ showView('adminPanel'); initMenuEditor(); initConfigEditor(); adminBnGo('orders'); });
     return true;
   }
 
@@ -4029,32 +4039,8 @@
     }
     else showPublic();
 
-    // ═══════ EDGE SWIPE ↔ DRAWER (open/close) ═══════
-    // Left edge se RIGHT swipe → drawer khulta hai (customer ya admin,
-    // jahan bhi ho). Drawer khula ho to kahin bhi LEFT swipe karne se
-    // wapas band ho jaata hai.
-    (function(){
-      // Customer side par drawer hai hi nahi — bottom nav sab kuch cover karta hai.
-      // Ye gesture sirf ADMIN panel ke drawer ke liye hai.
-      let sx=0, sy=0, tracking=false, wasOpen=false;
-      document.addEventListener('touchstart', function(e){
-        if(e.touches.length!==1){ tracking=false; return; }
-        if(document.getElementById('adminPanel').classList.contains('hidden')){ tracking=false; return; }
-        const d=document.getElementById('adminDrawer');
-        wasOpen = !!(d && d.classList.contains('open'));
-        const x=e.touches[0].clientX;
-        if(!wasOpen && x>24){ tracking=false; return; }   // band drawer: sirf edge se khulega
-        sx=x; sy=e.touches[0].clientY; tracking=true;
-      }, {passive:true});
-      document.addEventListener('touchend', function(e){
-        if(!tracking) return; tracking=false;
-        const t=e.changedTouches[0]; if(!t) return;
-        const dx=t.clientX-sx, dy=t.clientY-sy;
-        if(Math.abs(dy)>60) return;
-        if(wasOpen){ if(dx<-60) closeAdminDrawer(); }
-        else { if(dx>60) openAdminDrawer(); }
-      }, {passive:true});
-    })();
+    // Admin drawer hata diya gaya (ab bottom nav hai) — is liye edge-swipe gesture
+    // ki zaroorat nahi rahi.
 
     // ═══════ MOBILE BACK BUTTON ═══════
     // Pehle koi khula popup/drawer band karo; phir sub-page se home; home pe hi
@@ -4065,8 +4051,8 @@
       if(sheet && !sheet.classList.contains('hidden')){ closeMealSheet(); history.pushState({fbt:true},''); return; }
       const om=document.getElementById('orderModal');
       if(om && !om.classList.contains('hidden')){ closeOrderModal(); history.pushState({fbt:true},''); return; }
-      const adr=document.getElementById('adminDrawer');
-      if(adr && adr.classList.contains('open')){ closeAdminDrawer(); history.pushState({fbt:true},''); return; }
+      const adr=document.getElementById('adminMoreSheet');
+      if(adr && !adr.classList.contains('hidden')){ closeAdminMore(); history.pushState({fbt:true},''); return; }
       const onHome=!document.getElementById('homeView').classList.contains('hidden');
       const onAuth=!document.getElementById('authPage').classList.contains('hidden')||!document.getElementById('pubView').classList.contains('hidden');
       const onAdmin=!document.getElementById('adminPanel').classList.contains('hidden');
