@@ -2323,10 +2323,30 @@
     });
   }
   // BigDataCloud ka free reverse-geocode — koi API key/card nahi chahiye.
-  // Sirf lat/lng → area ka naam. GPS khud browser deta hai (wo bhi free).
+  // Top-level `locality` India me aksar ward-level hota hai (Gota → "Sabarmati"),
+  // isliye localityInfo me se sabse specific entry uthate hain.
   function pickPlaceNameBDC(j){
     if(!j) return '';
-    return String(j.locality || j.city || j.principalSubdivision || '').trim();
+    const bad = /district|taluka|tehsil|division|zone|ward|municipal|corporation|region|state|india/i;
+    let best='';
+    try{
+      // informative[] me neighbourhood/suburb jaise granular naam aate hain
+      const inf=(j.localityInfo&&j.localityInfo.informative)||[];
+      for(let i=inf.length-1;i>=0;i--){
+        const n=String(inf[i].name||'').trim();
+        if(n && !bad.test(n) && n.length<28){ best=n; break; }
+      }
+      if(!best){
+        // warna administrative[] me sabse zyada adminLevel = sabse specific
+        const adm=((j.localityInfo&&j.localityInfo.administrative)||[]).slice()
+          .sort((a,b)=>(b.adminLevel||0)-(a.adminLevel||0));
+        for(const a of adm){
+          const n=String(a.name||'').trim();
+          if(n && !bad.test(n)){ best=n; break; }
+        }
+      }
+    }catch(e){}
+    return best || String(j.locality || j.city || '').trim();
   }
   function detectLocation(force, done){
     if(!navigator.geolocation){ if(done) done(); return; }
