@@ -2323,10 +2323,36 @@
   function closeAllPopups(){
     ['mealSheet','orderModal','limitModal','modeModal'].forEach(x=>{ const e=document.getElementById(x); if(e) e.classList.add('hidden'); });
   }
+  const ALL_VIEWS = ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel','superLogin','superPanel','qaView'];
+  let lastGoodView = null;
   function showView(id){
+    // Agar koi galat/unknown id aa jaye to SAB views hide ho jaate the → blank white page.
+    // Ab aisi id ko chup-chaap safe view pe redirect kar dete hain.
+    if(ALL_VIEWS.indexOf(id) < 0) id = isLoggedIn() ? 'homeView' : 'pubView';
     closeAllPopups();                                       // page badle to koi popup upar chipka na rahe
     try{ if(['pubView','authPage','homeView','page1','cartView','ordersView','subView','aboutView','profileView','adminPanel'].indexOf(id)>=0) storeSet('fbt_view',id); }catch(e){}
-    ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel','superLogin','superPanel','qaView'].forEach(v=>document.getElementById(v).classList.toggle('hidden', v!==id)); window.scrollTo(0,0); updateBottomNav(id); updateFabVisibility(id); }
+    ALL_VIEWS.forEach(v=>{ const el=document.getElementById(v); if(el) el.classList.toggle('hidden', v!==id); });
+    lastGoodView = id;
+    window.scrollTo(0,0); updateBottomNav(id); updateFabVisibility(id); }
+
+  // ═══════ BLANK-SCREEN GUARD ═══════
+  // App background se wapas aaye aur (kisi bhi wajah se) koi view visible na ho,
+  // to khaali safed page dikhta tha. Ye har baar check karke wapas la deta hai.
+  function noViewVisible(){
+    return !ALL_VIEWS.some(v=>{ const el=document.getElementById(v); return el && !el.classList.contains('hidden'); });
+  }
+  function recoverIfBlank(){
+    if(!noViewVisible()) return;
+    let target = lastGoodView;
+    if(!target){ try{ target = storeGet('fbt_view'); }catch(e){} }
+    if(!target || ALL_VIEWS.indexOf(target)<0) target = isLoggedIn() ? 'homeView' : 'pubView';
+    showView(target);
+    // Boot loader agar atka reh gaya ho to usko bhi hatao
+    const bl=document.getElementById('bootLoader'); if(bl){ bl.classList.add('gone'); setTimeout(()=>bl.remove(),300); }
+  }
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) setTimeout(recoverIfBlank, 80); });
+  window.addEventListener('pageshow', ()=> setTimeout(recoverIfBlank, 80));
+  window.addEventListener('focus', ()=> setTimeout(recoverIfBlank, 120));
   // Bottom nav shows only on the 4 main customer screens
   // subView / aboutView bhi nav dikhayenge — inka apna tab nahi hai isliye
   // koi item highlight nahi hoga, lekin navigation hamesha available rahegi.
@@ -4467,6 +4493,13 @@
 
   // ═══════ INIT ═══════
   (function init(){
+    // Boot failsafe: 7 sec me bhi kuch na dikhe (network atka, koi error) to
+    // loader hata ke safe screen dikha do — user ko khaali page na mile.
+    setTimeout(()=>{
+      const bl=document.getElementById('bootLoader');
+      if(bl && !bl.classList.contains('gone')){ bl.classList.add('gone'); setTimeout(()=>bl.remove(),300); }
+      recoverIfBlank();
+    }, 7000);
     initFab();
     initDemo();
     // 🛡️ Super Admin — hidden entry, kisi bhi UI mein link nahi hai. Sirf
