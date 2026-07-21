@@ -1425,9 +1425,9 @@
       <div class="pf-box" style="margin-top:18px;">
         <div style="font-size:14px;font-weight:900;margin-bottom:12px;">➕ Naya Vendor Add Karo</div>
         <div class="form-group"><label>Business Naam</label><input type="text" id="svName" placeholder="e.g. Rasoi Express"></div>
-        <div class="form-group"><label>Vendor Slug (URL — sirf lowercase letters/numbers)</label><input type="text" id="svId" placeholder="rasoiexpress"></div>
-        <div class="form-group"><label>Google Sheet ID (unki apni Sheet — copy karke ID paste karo)</label><input type="text" id="svSheetId" placeholder="Sheet URL ka ID part"></div>
-        <div class="form-group"><label>Apps Script URL (unka apna deployment — quota alag rakhne ke liye)</label><input type="text" id="svScriptUrl" placeholder="https://script.google.com/macros/s/.../exec"></div>
+        <div class="form-group"><label>Vendor Slug — sirf chhota naam, poora URL nahi</label><input type="text" id="svId" placeholder="shyamrasoi"><div style="font-size:10.5px;color:var(--muted);margin-top:4px;">Sirf lowercase letters/numbers. Link apne aap banega: <b>?v=shyamrasoi</b></div></div>
+        <div class="form-group"><label>Google Sheet ID</label><input type="text" id="svSheetId" placeholder="1T6tTy_I-C8VH8JKOsB8...."><div style="font-size:10.5px;color:var(--muted);margin-top:4px;">Sheet URL me <b>/d/</b> aur <b>/edit</b> ke beech ka lamba code. Nayi sheet: apni sheet → File → Make a copy</div></div>
+        <div class="form-group"><label>Apps Script URL — <span style="color:var(--ok);">optional, khaali chhod do</span></label><input type="text" id="svScriptUrl" placeholder="khaali = shared deployment (theek hai)"><div style="font-size:10.5px;color:var(--muted);margin-top:4px;">Sirf tab bharo jab is vendor ka apna alag deployment ho (25+ vendors ke baad zaroori hota hai).</div></div>
         <div class="form-group"><label>Admin Username</label><input type="text" id="svAdminUser"></div>
         <div class="form-group"><label>Admin Password</label><input type="text" id="svAdminPass"></div>
         <div class="form-group"><label>Notify Email (order alerts)</label><input type="email" id="svEmail" placeholder="owner@example.com"></div>
