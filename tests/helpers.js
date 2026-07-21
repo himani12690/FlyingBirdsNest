@@ -1,6 +1,6 @@
 const { CONFIG, MENU, PROMOS, SESSION } = require('./fixtures');
 
-const APP_URL = process.env.APP_URL || 'http://localhost:8080/index.html';
+const APP_URL = process.env.APP_URL || 'https://himani12690.github.io/';
 const SCRIPT_HOST = 'script.google.com';
 
 // ── Mutable server state — har test se pehle reset ──
