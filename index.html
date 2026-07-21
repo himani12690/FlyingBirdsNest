@@ -733,6 +733,41 @@
     .oc-orders-link { color:var(--accent-dark); font-weight:800; text-decoration:underline; cursor:pointer; }
     .cust-filter-bar { display:flex; justify-content:space-between; align-items:center; background:var(--accent-soft); border:1.5px dashed var(--accent); border-radius:12px; padding:10px 14px; margin-bottom:10px; font-size:12px; font-weight:800; color:var(--accent-dark); }
     .cust-filter-bar b { cursor:pointer; }
+    /* ── Discovery ── */
+    .dsc-loc { background:var(--card); padding:13px 14px; display:flex; align-items:center; gap:11px; border-bottom:1px solid var(--line); }
+    .dsc-loc .dl1 { font-size:10.5px; color:var(--muted); font-weight:700; }
+    .dsc-loc .dl2 { font-size:13.5px; font-weight:900; color:var(--ink); }
+    .dsc-areas { display:flex; gap:7px; overflow-x:auto; padding:11px 14px 4px; }
+    .dsc-areas::-webkit-scrollbar { display:none; }
+    .dsc-ac { flex:0 0 auto; padding:8px 14px; border-radius:17px; border:1.5px solid var(--line);
+      background:var(--card); font-size:12px; font-weight:800; color:var(--muted); white-space:nowrap; cursor:pointer; }
+    .dsc-ac.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .kit { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:13px;
+      display:flex; gap:12px; margin-bottom:11px; align-items:flex-start; cursor:pointer; }
+    .kit .klogo { width:52px; height:52px; border-radius:14px; flex:0 0 auto; display:flex; align-items:center;
+      justify-content:center; font-size:21px; color:#fff; font-weight:900; overflow:hidden; }
+    .kit .klogo img { width:100%; height:100%; object-fit:cover; }
+    .kit .kn { font-size:14px; font-weight:900; color:var(--ink); }
+    .kit .kt { font-size:11px; color:var(--muted); margin-top:2px; }
+    .kit .krow { display:flex; align-items:center; gap:9px; margin-top:7px; flex-wrap:wrap; }
+    .k-rate { display:inline-flex; align-items:center; gap:3px; background:var(--okbg); color:var(--ok);
+      font-size:11px; font-weight:900; padding:3px 8px; border-radius:9px; }
+    .k-rate.none { background:var(--line); color:var(--muted); }
+    .k-meta { font-size:10.5px; color:var(--muted); font-weight:700; }
+    /* ── Rating ── */
+    .rate-nudge { background:var(--warnbg); border:1.5px dashed var(--warn); border-radius:13px; padding:12px 14px; margin-bottom:12px; cursor:pointer; }
+    .rate-nudge .rn-t { font-size:13px; font-weight:900; color:var(--warn); }
+    .rate-nudge .rn-s { font-size:11.5px; color:var(--muted); margin-top:2px; line-height:1.45; }
+    .star-row { display:flex; gap:8px; justify-content:center; margin:14px 0 4px; }
+    .star-row span { font-size:34px; color:var(--line); cursor:pointer; line-height:1; transition:transform .12s; }
+    .star-row span.on { color:#f59e0b; }
+    .star-row span:active { transform:scale(1.2); }
+    .rate-done { font-size:12px; font-weight:800; color:var(--ok); text-align:center; padding:8px 0 2px; }
+    .rate-cmt { width:100%; border:1.5px solid var(--line); border-radius:11px; padding:10px 12px; font-size:12.5px;
+      background:var(--bg); color:var(--ink); font-family:inherit; margin-top:10px; }
+    .vd-btn { flex:1; padding:7px 4px; border:1.5px solid var(--line); background:var(--card); color:var(--ink);
+      border-radius:9px; font-size:10.5px; font-weight:800; cursor:pointer; font-family:inherit; }
+    .vd-btn.danger { border-color:var(--danger); color:var(--danger); }
     .hist-row { display:flex; gap:10px; align-items:center; margin-top:6px; }
     .hist-row input[type=date] { flex:1; padding:11px 12px; border:2px solid var(--line); border-radius:10px; font-size:14px; font-weight:600; }
 
@@ -903,6 +938,14 @@
   <!-- ══════ AUTH ══════ -->
   <!-- ══════ PUBLIC LANDING (before login) ══════ -->
   <div id="pubView" class="hidden">
+    <div class="hidden" id="dscEntry" style="margin:12px 14px 0;background:linear-gradient(135deg,var(--accent-soft),#f3edff);border:1.5px solid var(--accent);border-radius:15px;padding:13px 15px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="openDiscovery()">
+      <span style="font-size:26px;">🏘️</span>
+      <div style="flex:1;">
+        <div style="font-size:13.5px;font-weight:900;color:var(--accent-dark);">Apne area ki kitchens dekhein</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px;">Ahmedabad ke tiffin services · rating ke saath</div>
+      </div>
+      <span style="font-size:18px;color:var(--accent-dark);">›</span>
+    </div>
     <div class="pub-tb">
       <div class="pub-br"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div>
       <div class="pub-tr">
@@ -1165,6 +1208,22 @@
   </div>
 
   <!-- ══════ SUBSCRIPTION VIEW ══════ -->
+  <!-- ══════ DISCOVERY — apne area ki kitchens ══════ -->
+  <div id="dscView" class="hidden">
+    <div class="dsc-loc">
+      <span style="font-size:20px;">📍</span>
+      <div><div class="dl1">Delivering to</div><div class="dl2" id="dscCity">Ahmedabad</div></div>
+    </div>
+    <div class="section" style="padding:14px 14px 2px;">
+      <div style="font-size:15px;font-weight:900;">🏘️ Apna area chuniye</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:3px;">Us area ki saari tiffin services dikhengi</div>
+    </div>
+    <div class="dsc-areas" id="dscAreas"></div>
+    <div class="section" style="padding-top:12px;padding-bottom:90px;">
+      <div id="dscList"></div>
+    </div>
+  </div>
+
   <!-- ══════ AI HELP / Q&A ══════ -->
   <div id="qaView" class="hidden">
     <div class="qa-top">
@@ -1211,6 +1270,10 @@
       <div class="cust-label" data-i="viewPast"></div>
       <div class="hist-row" style="margin-bottom:14px;">
         <input type="date" id="histDate" onchange="viewHistory()" style="width:100%;background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:11px;padding:12px;">
+      </div>
+      <div class="rate-nudge hidden" id="rateNudge" onclick="openRateSheet()">
+        <div class="rn-t">⭐ Khana kaisa tha?</div>
+        <div class="rn-s">Aapka rating doosre customers ko sahi kitchen chunne me madad karega</div>
       </div>
       <div id="myOrdersList"></div>
     </div>
@@ -1438,6 +1501,10 @@
         <div class="form-group"><label>Admin Password</label><input type="text" id="svAdminPass"></div>
         <div class="form-group"><label>Notify Email (order alerts)</label><input type="email" id="svEmail" placeholder="owner@example.com"></div>
         <div class="form-group"><label>WhatsApp (optional)</label><input type="text" id="svWhatsapp" placeholder="9XXXXXXXXX"></div>
+        <div class="form-group"><label>📍 Areas — discovery me yahi dikhega</label><input type="text" id="svAreas" placeholder="Gota, Chandkheda, Vastrapur"><div style="font-size:10.5px;color:var(--muted);margin-top:4px;">Comma se alag karo. Customer isi se apne area ki kitchens dhoondega.</div></div>
+        <div class="form-group"><label>🍽️ Cuisine (optional)</label><input type="text" id="svCuisine" placeholder="Gujarati, Punjabi, Home-style"></div>
+        <div class="form-group"><label>🖼️ Logo URL (optional)</label><input type="text" id="svLogo" placeholder="https://.../logo.png"></div>
+        <div class="form-group"><label>💰 Min Order ₹ (optional)</label><input type="number" id="svMinOrder" placeholder="150"></div>
         <button class="admin-btn" id="svSaveBtn" onclick="saveVendorFE()">✅ Vendor Create Karo</button>
       </div>
     </div>
@@ -1681,6 +1748,19 @@
       </div>
     </div>
   </div>
+  <div class="sheet-overlay hidden" id="rateSheet" onclick="if(event.target===this)closeRateSheet()">
+    <div class="sheet" style="max-width:380px;">
+      <div style="padding:22px 20px 20px;text-align:center;">
+        <div style="font-size:15px;font-weight:900;" id="rateTitle"></div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:3px;">Tap karke stars chuniye</div>
+        <div class="star-row" id="starRow"></div>
+        <div style="font-size:11.5px;font-weight:800;color:var(--muted);" id="rateWord">&nbsp;</div>
+        <textarea class="rate-cmt" id="rateComment" rows="2" maxlength="200" placeholder="Kuch likhna chahein? (optional)"></textarea>
+        <button class="add-cart-btn" id="rateSendBtn" style="margin-top:12px;" onclick="sendRating()">Rating bhejein</button>
+        <button class="add-cart-btn" style="margin-top:8px;background:var(--card);color:var(--ink);border:1.5px solid var(--line);" onclick="closeRateSheet()">Abhi nahi</button>
+      </div>
+    </div>
+  </div>
   <div class="ai-fab hidden" id="aiFab" role="button" aria-label="Help" title="Help">
     <span class="orb-ring"></span><span class="orb-ring"></span>
     <span class="orb-core">💬</span>
@@ -1727,6 +1807,12 @@
   })();
   const IS_DEFAULT_VENDOR = (VENDOR_ID === DEFAULT_VENDOR_ID);
   const IS_DEMO = (VENDOR_ID === 'demo');   // ?v=demo → try-before-buy mode
+  // Platform ka main link (bina ?v=) → pehle discovery. Vendor ke apne link se
+  // aane wale customer ko seedha uski app milegi.
+  const HAS_VENDOR_PARAM = (function(){
+    try { return !!(new URLSearchParams(location.search).get('v') || '').trim(); }
+    catch(e){ return false; }
+  })();
   const OWNER_WHATSAPP = '917043491481';
   // Google Cloud Console → APIs & Services → Credentials → OAuth Client ID (Web application)
   // → Authorized JavaScript origins me apna Netlify domain add karo → yahan paste karo.
@@ -2329,7 +2415,7 @@
   function closeAllPopups(){
     ['mealSheet','orderModal','limitModal','modeModal'].forEach(x=>{ const e=document.getElementById(x); if(e) e.classList.add('hidden'); });
   }
-  const ALL_VIEWS = ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel','superLogin','superPanel','qaView'];
+  const ALL_VIEWS = ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel','superLogin','superPanel','qaView','dscView'];
   let lastGoodView = null;
   function showView(id){
     // Agar koi galat/unknown id aa jaye to SAB views hide ho jaate the → blank white page.
@@ -2711,7 +2797,7 @@
 
   // ═══════ HELP FAB — draggable, har page pe ═══════
   // Ye pages pe FAB nahi dikhega (login/admin customer-help ke liye nahi hain)
-  const FAB_HIDE_ON = ['profileView','qaView','authPage','pubView','adminLogin','adminPanel','superLogin','superPanel'];
+  const FAB_HIDE_ON = ['profileView','qaView','authPage','pubView','adminLogin','adminPanel','superLogin','superPanel','dscView'];
   function updateFabVisibility(viewId){
     const f=document.getElementById('aiFab'); if(!f)return;
     f.classList.toggle('hidden', FAB_HIDE_ON.indexOf(viewId)>=0);
@@ -3683,8 +3769,133 @@
   function alreadyOrdered(dateStr, meal){ return orderedMap[dateStr+'|'+meal]||null; }
 
   let myOrdersCache=[], myOrdersIsHist=false;
+  // ═══════ DISCOVERY — apne area ki kitchens ═══════
+  // Sirf tab dikhta hai jab URL me koi ?v= na ho (yaani platform ka main link).
+  // Vendor ke apne link se aane wale customer ko seedha uski app milti hai.
+  let dscAreas = [], dscArea = null;
+
+  function openDiscovery(){
+    showView('dscView');
+    if(!dscAreas.length) loadDscAreas(); else renderDscAreas();
+  }
+  function loadDscAreas(){
+    document.getElementById('dscAreas').innerHTML =
+      '<span class="dsc-ac">Loading…</span>';
+    fetch(GOOGLE_SCRIPT_URL+'?action=areas').then(r=>r.json()).then(j=>{
+      dscAreas = (j && j.areas) || [];
+      if(!dscArea && dscAreas.length) dscArea = dscAreas[0].area;
+      renderDscAreas(); loadDscVendors();
+    }).catch(()=>{
+      document.getElementById('dscAreas').innerHTML = '';
+      document.getElementById('dscList').innerHTML =
+        '<div style="text-align:center;color:var(--muted);font-size:12.5px;padding:26px 14px;">Areas load nahi ho paye. <span style="color:var(--accent-dark);font-weight:800;" onclick="loadDscAreas()">🔄 Retry</span></div>';
+    });
+  }
+  function renderDscAreas(){
+    const box = document.getElementById('dscAreas'); if(!box) return;
+    if(!dscAreas.length){ box.innerHTML=''; return; }
+    box.innerHTML = dscAreas.map(a=>
+      `<span class="dsc-ac ${a.area===dscArea?'on':''}" onclick="pickDscArea('${esc(a.area).replace(/'/g,"")}')">${esc(a.area)} <small style="opacity:.75;">${a.count}</small></span>`
+    ).join('');
+  }
+  function pickDscArea(a){ dscArea = a; renderDscAreas(); loadDscVendors(); }
+
+  function loadDscVendors(){
+    const box = document.getElementById('dscList'); if(!box) return;
+    box.innerHTML = '<div class="mini-spin-wrap"><div class="mini-spin"></div><span>Kitchens dhoondh rahe hain…</span></div>';
+    fetch(GOOGLE_SCRIPT_URL+'?action=discover&area='+encodeURIComponent(dscArea||'')).then(r=>r.json()).then(j=>{
+      renderDscList((j && j.vendors) || []);
+    }).catch(()=>{
+      box.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:12.5px;padding:26px 14px;">Load nahi ho paya. <span style="color:var(--accent-dark);font-weight:800;" onclick="loadDscVendors()">🔄 Retry</span></div>';
+    });
+  }
+  const DSC_COLORS = ['#6b7b5a','#e8974a','#4a90c9','#a35b8f','#0d9488','#c2410c'];
+  function renderDscList(list){
+    const box = document.getElementById('dscList'); if(!box) return;
+    if(!list.length){
+      box.innerHTML = `<div style="text-align:center;padding:34px 18px;">
+        <div style="font-size:42px;opacity:.5;">🍱</div>
+        <div style="font-size:14px;font-weight:800;margin-top:10px;">${esc(dscArea||'Is area')} me abhi koi kitchen nahi</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:5px;">Doosra area try kijiye</div></div>`;
+      return;
+    }
+    box.innerHTML = list.map((v,i)=>{
+      const rated = v.ratingCount > 0;
+      const logo = v.logo
+        ? `<img src="${esc(v.logo)}" alt="">`
+        : (v.name||'?').charAt(0).toUpperCase();
+      return `<div class="kit" onclick="goToVendor('${esc(v.vendorId).replace(/'/g,"")}')">
+        <div class="klogo" style="background:${DSC_COLORS[i % DSC_COLORS.length]};">${logo}</div>
+        <div style="flex:1;min-width:0;">
+          <div class="kn">${esc(v.name)}</div>
+          ${v.cuisine?`<div class="kt">${esc(v.cuisine)}</div>`:''}
+          <div class="krow">
+            ${rated ? `<span class="k-rate">⭐ ${v.rating}</span><span class="k-meta">${v.ratingCount} review${v.ratingCount>1?'s':''}</span>`
+                    : `<span class="k-rate none">🆕 Naya</span><span class="k-meta">abhi koi review nahi</span>`}
+            ${v.minOrder?`<span class="k-meta">· Min ₹${v.minOrder}</span>`:''}
+          </div>
+        </div>
+        <span style="font-size:20px;color:var(--muted);align-self:center;">›</span>
+      </div>`;
+    }).join('');
+  }
+  // Vendor chuna → uske apne link par bhej do (poora app reload, uski branding ke saath)
+  function goToVendor(id){
+    const u = new URL(location.href);
+    u.searchParams.set('v', id);
+    u.searchParams.delete('superadmin');
+    location.href = u.toString();
+  }
+
+  // ═══════ RATING ═══════
+  // Rating sirf DELIVERED order ke baad — backend bhi yahi check karta hai.
+  let myStars = 0, ratePicked = 0;
+  const RATE_WORDS = ['', '😞 Bahut kharab', '😕 Theek nahi', '🙂 Theek hai', '😊 Achha', '🤩 Bahut achha'];
+
+  function loadMyRating(){
+    if(!isLoggedIn()) return;
+    apiPost({action:'myrating', token:SESSION.token}).then(j=>{
+      if(j.status==='success'){ myStars = Number(j.stars) || 0; refreshRateNudge(); }
+    }).catch(()=>{});
+  }
+  function hasDelivered(){ return (myOrdersCache||[]).some(o=>o.status==='Delivered'); }
+  function refreshRateNudge(){
+    const n = document.getElementById('rateNudge'); if(!n) return;
+    // Nudge tabhi jab koi order deliver ho chuka ho aur rating abhi na di ho
+    n.classList.toggle('hidden', !(hasDelivered() && !myStars));
+  }
+  function openRateSheet(){
+    if(!hasDelivered()){ showToast('Rating delivery ke baad de sakte hain 🙏','warning'); return; }
+    ratePicked = myStars || 0;
+    document.getElementById('rateTitle').textContent = myStars ? 'Apna rating badlein' : 'Khana kaisa tha?';
+    document.getElementById('rateSendBtn').textContent = myStars ? 'Rating update karein' : 'Rating bhejein';
+    document.getElementById('rateComment').value = '';
+    drawStars();
+    document.getElementById('rateSheet').classList.remove('hidden');
+  }
+  function closeRateSheet(){ document.getElementById('rateSheet').classList.add('hidden'); }
+  function drawStars(){
+    const r = document.getElementById('starRow'); if(!r) return;
+    r.innerHTML = [1,2,3,4,5].map(i=>`<span class="${i<=ratePicked?'on':''}" onclick="pickStar(${i})">★</span>`).join('');
+    document.getElementById('rateWord').textContent = RATE_WORDS[ratePicked] || '\u00a0';
+  }
+  function pickStar(n){ ratePicked = n; drawStars(); }
+  function sendRating(){
+    if(!ratePicked){ showToast('Pehle stars chuniye ⭐','warning'); return; }
+    const btn = document.getElementById('rateSendBtn');
+    btn.disabled = true; btn.textContent = '⏳ Bhej rahe hain…';
+    apiPost({action:'ratevendor', token:SESSION.token, stars:ratePicked,
+             comment:document.getElementById('rateComment').value.trim()}).then(j=>{
+      btn.disabled = false;
+      if(j.status!=='success'){ btn.textContent='Rating bhejein'; showToast('❌ '+(j.message||'Nahi ho paya'),'error'); return; }
+      myStars = ratePicked; closeRateSheet(); refreshRateNudge(); renderMyOrders(myOrdersCache, myOrdersIsHist);
+      showToast('⭐ Shukriya! Aapka rating mil gaya','success');
+    }).catch(()=>{ btn.disabled=false; btn.textContent='Rating bhejein'; showToast(t('errNetwork'),'error'); });
+  }
+
   function renderMyOrders(list,isHist){
     myOrdersCache=list||[]; myOrdersIsHist=!!isHist;
+    setTimeout(refreshRateNudge,0);
     const box=document.getElementById('myOrdersList');
     if(!list.length){ box.innerHTML=`<div style="text-align:center;padding:34px 18px;">
       <div style="font-size:44px;opacity:.55;">🧾</div>
@@ -3693,11 +3904,18 @@
     </div>`; return; }
     const mealMini=o=>{ const p=[]; if(Number(o.breakfastQty))p.push('🌅'+o.breakfastQty); if(Number(o.lunchQty))p.push('☀️'+o.lunchQty); if(Number(o.dinnerQty))p.push('🌙'+o.dinnerQty); return p.join('  '); };
     const pillColor=s=>({Pending:'background:var(--warnbg);color:var(--warn);',Preparing:'background:var(--accent-soft);color:var(--accent-dark);',Delivered:'background:var(--okbg);color:var(--ok);',Cancelled:'background:var(--dangerbg);color:var(--danger);'}[s]||'background:var(--bg);color:var(--muted);');
+    const rateLine=o=>{
+      if(o.status!=='Delivered') return '';
+      return myStars
+        ? `<div style="font-size:11px;font-weight:800;color:var(--ok);margin-top:6px;">${'⭐'.repeat(myStars)} Aapne ${myStars} star diya</div>`
+        : `<div style="font-size:11px;font-weight:800;color:var(--warn);margin-top:6px;" onclick="event.stopPropagation();openRateSheet()">⭐ Rating dein →</div>`;
+    };
     box.innerHTML=list.map((o,i)=>`<div class="ord-row" onclick="openMyOrderModal(${i})">
       <div class="or-date">
         <div class="or-d1">📅 ${fmtDateStr(o.deliveryDate)}</div>
         <div class="or-d2">${mealMini(o)} · 💳 ${o.payment}</div>
         <span class="ord-pill" style="${pillColor(o.status)}">${STATUS_LABEL[o.status]||o.status}</span>${o.paymentStatus==='Paid'?(o.status==='Cancelled'?'<span class="ord-pill" style="background:var(--dangerbg);color:var(--danger);margin-left:4px;">REFUND DUE</span>':'<span class="ord-pill" style="background:var(--okbg);color:var(--ok);margin-left:4px;">PAID</span>'):''}
+        ${rateLine(o)}
       </div>
       <div class="or-right"><div class="or-total">${o.total}</div></div>
       <span class="or-chev">›</span>
@@ -3900,11 +4118,16 @@
         <div style="flex:1;min-width:0;">
           <div style="font-size:13.5px;font-weight:800;">${v.name}${v.isDefault?' <span style="font-size:10px;color:var(--muted);">(default)</span>':''}</div>
           <div style="font-size:11px;color:var(--muted);margin-top:1px;">?v=${v.vendorId}</div>
-          <div style="font-size:10.5px;color:var(--muted);margin-top:2px;">${v.notifyEmail||'—'}</div>
+          <div style="font-size:10.5px;color:var(--muted);margin-top:2px;">${v.ratingCount?('⭐ '+v.rating+' ('+v.ratingCount+')'):'⭐ abhi koi rating nahi'}${v.areas?(' · '+esc(v.areas)):''}</div>
           <div style="font-size:9.5px;margin-top:2px;${v.scriptUrl?'color:var(--ok);':'color:var(--warn);'}">${v.scriptUrl?'⚡ Apna deployment':'⚠️ Shared deployment (quota shared)'}</div>
         </div>
         <div style="font-size:9.5px;font-weight:900;padding:3px 8px;border-radius:9px;flex:0 0 auto;${v.status==='Active'?'background:var(--okbg);color:var(--ok);':'background:var(--line);color:var(--muted);'}">${v.status||'Active'}</div>
-      </div>`).join('');
+      </div>
+      ${v.isDefault?'':`<div style="display:flex;gap:6px;margin:-4px 0 10px;">
+        <button class="vd-btn" onclick="editVendorFE('${v.vendorId}')">✏️ Edit</button>
+        <button class="vd-btn" onclick="toggleVendorFE('${v.vendorId}')">${v.status==='Active'?'⏸️ Band karo':'▶️ Chalu karo'}</button>
+        <button class="vd-btn danger" onclick="deleteVendorFE('${v.vendorId}','${(v.name||'').replace(/'/g,'')}')">🗑️ Delete</button>
+      </div>`}`).join('');
   }
   // User aksar poora URL ya "?v=slug" paste kar deta hai — usme se sirf slug nikaalo
   // User aksar poora URL ya "?v=slug" paste kar deta hai — usme se sirf slug nikaalo.
@@ -3924,6 +4147,46 @@
     if(parts.length > 1) x = parts[1].split('/')[0].split('?')[0];
     return x;
   }
+  function editVendorFE(id){
+    const v=superVendors.find(x=>x.vendorId===id); if(!v)return;
+    document.getElementById('svName').value=v.name||'';
+    document.getElementById('svId').value=v.vendorId;
+    document.getElementById('svSheetId').value=v.sheetId||'';
+    document.getElementById('svScriptUrl').value=v.scriptUrl||'';
+    document.getElementById('svEmail').value=v.notifyEmail||'';
+    document.getElementById('svWhatsapp').value=v.whatsapp||'';
+    document.getElementById('svAdminUser').value=v.adminUser||'';
+    document.getElementById('svAreas').value=v.areas||'';
+    document.getElementById('svCuisine').value=v.cuisine||'';
+    document.getElementById('svLogo').value=v.logo||'';
+    document.getElementById('svMinOrder').value=v.minOrder||'';
+    document.getElementById('svAdminPass').value='';   // khaali = purana password rahega
+    document.getElementById('svSaveBtn').textContent='💾 Changes Save Karo';
+    document.getElementById('svName').scrollIntoView({behavior:'smooth',block:'center'});
+    showToast('✏️ Edit mode — password khaali chhodo to purana hi rahega','success');
+  }
+  function toggleVendorFE(id){
+    const v=superVendors.find(x=>x.vendorId===id); if(!v||!superCreds)return;
+    const next=(v.status==='Active')?'Inactive':'Active';
+    apiPost({action:'savevendor',user:superCreds.user,pass:superCreds.pass,
+      vendorId:v.vendorId,name:v.name,sheetId:v.sheetId,scriptUrl:v.scriptUrl||'',
+      adminUser:v.adminUser||'',adminPass:'',notifyEmail:v.notifyEmail||'',
+      whatsapp:v.whatsapp||'',areas:v.areas||'',cuisine:v.cuisine||'',logo:v.logo||'',
+      minOrder:v.minOrder||0,status:next}).then(j=>{
+      if(j.status!=='success'){ showToast('❌ '+(j.message||'Failed'),'error'); return; }
+      superVendors=j.vendors||superVendors; renderSuperVendorList();
+      showToast(next==='Active'?'▶️ Chalu ho gaya':'⏸️ Band kar diya','success');
+    }).catch(()=>showToast(t('errNetwork'),'error'));
+  }
+  function deleteVendorFE(id,name){
+    if(!superCreds)return;
+    if(!confirm('"'+name+'" ko list se hatana hai?\n\nUnka Google Sheet aur data waisa hi rahega — sirf app se link toot jayega.')) return;
+    apiPost({action:'deletevendor',user:superCreds.user,pass:superCreds.pass,vendorId:id}).then(j=>{
+      if(j.status!=='success'){ showToast('❌ '+(j.message||'Failed'),'error'); return; }
+      superVendors=j.vendors||[]; renderSuperVendorList();
+      showToast('🗑️ Vendor hata diya','success');
+    }).catch(()=>showToast(t('errNetwork'),'error'));
+  }
   function saveVendorFE(){
     if(!superCreds)return;
     const d={ action:'savevendor', user:superCreds.user, pass:superCreds.pass,
@@ -3934,15 +4197,20 @@
       adminPass:document.getElementById('svAdminPass').value.trim(),
       notifyEmail:document.getElementById('svEmail').value.trim(),
       whatsapp:document.getElementById('svWhatsapp').value.trim(),
-      scriptUrl:document.getElementById('svScriptUrl').value.trim() };
+      scriptUrl:document.getElementById('svScriptUrl').value.trim(),
+      areas:document.getElementById('svAreas').value.trim(),
+      cuisine:document.getElementById('svCuisine').value.trim(),
+      logo:document.getElementById('svLogo').value.trim(),
+      minOrder:document.getElementById('svMinOrder').value.trim() };
     if(!d.name||!d.vendorId||!d.sheetId||!d.adminUser||!d.adminPass){ showToast('⚠️ Naam, Slug, Sheet ID, Admin login zaroori hain.','warning'); return; }
     const btn=document.getElementById('svSaveBtn'); btn.disabled=true; btn.textContent='⏳ Saving…';
     apiPost(d).then(j=>{
       btn.disabled=false; btn.textContent='✅ Vendor Create Karo';
       if(j.status==='success'){
         superVendors=j.vendors||superVendors; renderSuperVendorList();
-        ['svName','svId','svSheetId','svScriptUrl','svAdminUser','svAdminPass','svEmail','svWhatsapp'].forEach(id=>document.getElementById(id).value='');
-        showToast('✅ Vendor add ho gaya','success');
+        ['svName','svId','svSheetId','svScriptUrl','svAdminUser','svAdminPass','svEmail','svWhatsapp','svAreas','svCuisine','svLogo','svMinOrder'].forEach(id=>document.getElementById(id).value='');
+        document.getElementById('svSaveBtn').textContent='✅ Vendor Create Karo';
+        showToast('✅ Save ho gaya','success');
       } else showToast('❌ '+(j.message||'Failed'),'error');
     }).catch(()=>{ btn.disabled=false; btn.textContent='✅ Vendor Create Karo'; showToast(t('errNetwork'),'error'); });
   }
@@ -4051,7 +4319,10 @@
     const box=document.getElementById('moneyBar'); if(!box)return;
     const live=list.filter(o=>o.status!=='Cancelled');
     let cod=0,upi=0;
-    live.forEach(o=>{ const amt=Number(o.total)||0; if(String(o.payment).toUpperCase()==='COD') cod+=amt; else upi+=amt; });
+    // Sheet me total "₹200" jaisi string hoti hai — Number() us par NaN deta hai,
+    // isliye pehle digits nikaalo warna money bar hamesha ₹0 dikhata hai.
+    const amtOf = v => { const n = parseInt(String(v == null ? '' : v).replace(/[^0-9.-]/g, ''), 10); return isNaN(n) ? 0 : n; };
+    live.forEach(o=>{ const amt=amtOf(o.total); if(String(o.payment).toUpperCase()==='COD') cod+=amt; else upi+=amt; });
     box.innerHTML=`
       <div class="mb-cell"><div class="mb-n">₹${cod}</div><div class="mb-l">💵 COD to collect</div></div>
       <div class="mb-cell"><div class="mb-n">₹${upi}</div><div class="mb-l">📲 UPI (paid)</div></div>
@@ -4600,6 +4871,8 @@
       const onAuth=!document.getElementById('authPage').classList.contains('hidden')||!document.getElementById('pubView').classList.contains('hidden');
       const onAdmin=!document.getElementById('adminPanel').classList.contains('hidden');
       // checkout/cart/orders/sub/about/adminPanel → back goes to home (or admin→app)
+      const onDsc=!document.getElementById('dscView').classList.contains('hidden');
+      if(onDsc){ showView(isLoggedIn()?'homeView':'pubView'); history.pushState({fbt:true},''); return; }
       if(onAdmin){
         // Back se admin panel poora band nahi hona chahiye (lagta hai logout ho gaya).
         // Sub-tab pe ho to pehle Orders pe wapas aao; Orders pe hi ho to tabhi bahar.
