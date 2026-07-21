@@ -1671,12 +1671,9 @@
 
   // ── Location auto-detect (optional) ──
   // Home page par "📍 Ahmedabad" ki jagah user ke aas-paas ka naam dikhata hai.
-  // Setup: Google Cloud Console (wahi project jisme OAuth hai) → APIs & Services
-  //   → Library → "Geocoding API" enable karo → Credentials → Create API key
-  //   → key ko restrict karo: HTTP referrers = himani12690.github.io/*
-  //     aur API restrictions = Geocoding API (warna koi bhi tumhari key use kar lega)
-  // Khaali chhod doge to kuch nahi tootega — "Ahmedabad" hi dikhta rahega.
-  const MAPS_API_KEY = '';
+  // Location detection ko ab koi API key nahi chahiye:
+  // GPS browser se free milta hai, aur lat/lng → area ka naam BigDataCloud
+  // ke free endpoint se aata hai. Koi Google Cloud billing/card nahi.
 
   // Dynamic config (admin editable, synced from backend)
   function defaultVariantsFE(){
@@ -2314,22 +2311,6 @@
 
   // Google ke result me se sabse kaam ka naam chuno:
   // pehle building/society (premise), phir mohalla (neighborhood/sublocality)
-  function pickPlaceName(results){
-    if(!results || !results.length) return '';
-    const wanted = ['premise','point_of_interest','establishment','neighborhood',
-                    'sublocality_level_1','sublocality','locality'];
-    for(const type of wanted){
-      const hit = results.find(r => (r.types||[]).indexOf(type) >= 0);
-      if(hit){
-        const comp = (hit.address_components||[]).find(x => (x.types||[]).indexOf(type) >= 0);
-        if(comp && comp.long_name) return comp.long_name;
-      }
-    }
-    // kuch na mile to pehle result ka pehla hissa
-    const parts = String(results[0].formatted_address||'').split(',');
-    return parts[0] ? parts[0].trim() : '';
-  }
-
   let __locBusy=false;
   function refreshLocation(ev){
     if(ev&&ev.stopPropagation) ev.stopPropagation();
@@ -2341,8 +2322,13 @@
       document.querySelectorAll('.loc-refresh').forEach(b=>{ b.textContent='↻'; });
     });
   }
+  // BigDataCloud ka free reverse-geocode — koi API key/card nahi chahiye.
+  // Sirf lat/lng → area ka naam. GPS khud browser deta hai (wo bhi free).
+  function pickPlaceNameBDC(j){
+    if(!j) return '';
+    return String(j.locality || j.city || j.principalSubdivision || '').trim();
+  }
   function detectLocation(force, done){
-    if(!MAPS_API_KEY){ if(done) done(); return; }    // key nahi → chup-chaap skip
     if(!navigator.geolocation){ if(done) done(); return; }
 
     if(!force){
@@ -2354,11 +2340,10 @@
 
     navigator.geolocation.getCurrentPosition(pos => {
       const { latitude:lat, longitude:lng } = pos.coords;
-      fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${MAPS_API_KEY}`)
+      fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`)
         .then(r => r.json())
         .then(j => {
-          if(j.status !== 'OK') return;             // OVER_QUERY_LIMIT / denied → chhod do
-          const name = pickPlaceName(j.results);
+          const name = pickPlaceNameBDC(j);
           if(!name) return;
           setLocLine(name);
           storeSet(LOC_CACHE_KEY, { name: name, at: Date.now() });
@@ -4369,10 +4354,9 @@
       }
     }catch(e){}
     initTheme();
-    if(MAPS_API_KEY){   // key na ho to button dikhana bekaar hai
-      document.querySelectorAll('.loc-refresh').forEach(b=>b.classList.remove('hidden'));
-      detectLocation();   // optional — fail ho to kuch nahi tootega
-    }
+    // Location ab bina kisi API key ke chalti hai (GPS free + BigDataCloud free)
+    document.querySelectorAll('.loc-refresh').forEach(b=>b.classList.remove('hidden'));
+    detectLocation();   // optional — fail ho to kuch nahi tootega
     const cl=storeGet('fbt_lang'); if(cl&&T[cl])LANG=cl;
     const cm=storeGet('fbt_menu'); if(cm&&cm.monday)MENU=cm;
     const savedAddr=storeGet('fbt_addr'); if(savedAddr&&(savedAddr.deliveryType==='home'||savedAddr.deliveryType==='office')) deliveryType=savedAddr.deliveryType;
