@@ -57,7 +57,13 @@
     /* Safety net — koi bhi input/select apna explicit color na de to bhi
        theme text color use ho (dark mode me black-on-black jaisa bug rokta hai) */
     input, select, textarea, button { color:var(--ink); font-family:inherit; }
-    body { font-family:'Segoe UI', system-ui, -apple-system, sans-serif; background:var(--body-bg); min-height:100vh; color:var(--ink); transition:background .2s; }
+    html { overflow-x:hidden; }
+    body { font-family:'Segoe UI', system-ui, -apple-system, sans-serif; background:var(--body-bg); min-height:100vh; color:var(--ink); transition:background .2s; overflow-x:hidden; max-width:100%; }
+    /* Page kabhi horizontally scroll na ho. Andar ke carousel (jaise Today's Meals)
+       apne aap me scroll karte hain — unka overflow page tak nahi jaana chahiye. */
+    .container { overflow-x:clip; }
+    #homeMealRow { max-width:100%; scrollbar-width:none; }
+    #homeMealRow::-webkit-scrollbar { display:none; }
     .container { max-width:480px; margin:0 auto; background:var(--bg); min-height:100vh; position:relative; }
 
     /* HERO — clean flat header with proper top-left back button */
