@@ -52,20 +52,57 @@ test.describe('Icons', () => {
 });
 
 test.describe('Layout', () => {
+  // Purana test har element ka bounding-rect dekhta tha — lekin "Today's Meals"
+  // (#homeMealRow) aur .about-slides jaise carousel jaanbujh ke viewport se chaude
+  // hote hain; wo apne container me scroll karte hain, page nahi tootta.
+  // Isliye ab wahi check hota hai jo user ko actually dikhta hai: page khud
+  // horizontally scroll to nahi ho raha?
   for (const theme of ['light', 'dark']) {
     test(`${theme}: koi horizontal overflow nahi`, async ({ page }) => {
       await openApp(page, { theme });
       for (const tab of SCREENS) {
         await goTo(page, tab);
-        const bad = await page.evaluate(() =>
-          [...document.querySelectorAll('.container *')]
-            .filter(e => {
-              const r = e.getBoundingClientRect();
-              return r.width > 0 && r.right > window.innerWidth + 2;
+        await page.waitForTimeout(300);
+
+        const result = await page.evaluate(() => {
+          const de = document.documentElement;
+
+          // 1) Asli sawaal: page horizontally scroll ho raha hai?
+          const overflow = Math.max(de.scrollWidth, document.body.scrollWidth)
+                           > de.clientWidth + 1;
+          if (!overflow) return { overflow: false, culprits: [] };
+
+          // 2) Ho raha hai to wajah dhoondo — scroll-container ke andar wale chhodo
+          const insideScroller = (el) => {
+            for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+              const ox = getComputedStyle(p).overflowX;
+              if (ox === 'auto' || ox === 'scroll' || ox === 'hidden' || ox === 'clip') return true;
+            }
+            return false;
+          };
+
+          const culprits = [...document.querySelectorAll('body *')]
+            .filter(el => {
+              const cs = getComputedStyle(el);
+              if (cs.display === 'none' || cs.visibility === 'hidden') return false;
+              if (insideScroller(el)) return false;
+              const r = el.getBoundingClientRect();
+              if (r.width === 0 || r.height === 0) return false;
+              return r.right > de.clientWidth + 1;
             })
             .slice(0, 5)
-            .map(e => e.tagName + '.' + (e.className || '').toString().slice(0, 40)));
-        expect(bad, `${tab} par overflow`).toEqual([]);
+            .map(el => `${el.tagName}#${el.id || '-'}.${(el.className || '').toString().slice(0, 40)}`
+                       + ` (right=${Math.round(el.getBoundingClientRect().right)})`);
+
+          return { overflow: true, culprits, scrollWidth: de.scrollWidth, clientWidth: de.clientWidth };
+        });
+
+        expect(
+          result.overflow,
+          `${tab} par page horizontally scroll ho raha hai `
+          + `(scrollWidth=${result.scrollWidth} vs clientWidth=${result.clientWidth}). `
+          + `Wajah: ${JSON.stringify(result.culprits)}`
+        ).toBe(false);
       }
     });
   }
