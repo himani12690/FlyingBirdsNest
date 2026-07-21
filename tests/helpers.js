@@ -346,7 +346,7 @@ async function openApp(page, opts = {}) {
        loggedIn: opts.loggedIn !== false,
        addr: opts.addr || { deliveryType:'home', society:'Vrindavan', flatNo:'D-706' } });
 
-  await page.goto(APP_URL);
+  await page.goto(opts.url || APP_URL);
   await page.waitForSelector('#bootLoader.gone', { timeout:15000 }).catch(() => {});
   return { errors, state };
 }
