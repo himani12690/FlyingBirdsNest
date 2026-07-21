@@ -135,8 +135,11 @@
       .ai-orb .orb-core,.ai-orb .orb-ring,.ai-orb .spark { animation:none; }
       .ai-orb .orb-ring { opacity:0.35; }
     }
-    /* Floating help button — bottom-right corner, sticky bar ke upar */
-    .ai-fab { position:fixed; right:18px; bottom:152px; width:52px; height:52px; z-index:130; cursor:pointer; }
+    /* Floating help button — draggable, har page pe */
+    .ai-fab { position:fixed; right:18px; bottom:152px; width:52px; height:52px; z-index:130;
+      cursor:grab; touch-action:none; user-select:none; -webkit-user-select:none; }
+    .ai-fab.dragging { cursor:grabbing; transition:none; }
+    .ai-fab.dragging .orb-core { transform:scale(1.12); box-shadow:0 8px 24px rgba(124,58,237,0.6); }
     .ai-fab .orb-core { position:absolute; inset:0; border-radius:50%;
       background:linear-gradient(135deg,#8b5cf6,#6366f1 45%,#22d3ee);
       background-size:200% 200%; animation:orbShift 4s ease infinite;
@@ -1036,11 +1039,6 @@
     <div class="section" style="padding-top:16px;padding-bottom:4px;">
       <div id="modeChip"></div>
     </div>
-    <div class="ai-fab" onclick="openQA()" role="button" aria-label="Help">
-      <span class="orb-ring"></span><span class="orb-ring"></span>
-      <span class="orb-core">💬</span>
-      <span class="spark s1">✨</span><span class="spark s2">✨</span>
-    </div>
     <div class="section pad-sticky" style="padding-top:4px;">
       <div style="font-size:14px;font-weight:900;margin:4px 2px 10px;color:var(--ink);" data-i-html="lpTodays"></div>
       <div id="homeMealRow" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;"></div>
@@ -1642,6 +1640,11 @@
         <button class="add-cart-btn" id="cfNo" style="margin-top:8px;background:var(--card);color:var(--ink);border:1.5px solid var(--line);" onclick="closeConfirm(false)"></button>
       </div>
     </div>
+  </div>
+  <div class="ai-fab hidden" id="aiFab" role="button" aria-label="Help" title="Help">
+    <span class="orb-ring"></span><span class="orb-ring"></span>
+    <span class="orb-core">💬</span>
+    <span class="spark s1">✨</span><span class="spark s2">✨</span>
   </div>
   <div class="toast" id="toast"></div>
 
@@ -2264,7 +2267,7 @@
   function showView(id){
     closeAllPopups();                                       // page badle to koi popup upar chipka na rahe
     try{ if(['pubView','authPage','homeView','page1','cartView','ordersView','subView','aboutView','profileView','adminPanel'].indexOf(id)>=0) storeSet('fbt_view',id); }catch(e){}
-    ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel','superLogin','superPanel','qaView'].forEach(v=>document.getElementById(v).classList.toggle('hidden', v!==id)); window.scrollTo(0,0); updateBottomNav(id); }
+    ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel','superLogin','superPanel','qaView'].forEach(v=>document.getElementById(v).classList.toggle('hidden', v!==id)); window.scrollTo(0,0); updateBottomNav(id); updateFabVisibility(id); }
   // Bottom nav shows only on the 4 main customer screens
   // subView / aboutView bhi nav dikhayenge — inka apna tab nahi hai isliye
   // koi item highlight nahi hoga, lekin navigation hamesha available rahegi.
@@ -2613,6 +2616,65 @@
       return out;
     }
     return null;   // koi rule match nahi — AI dekhega
+  }
+
+  // ═══════ HELP FAB — draggable, har page pe ═══════
+  // Ye pages pe FAB nahi dikhega (login/admin customer-help ke liye nahi hain)
+  const FAB_HIDE_ON = ['profileView','qaView','authPage','pubView','adminLogin','adminPanel','superLogin','superPanel'];
+  function updateFabVisibility(viewId){
+    const f=document.getElementById('aiFab'); if(!f)return;
+    f.classList.toggle('hidden', FAB_HIDE_ON.indexOf(viewId)>=0);
+  }
+  function clampFab(x,y){
+    const f=document.getElementById('aiFab'); const m=8;
+    const w=f.offsetWidth||52, h=f.offsetHeight||52;
+    return { x: Math.max(m, Math.min(x, window.innerWidth-w-m)),
+             y: Math.max(m, Math.min(y, window.innerHeight-h-m)) };
+  }
+  function applyFabPos(x,y){
+    const f=document.getElementById('aiFab'); if(!f)return;
+    const c=clampFab(x,y);
+    f.style.left=c.x+'px'; f.style.top=c.y+'px';
+    f.style.right='auto'; f.style.bottom='auto';
+  }
+  function initFab(){
+    const f=document.getElementById('aiFab'); if(!f)return;
+    // Pichli baar jahan chhoda tha, wahi se shuru karo
+    const saved=storeGet('fbt_fabpos');
+    if(saved && typeof saved.x==='number') applyFabPos(saved.x, saved.y);
+
+    let dragging=false, moved=false, sx=0, sy=0, ox=0, oy=0;
+    f.addEventListener('pointerdown', e=>{
+      dragging=true; moved=false;
+      const r=f.getBoundingClientRect();
+      sx=e.clientX; sy=e.clientY; ox=r.left; oy=r.top;
+      f.setPointerCapture(e.pointerId);
+      f.classList.add('dragging');
+    });
+    f.addEventListener('pointermove', e=>{
+      if(!dragging)return;
+      const dx=e.clientX-sx, dy=e.clientY-sy;
+      if(!moved && (Math.abs(dx)>6||Math.abs(dy)>6)) moved=true;   // 6px se kam = tap
+      if(moved) applyFabPos(ox+dx, oy+dy);
+    });
+    const end=e=>{
+      if(!dragging)return;
+      dragging=false; f.classList.remove('dragging');
+      try{ f.releasePointerCapture(e.pointerId); }catch(err){}
+      if(moved){
+        const r=f.getBoundingClientRect();
+        storeSet('fbt_fabpos',{x:r.left,y:r.top});
+      } else {
+        openQA();   // hila nahi = normal tap
+      }
+    };
+    f.addEventListener('pointerup', end);
+    f.addEventListener('pointercancel', end);
+    // Screen rotate / resize hone par bahar na nikal jaye
+    window.addEventListener('resize', ()=>{
+      const s=storeGet('fbt_fabpos');
+      if(s && typeof s.x==='number') applyFabPos(s.x, s.y);
+    });
   }
 
   function showSubPage(){ if(!isLoggedIn()){ showAuth(); return; } showView('subView'); loadSub(); }
@@ -4296,6 +4358,7 @@
 
   // ═══════ INIT ═══════
   (function init(){
+    initFab();
     // 🛡️ Super Admin — hidden entry, kisi bhi UI mein link nahi hai. Sirf
     // ?superadmin=1 URL se access hota hai, normal customer/vendor flow bilkul skip.
     try{
