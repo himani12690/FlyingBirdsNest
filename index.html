@@ -138,6 +138,15 @@
     /* Floating help button — draggable, har page pe */
     .ai-fab { position:fixed; right:18px; bottom:152px; width:52px; height:52px; z-index:130;
       cursor:grab; touch-action:none; user-select:none; -webkit-user-select:none; }
+    .demo-bar { position:fixed; top:0; left:0; right:0; z-index:9000; background:linear-gradient(90deg,#f59e0b,#f97316);
+      color:#fff; font-size:11.5px; font-weight:900; text-align:center; padding:6px 12px; letter-spacing:.2px; }
+    body.demo-on { padding-top:26px; }
+    body.demo-on .hd, body.demo-on .admin-topbar { top:26px; }
+    .demo-login { background:#fff7ed; border:1.5px dashed #f59e0b; border-radius:13px; padding:13px; margin-bottom:14px; }
+    .demo-login .dl-t { font-size:13px; font-weight:900; color:#b45309; }
+    .demo-login .dl-s { font-size:11.5px; color:var(--muted); margin:3px 0 10px; line-height:1.5; }
+    .demo-login button { width:100%; background:#f59e0b; color:#fff; border:none; padding:11px; border-radius:11px; font-size:13px; font-weight:900; cursor:pointer; font-family:inherit; }
+    .demo-creds { background:var(--accent-soft); border-radius:9px; padding:9px 11px; font-size:11.5px; font-weight:700; color:var(--accent-dark); margin-top:9px; line-height:1.7; }
     .ai-fab.dragging { cursor:grabbing; transition:none; }
     .ai-fab.dragging .orb-core { transform:scale(1.12); box-shadow:0 8px 24px rgba(124,58,237,0.6); }
     .ai-fab .orb-core { position:absolute; inset:0; border-radius:50%;
@@ -752,6 +761,20 @@
     .oc.oc-done { opacity:0.55; }
     .oc.oc-done .oc-quick { display:none; }
     /* One-tap status buttons — modal khole bina seedha next status */
+    .oc-meals { margin-top:9px; }
+    .ocm { display:flex; align-items:center; gap:8px; padding:7px 9px; border:1px solid var(--line); border-radius:10px; margin-bottom:6px; background:var(--card); }
+    .ocm .ocm-t { flex:1; min-width:0; font-size:11.5px; font-weight:700; color:var(--ink); }
+    .ocm .ocm-t small { display:block; font-size:10px; color:var(--muted); font-weight:600; margin-top:1px; }
+    .ocm-btn { border:none; border-radius:9px; padding:6px 11px; font-size:10.5px; font-weight:900; cursor:pointer; flex:0 0 auto; }
+    .ocm-btn.p { background:#e3f2fd; color:#0d47a1; }
+    .ocm-btn.d { background:var(--okbg); color:var(--ok); }
+    .ocm-bd { font-size:9.5px; font-weight:900; padding:3px 9px; border-radius:10px; flex:0 0 auto; }
+    .ocm-bd.w { background:var(--warnbg); color:var(--warn); }
+    .ocm-bd.b { background:#e3f2fd; color:#0d47a1; }
+    .ocm-bd.g { background:var(--okbg); color:var(--ok); }
+    .ocm-bd.r { background:var(--dangerbg); color:var(--danger); }
+    .ks-cell { cursor:pointer; }
+    .ks-cell.sel { outline:2px solid var(--accent); outline-offset:-2px; }
     .oc-quick { margin-top:10px; display:flex; gap:8px; }
     .oc-quick button { flex:1; border:none; border-radius:10px; padding:9px 6px; font-size:11.5px; font-weight:800; cursor:pointer; }
     .oc-quick .qk-prep { background:#e3f2fd; color:#0d47a1; }
@@ -923,6 +946,11 @@
       <span class="hero-badge" data-i="secureLogin"></span>
     </div>
     <div class="section">
+      <div class="demo-login hidden" id="demoCustHint">
+        <div class="dl-t">🎬 Demo Mode</div>
+        <div class="dl-s">Signup ki zaroorat nahi — ek tap me andar aa jaao aur poora customer experience dekho.</div>
+        <button onclick="demoLoginFE()" id="demoLoginBtn">🚀 Demo Customer se Login</button>
+      </div>
 
       <!-- SIGN IN -->
       <div id="authModeSignIn">
@@ -1361,6 +1389,11 @@
       <h1 style="font-size:20px;">🔐 Admin Login</h1>
     </div>
     <div class="section">
+      <div class="demo-login hidden" id="demoAdminHint">
+        <div class="dl-t">🎬 Demo Admin</div>
+        <div class="dl-s">Ye demo panel hai — koi bhi setting badlo, order status change karo, kuch nahi bigdega.</div>
+        <div class="demo-creds">Username: <b>demo</b><br>Password: <b>demo123</b></div>
+      </div>
       <div class="form-group"><label>Username</label><input type="text" id="adminUser"></div>
       <div class="form-group"><label>Password</label><input type="password" id="adminPass"></div>
       <button class="admin-btn" id="loginBtn" onclick="adminLogin()">🔓 Login</button>
@@ -1394,6 +1427,7 @@
         <div class="form-group"><label>Business Naam</label><input type="text" id="svName" placeholder="e.g. Rasoi Express"></div>
         <div class="form-group"><label>Vendor Slug (URL — sirf lowercase letters/numbers)</label><input type="text" id="svId" placeholder="rasoiexpress"></div>
         <div class="form-group"><label>Google Sheet ID (unki apni Sheet — copy karke ID paste karo)</label><input type="text" id="svSheetId" placeholder="Sheet URL ka ID part"></div>
+        <div class="form-group"><label>Apps Script URL (unka apna deployment — quota alag rakhne ke liye)</label><input type="text" id="svScriptUrl" placeholder="https://script.google.com/macros/s/.../exec"></div>
         <div class="form-group"><label>Admin Username</label><input type="text" id="svAdminUser"></div>
         <div class="form-group"><label>Admin Password</label><input type="text" id="svAdminPass"></div>
         <div class="form-group"><label>Notify Email (order alerts)</label><input type="email" id="svEmail" placeholder="owner@example.com"></div>
@@ -1646,11 +1680,34 @@
     <span class="orb-core">💬</span>
     <span class="spark s1">✨</span><span class="spark s2">✨</span>
   </div>
+  <div class="demo-bar hidden" id="demoBar">🎬 DEMO — jo chahe kar sakte ho, data roz raat ko reset ho jaata hai</div>
   <div class="toast" id="toast"></div>
 
 <script>
   // ═══════ CONFIG ═══════
-  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwdMXlSwNdqO84OspsUe2jAEeDL-hbwjwLcKL-fo6YObB6Se-dvTxX2iS5BMz2t8bV6/exec';
+  // ═══════ PER-VENDOR BACKEND ROUTING ═══════
+  // ⚠️ Scale ka asli fix: har vendor ka APNA Apps Script deployment.
+  // Apps Script ki quota (runtime, simultaneous executions) poore SCRIPT PROJECT ki
+  // hoti hai — sirf sheet alag karne se kuch nahi badalta. Alag deployment matlab
+  // alag quota bucket → ek vendor ka rush baaki vendors ko slow nahi karega.
+  //
+  // Routing ek static file se aati hai (vendors.json, index.html ke saath hi host karo):
+  //   { "nestandnosh": { "url": "https://script.google.com/.../exec" },
+  //     "maakaswaad":  { "url": "https://script.google.com/.../exec" } }
+  // Ye file GitHub Pages/Netlify se serve hoti hai — koi Apps Script call nahi lagti,
+  // isliye routing khud kabhi bottleneck nahi banegi.
+  const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwdMXlSwNdqO84OspsUe2jAEeDL-hbwjwLcKL-fo6YObB6Se-dvTxX2iS5BMz2t8bV6/exec';
+  let GOOGLE_SCRIPT_URL = DEFAULT_SCRIPT_URL;   // boot pe vendor ke hisaab se set hota hai
+  function loadVendorEndpoint(){
+    // Default vendor ke liye extra network call ki zaroorat nahi
+    if(IS_DEFAULT_VENDOR) return Promise.resolve();
+    const cached = storeGet('fbt_endpoint');
+    if(cached && cached.url && (Date.now()-(cached.at||0) < 86400000)){ GOOGLE_SCRIPT_URL=cached.url; return Promise.resolve(); }
+    return fetch('vendors.json',{cache:'no-cache'}).then(r=>r.json()).then(j=>{
+      const v=j&&j[VENDOR_ID];
+      if(v&&v.url){ GOOGLE_SCRIPT_URL=v.url; storeSet('fbt_endpoint',{url:v.url,at:Date.now()}); }
+    }).catch(()=>{ /* file na mile to default hi chalega */ });
+  }
   // ═══════ MULTI-TENANT: VENDOR ID ═══════
   // Har vendor ka apna link: yourapp.com/?v=vendorSlug — link na ho to DEFAULT_VENDOR chalta hai
   // (isliye maujooda users/links bilkul bhi nahi tootenge). Phase 2 mein backend isi vendorId se
@@ -1663,6 +1720,7 @@
     }catch(e){ return DEFAULT_VENDOR_ID; }
   })();
   const IS_DEFAULT_VENDOR = (VENDOR_ID === DEFAULT_VENDOR_ID);
+  const IS_DEMO = (VENDOR_ID === 'demo');   // ?v=demo → try-before-buy mode
   const OWNER_WHATSAPP = '917043491481';
   // Google Cloud Console → APIs & Services → Credentials → OAuth Client ID (Web application)
   // → Authorized JavaScript origins me apna Netlify domain add karo → yahan paste karo.
@@ -1671,9 +1729,11 @@
 
   // ── Location auto-detect (optional) ──
   // Home page par "📍 Ahmedabad" ki jagah user ke aas-paas ka naam dikhata hai.
-  // Location detection ko ab koi API key nahi chahiye:
-  // GPS browser se free milta hai, aur lat/lng → area ka naam BigDataCloud
-  // ke free endpoint se aata hai. Koi Google Cloud billing/card nahi.
+  // Location auto-detect (optional). Key khaali chhodoge to detection band —
+  // header me static "Ahmedabad" dikhega, kuch nahi tootega.
+  // Free alternatives (BigDataCloud etc.) India me neighbourhood-level galat dete hain,
+  // isliye sirf Google Geocoding — ya phir kuch nahi.
+  const MAPS_API_KEY = '';
 
   // Dynamic config (admin editable, synced from backend)
   function defaultVariantsFE(){
@@ -2238,8 +2298,10 @@
   const ADMIN_SECTIONS={orders:'🧾 Orders',users:'👥 Users',menu:'✏️ Menu',config:'⚙️ Setup',variants:'🍱 Variants',promos:'🎟️ Promos',stats:'📊 Stats'};
   function openAdminMore(){ document.getElementById('adminMoreOverlay').classList.remove('hidden'); }
   function closeAdminMore(){ document.getElementById('adminMoreOverlay').classList.add('hidden'); }
+  let adminCurTab='orders';
   const ADMIN_BN_TABS=['orders','users','menu','stats'];   // ye 4 seedhe bottom nav mein; baaki "More" sheet mein
   function adminBnGo(tab){
+    adminCurTab=tab;
     closeAdminMore();
     adminTab(tab);
     const t=document.getElementById('adminSectionTitle'); if(t) t.textContent=ADMIN_SECTIONS[tab]||'Admin';
@@ -2322,55 +2384,44 @@
       document.querySelectorAll('.loc-refresh').forEach(b=>{ b.textContent='↻'; });
     });
   }
-  // BigDataCloud ka free reverse-geocode — koi API key/card nahi chahiye.
-  // Top-level `locality` India me aksar ward-level hota hai (Gota → "Sabarmati"),
-  // isliye localityInfo me se sabse specific entry uthate hain.
-  function pickPlaceNameBDC(j){
-    if(!j) return '';
-    const bad = /district|taluka|tehsil|division|zone|ward|municipal|corporation|region|state|india/i;
-    let best='';
-    try{
-      // informative[] me neighbourhood/suburb jaise granular naam aate hain
-      const inf=(j.localityInfo&&j.localityInfo.informative)||[];
-      for(let i=inf.length-1;i>=0;i--){
-        const n=String(inf[i].name||'').trim();
-        if(n && !bad.test(n) && n.length<28){ best=n; break; }
+  function pickPlaceName(results){
+    if(!results || !results.length) return '';
+    const wanted = ['neighborhood','sublocality_level_1','sublocality','locality'];
+    for(const type of wanted){
+      const hit = results.find(r => (r.types||[]).indexOf(type) >= 0);
+      if(hit){
+        const comp = (hit.address_components||[]).find(x => (x.types||[]).indexOf(type) >= 0);
+        if(comp && comp.long_name) return comp.long_name;
       }
-      if(!best){
-        // warna administrative[] me sabse zyada adminLevel = sabse specific
-        const adm=((j.localityInfo&&j.localityInfo.administrative)||[]).slice()
-          .sort((a,b)=>(b.adminLevel||0)-(a.adminLevel||0));
-        for(const a of adm){
-          const n=String(a.name||'').trim();
-          if(n && !bad.test(n)){ best=n; break; }
-        }
-      }
-    }catch(e){}
-    return best || String(j.locality || j.city || '').trim();
+    }
+    const parts = String(results[0].formatted_address||'').split(',');
+    return parts[0] ? parts[0].trim() : '';
   }
   function detectLocation(force, done){
+    if(!MAPS_API_KEY){ if(done) done(); return; }     // key nahi → detection off
     if(!navigator.geolocation){ if(done) done(); return; }
 
     if(!force){
       const cached = storeGet(LOC_CACHE_KEY);
       if(cached && cached.name && (Date.now() - (cached.at||0) < LOC_TTL_MS)){
-        setLocLine(cached.name); if(done) done(); return;   // 24 ghante purana result chalega
+        setLocLine(cached.name); if(done) done(); return;   // 24 ghante purana result
       }
     }
 
     navigator.geolocation.getCurrentPosition(pos => {
       const { latitude:lat, longitude:lng } = pos.coords;
-      fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`)
+      fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&result_type=neighborhood|sublocality|locality&key=${MAPS_API_KEY}`)
         .then(r => r.json())
         .then(j => {
-          const name = pickPlaceNameBDC(j);
+          if(j.status !== 'OK') return;
+          const name = pickPlaceName(j.results);
           if(!name) return;
           setLocLine(name);
           storeSet(LOC_CACHE_KEY, { name: name, at: Date.now() });
         })
-        .catch(()=>{})                              // network fail → line waisi hi
+        .catch(()=>{})
         .finally(()=>{ if(done) done(); });
-    }, ()=>{ if(done) done(); },                    // permission deny → spinner band karo
+    }, ()=>{ if(done) done(); },
        { enableHighAccuracy:true, timeout:8000, maximumAge: force?0:300000 });
   }
 
@@ -2642,6 +2693,25 @@
     f.style.left=c.x+'px'; f.style.top=c.y+'px';
     f.style.right='auto'; f.style.bottom='auto';
   }
+  // ═══════ DEMO MODE ═══════
+  function initDemo(){
+    if(!IS_DEMO) return;
+    document.body.classList.add('demo-on');
+    const b=document.getElementById('demoBar'); if(b) b.classList.remove('hidden');
+    ['demoCustHint','demoAdminHint'].forEach(id=>{ const e=document.getElementById(id); if(e) e.classList.remove('hidden'); });
+  }
+  function demoLoginFE(){
+    const btn=document.getElementById('demoLoginBtn'); if(btn){ btn.disabled=true; btn.textContent='⏳ Andar le ja rahe hain…'; }
+    apiPost({action:'demologin'}).then(j=>{
+      if(btn){ btn.disabled=false; btn.textContent='🚀 Demo Customer se Login'; }
+      if(j.status!=='success'){ showToast('❌ '+(j.message||'Demo login fail'),'error'); return; }
+      SESSION={token:j.token,name:j.name,phone:j.phone};
+      storeSet('fbt_session',SESSION);
+      enterApp();
+      showToast('🎬 Demo me swagat hai!','success');
+    }).catch(()=>{ if(btn){ btn.disabled=false; btn.textContent='🚀 Demo Customer se Login'; } showToast(t('errNetwork'),'error'); });
+  }
+
   function initFab(){
     const f=document.getElementById('aiFab'); if(!f)return;
     // Pichli baar jahan chhoda tha, wahi se shuru karo
@@ -3796,6 +3866,7 @@
           <div style="font-size:13.5px;font-weight:800;">${v.name}${v.isDefault?' <span style="font-size:10px;color:var(--muted);">(default)</span>':''}</div>
           <div style="font-size:11px;color:var(--muted);margin-top:1px;">?v=${v.vendorId}</div>
           <div style="font-size:10.5px;color:var(--muted);margin-top:2px;">${v.notifyEmail||'—'}</div>
+          <div style="font-size:9.5px;margin-top:2px;${v.scriptUrl?'color:var(--ok);':'color:var(--warn);'}">${v.scriptUrl?'⚡ Apna deployment':'⚠️ Shared deployment (quota shared)'}</div>
         </div>
         <div style="font-size:9.5px;font-weight:900;padding:3px 8px;border-radius:9px;flex:0 0 auto;${v.status==='Active'?'background:var(--okbg);color:var(--ok);':'background:var(--line);color:var(--muted);'}">${v.status||'Active'}</div>
       </div>`).join('');
@@ -3809,14 +3880,15 @@
       adminUser:document.getElementById('svAdminUser').value.trim(),
       adminPass:document.getElementById('svAdminPass').value.trim(),
       notifyEmail:document.getElementById('svEmail').value.trim(),
-      whatsapp:document.getElementById('svWhatsapp').value.trim() };
+      whatsapp:document.getElementById('svWhatsapp').value.trim(),
+      scriptUrl:document.getElementById('svScriptUrl').value.trim() };
     if(!d.name||!d.vendorId||!d.sheetId||!d.adminUser||!d.adminPass){ showToast('⚠️ Naam, Slug, Sheet ID, Admin login zaroori hain.','warning'); return; }
     const btn=document.getElementById('svSaveBtn'); btn.disabled=true; btn.textContent='⏳ Saving…';
     apiPost(d).then(j=>{
       btn.disabled=false; btn.textContent='✅ Vendor Create Karo';
       if(j.status==='success'){
         superVendors=j.vendors||superVendors; renderSuperVendorList();
-        ['svName','svId','svSheetId','svAdminUser','svAdminPass','svEmail','svWhatsapp'].forEach(id=>document.getElementById(id).value='');
+        ['svName','svId','svSheetId','svScriptUrl','svAdminUser','svAdminPass','svEmail','svWhatsapp'].forEach(id=>document.getElementById(id).value='');
         showToast('✅ Vendor add ho gaya','success');
       } else showToast('❌ '+(j.message||'Failed'),'error');
     }).catch(()=>{ btn.disabled=false; btn.textContent='✅ Vendor Create Karo'; showToast(t('errNetwork'),'error'); });
@@ -3909,11 +3981,11 @@
     const sabziLine=(obj)=>Object.keys(obj).map(k=>`<b>${obj[k]}×</b> ${esc(k)}`).join(', ')||'—';
     const hasDetail=lQty||dQty;
     document.getElementById('kitchenSummary').innerHTML=`
-      <div class="ks-head">👨‍🍳 Kitchen Summary <span class="ks-sub">Pending + Preparing${socFilter!=='All'?(' · '+socFilter):''}</span></div>
+      <div class="ks-head">👨‍🍳 Kitchen Summary <span class="ks-sub">Pending + Preparing${socFilter!=='All'?(' · '+socFilter):''}${mealFilter!=='All'?(' · '+((MEAL_META[mealFilter]||{}).title||mealFilter)+' only'):''}</span></div>
       <div class="ks-grid">
-        <div class="ks-cell"><div class="ks-n">${bQty}</div><div class="ks-l">🌅 Breakfast</div></div>
-        <div class="ks-cell"><div class="ks-n">${lQty}</div><div class="ks-l">☀️ Lunch</div></div>
-        <div class="ks-cell"><div class="ks-n">${dQty}</div><div class="ks-l">🌙 Dinner</div></div>
+        <div class="ks-cell ${mealFilter==='breakfast'?'sel':''}" onclick="setMealFilter('breakfast')"><div class="ks-n">${bQty}</div><div class="ks-l">🌅 Breakfast</div></div>
+        <div class="ks-cell ${mealFilter==='lunch'?'sel':''}" onclick="setMealFilter('lunch')"><div class="ks-n">${lQty}</div><div class="ks-l">☀️ Lunch</div></div>
+        <div class="ks-cell ${mealFilter==='dinner'?'sel':''}" onclick="setMealFilter('dinner')"><div class="ks-n">${dQty}</div><div class="ks-l">🌙 Dinner</div></div>
       </div>
       ${hasDetail?`<div class="ks-toggle" onclick="this.nextElementSibling.classList.toggle('show')">👇 Cooking Detail Dekho</div>
       <div class="ks-detail">
@@ -3932,8 +4004,11 @@
       <div class="mb-cell"><div class="mb-n">₹${upi}</div><div class="mb-l">📲 UPI (paid)</div></div>
       <div class="mb-cell"><div class="mb-n">₹${cod+upi}</div><div class="mb-l">💰 Total</div></div>`;
   }
+  let mealFilter='All';  // Kitchen Summary cell tap se set hota hai — sirf us meal ke orders
   let custFilter=null;   // Users page se "X orders" tap karne par set hota hai — sirf usi customer ke orders
   function socMatch(o){ return (socFilter==='All' || o.society===socFilter) && (!custFilter || o.phone===custFilter); }
+  function mealMatch(o){ return mealFilter==='All' || Number(o[mealFilter+'Qty'])>0; }
+  function setMealFilter(m){ mealFilter=(mealFilter===m)?'All':m; renderOrders(); renderKitchen(); }
   function clearCustFilter(){ custFilter=null; renderOrders(); renderKitchen(); const b=document.getElementById('custFilterBar'); if(b)b.classList.add('hidden'); }
   function goToCustOrders(phone,name){
     custFilter=phone; orderFilter='All';
@@ -3941,8 +4016,35 @@
     adminBnGo('orders'); loadOrders();
     const b=document.getElementById('custFilterBar'); if(b){ b.classList.remove('hidden'); b.querySelector('span').textContent='👤 '+name+' ke orders dikha rahe hain'; }
   }
+  // Har meal ka apna status — ek meal Delivered ho sakta hai jabki doosra abhi Preparing me ho
+  const MS_BADGE={Pending:['w','🕐'],Preparing:['b','👨‍🍳'],Delivered:['g','✅'],Cancelled:['r','❌']};
+  function mealStatusRows(o){
+    const ms=o.mealStatus||{};
+    const rows=['breakfast','lunch','dinner'].filter(m=>Number(o[m+'Qty'])>0).map(m=>{
+      if(mealFilter!=='All'&&mealFilter!==m) return '';
+      const st=ms[m]||o.status||'Pending';
+      const meta=MEAL_META[m]||{};
+      const slot=o[m+'TimeSlot']?esc(o[m+'TimeSlot']):'';
+      const bd=MS_BADGE[st]||MS_BADGE.Pending;
+      let act='';
+      if(st==='Pending') act=`<button class="ocm-btn p" onclick="event.stopPropagation();setMealSt(${o.row},'${m}','Preparing')">👨‍🍳 Start</button>`;
+      else if(st==='Preparing') act=`<button class="ocm-btn d" onclick="event.stopPropagation();setMealSt(${o.row},'${m}','Delivered')">✅ Done</button>`;
+      else act=`<span class="ocm-bd ${bd[0]}">${bd[1]} ${st}</span>`;
+      return `<div class="ocm"><span class="ocm-t">${meta.emoji||''} ${meta.title||m} ×${o[m+'Qty']}${slot?`<small>🕐 ${slot}</small>`:''}</span>${act}</div>`;
+    }).join('');
+    return rows?`<div class="oc-meals">${rows}</div>`:'';
+  }
+  function setMealSt(row,meal,st){
+    const o=adminOrders.find(x=>x.row===row); if(!o)return;
+    apiPost({action:'setmealstatus',user:adminCreds.user,pass:adminCreds.pass,row:row,phone:o.phone,meal:meal,status:st}).then(j=>{
+      if(j.status!=='success'){ showToast('❌ '+(j.message||'Failed'),'error'); return; }
+      o.mealStatus=j.mealStatus; o.status=j.orderStatus;
+      renderOrders(); renderKitchen();
+      showToast('✅ '+(MEAL_META[meal]||{}).title+' → '+st,'success');
+    }).catch(()=>showToast(t('errNetwork'),'error'));
+  }
   function renderOrders(){
-    const list=adminOrders.filter(o=>(orderFilter==='All'||o.status===orderFilter)&&socMatch(o))
+    const list=adminOrders.filter(o=>(orderFilter==='All'||o.status===orderFilter)&&socMatch(o)&&mealMatch(o))
       .slice().sort((a,b)=> (STATUS_PRIORITY[a.status]-STATUS_PRIORITY[b.status]) || String(a.time||'').localeCompare(String(b.time||'')));
     const box=document.getElementById('ordersList');
     renderBulkBar();
@@ -3950,9 +4052,7 @@
     if(!list.length){ box.innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;">No orders ('+orderFilter+(socFilter!=='All'?(' · '+socFilter):'')+').</div>'; return; }
     box.innerHTML=list.map(o=>{
       const done=(o.status==='Delivered'||o.status==='Cancelled');
-      let quick='';
-      if(o.status==='Pending') quick=`<div class="oc-quick"><button class="qk-prep" onclick="event.stopPropagation();updateStatus(${o.row},'Preparing')">👨‍🍳 Start Preparing</button></div>`;
-      else if(o.status==='Preparing') quick=`<div class="oc-quick"><button class="qk-done" onclick="event.stopPropagation();updateStatus(${o.row},'Delivered')">✅ Mark Delivered</button></div>`;
+      const quick=mealStatusRows(o);
       return `<div class="oc ${done?'oc-done':''}" onclick="openOrderModal(${o.row})">
         <div class="oc-top"><span class="oc-name">${esc(o.name)}</span><span class="oc-status st-${o.status}">${STATUS_LABEL[o.status]||o.status}</span></div>
         <div class="oc-meal-box">${orderMealsText(o)}${o.note&&o.note!=='None'?'<br><span style="color:var(--muted);">📝 '+esc(o.note)+'</span>':''}${o.promo?'<br><span style="color:var(--ok);font-weight:800;">🎟️ '+esc(o.promo)+'</span>':''}</div>
@@ -4061,8 +4161,12 @@
     const b=document.getElementById('newOrderBanner'); if(b)b.classList.remove('hidden');
   }
   function dismissNewOrder(){ stopRing(); const b=document.getElementById('newOrderBanner'); if(b)b.classList.add('hidden'); setOrderDate(0); }
-  function updateStatus(row,status){ const o=adminOrders.find(x=>x.row===row); if(!o||!adminCreds)return; const old=o.status; o.status=status; renderOrders(); renderKitchen();
-    apiPost({action:'setStatus',user:adminCreds.user,pass:adminCreds.pass,row:row,phone:o.phone,status:status}).then(j=>{ if(j.status!=='success'){ o.status=old; renderOrders(); renderKitchen(); showToast('❌ '+(j.message||'Update failed'),'error'); } }).catch(()=>{ o.status=old; renderOrders(); renderKitchen(); showToast(t('errNetwork'),'error'); }); }
+  function updateStatus(row,status){ const o=adminOrders.find(x=>x.row===row); if(!o||!adminCreds)return; const old=o.status, oldMs=o.mealStatus;
+    o.status=status;
+    // Poora order ek saath badla → saare meals bhi wahi status le lein
+    o.mealStatus=Object.assign({},o.mealStatus||{},{breakfast:status,lunch:status,dinner:status});
+    renderOrders(); renderKitchen();
+    apiPost({action:'setStatus',user:adminCreds.user,pass:adminCreds.pass,row:row,phone:o.phone,status:status}).then(j=>{ if(j.status!=='success'){ o.status=old; o.mealStatus=oldMs; renderOrders(); renderKitchen(); showToast('❌ '+(j.message||'Update failed'),'error'); } }).catch(()=>{ o.status=old; o.mealStatus=oldMs; renderOrders(); renderKitchen(); showToast(t('errNetwork'),'error'); }); }
 
   function loadUsers(){ if(!adminCreds)return; document.getElementById('usersList').innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;">Loading...</div>';
     apiPost({action:'users', user:adminCreds.user, pass:adminCreds.pass}).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminUsers=j.users||[]; renderUsers(); }).catch(()=>showToast(t('errNetwork'),'error')); }
@@ -4364,6 +4468,7 @@
   // ═══════ INIT ═══════
   (function init(){
     initFab();
+    initDemo();
     // 🛡️ Super Admin — hidden entry, kisi bhi UI mein link nahi hai. Sirf
     // ?superadmin=1 URL se access hota hai, normal customer/vendor flow bilkul skip.
     try{
@@ -4374,9 +4479,10 @@
       }
     }catch(e){}
     initTheme();
-    // Location ab bina kisi API key ke chalti hai (GPS free + BigDataCloud free)
-    document.querySelectorAll('.loc-refresh').forEach(b=>b.classList.remove('hidden'));
-    detectLocation();   // optional — fail ho to kuch nahi tootega
+    if(MAPS_API_KEY){   // key na ho to ↻ button bhi mat dikhao
+      document.querySelectorAll('.loc-refresh').forEach(b=>b.classList.remove('hidden'));
+      detectLocation();
+    }
     const cl=storeGet('fbt_lang'); if(cl&&T[cl])LANG=cl;
     const cm=storeGet('fbt_menu'); if(cm&&cm.monday)MENU=cm;
     const savedAddr=storeGet('fbt_addr'); if(savedAddr&&(savedAddr.deliveryType==='home'||savedAddr.deliveryType==='office')) deliveryType=savedAddr.deliveryType;
@@ -4400,13 +4506,14 @@
       // PAKKA 'invalid_session' bole. Network error/timeout pe andar hi rehne do
       // (warna offline ya slow net pe logged-in user bewajah login page dekhega).
       if(GOOGLE_SCRIPT_URL.indexOf('http')===0){
+        loadVendorEndpoint().then(()=>
         fetch(GOOGLE_SCRIPT_URL+'?action=me&token='+encodeURIComponent(SESSION.token)+'&vendorId='+VENDOR_ID)
           .then(r=>r.json())
           .then(j=>{
             if(j.status==='invalid_session'){ forceLogout(); }
             else if(j.status==='success'&&j.name){ SESSION.name=j.name; storeSet('fbt_session',SESSION); document.getElementById('profileName').textContent='👤 '+j.name; const lg=document.getElementById('lpGreet'); if(lg){ const fn=j.name.split(' ')[0]; lg.textContent='👋 Hi, '+fn+' — welcome back!'; } updateNavAvatar(); }
           })
-          .catch(()=>{ /* network error — session localStorage me hai, andar rehne do */ });
+          .catch(()=>{ /* network error — session localStorage me hai, andar rehne do */ }));
       }
     }
     else showPublic();
@@ -4429,7 +4536,12 @@
       const onAuth=!document.getElementById('authPage').classList.contains('hidden')||!document.getElementById('pubView').classList.contains('hidden');
       const onAdmin=!document.getElementById('adminPanel').classList.contains('hidden');
       // checkout/cart/orders/sub/about/adminPanel → back goes to home (or admin→app)
-      if(onAdmin){ hideAdmin(); history.pushState({fbt:true},''); return; }
+      if(onAdmin){
+        // Back se admin panel poora band nahi hona chahiye (lagta hai logout ho gaya).
+        // Sub-tab pe ho to pehle Orders pe wapas aao; Orders pe hi ho to tabhi bahar.
+        if(adminCurTab && adminCurTab!=='orders'){ adminBnGo('orders'); history.pushState({fbt:true},''); return; }
+        hideAdmin(); history.pushState({fbt:true},''); return;
+      }
       const onAuthPage=!document.getElementById('authPage').classList.contains('hidden');
       if(onAuthPage && !isLoggedIn()){ showPublic(); history.pushState({fbt:true},''); return; }
       if(!onHome && !onAuth){ if(isLoggedIn())showLanding(); else showPublic(); history.pushState({fbt:true},''); return; }
@@ -4437,13 +4549,47 @@
       history.back();
     });
 
+    // Pehle vendor ka backend URL resolve karo, uske BAAD hi bootstrap maaro —
+    // warna non-default vendor ki request galat (default) script pe chali jaayegi.
+    loadVendorEndpoint().then(()=>{
     if(GOOGLE_SCRIPT_URL.indexOf('http')===0){
       fetch(GOOGLE_SCRIPT_URL+'?action=bootstrap&vendorId='+VENDOR_ID).then(r=>r.json()).then(j=>{
         if(j.status==='success'){ if(j.menu&&j.menu.monday){ MENU=j.menu; storeSet('fbt_menu',MENU); } if(j.config&&j.config.prices){ CFG=j.config; CFG.promos=j.promos||[]; storeSet('fbt_cfg',CFG); applyConfigToUI(); preloadImgs(); } else if(j.promos){ CFG.promos=j.promos; storeSet('fbt_cfg',CFG); } const pg=document.getElementById('page1'); if(pg&&!pg.classList.contains('hidden')){ renderMenuDateTime&&renderMenuDateTime(); renderMealPanel(); } const hv=document.getElementById('homeView'); if(hv&&!hv.classList.contains('hidden')) renderHome(); if(!document.getElementById('cartView').classList.contains('hidden')) renderCart(); }
       }).catch(()=>{});
     }
+    });
 
     setInterval(()=>{ if(!document.getElementById('page1').classList.contains('hidden')) refreshAvailability(); },60000);
+
+    // Vendor prices/menu badle to khule hue app me bhi jaldi dikhe.
+    // Pehle config sirf app-open pe aata tha — customer app khula rakhta to
+    // purane daam dikhte rehte the. Ab har 90 sec (sirf jab screen saamne ho)
+    // aur jab user app pe wapas aaye tab refresh hota hai.
+    let lastCfgFetch=0;
+    function refreshConfigSoon(force){
+      if(document.hidden && !force) return;
+      if(!force && Date.now()-lastCfgFetch < 60000) return;
+      if(GOOGLE_SCRIPT_URL.indexOf('http')!==0) return;
+      lastCfgFetch=Date.now();
+      fetch(GOOGLE_SCRIPT_URL+'?action=bootstrap&vendorId='+VENDOR_ID).then(r=>r.json()).then(j=>{
+        if(j.status!=='success') return;
+        let changed=false;
+        if(j.menu&&j.menu.monday&&JSON.stringify(j.menu)!==JSON.stringify(MENU)){ MENU=j.menu; storeSet('fbt_menu',MENU); changed=true; }
+        if(j.config&&j.config.prices){
+          const old=JSON.stringify(CFG&&CFG.prices), nw=JSON.stringify(j.config.prices);
+          CFG=j.config; CFG.promos=j.promos||[]; storeSet('fbt_cfg',CFG);
+          if(old!==nw) changed=true;
+          applyConfigToUI();
+        }
+        if(!changed) return;
+        // Jo screen khuli hai use turant naye daam ke saath dobara bana do
+        const pg=document.getElementById('page1'); if(pg&&!pg.classList.contains('hidden')){ renderMenuDateTime&&renderMenuDateTime(); renderMealPanel(); }
+        const hv=document.getElementById('homeView'); if(hv&&!hv.classList.contains('hidden')) renderHome();
+        const cv=document.getElementById('cartView'); if(cv&&!cv.classList.contains('hidden')) renderCart();
+      }).catch(()=>{});
+    }
+    setInterval(()=>refreshConfigSoon(false), 90000);
+    document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) refreshConfigSoon(true); });
   })();
 
 </script>
