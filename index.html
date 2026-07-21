@@ -1425,7 +1425,7 @@
       <div class="pf-box" style="margin-top:18px;">
         <div style="font-size:14px;font-weight:900;margin-bottom:12px;">➕ Naya Vendor Add Karo</div>
         <div class="form-group"><label>Business Naam</label><input type="text" id="svName" placeholder="e.g. Rasoi Express"></div>
-        <div class="form-group"><label>Vendor Slug — sirf chhota naam, poora URL nahi</label><input type="text" id="svId" placeholder="shyamrasoi"><div style="font-size:10.5px;color:var(--muted);margin-top:4px;">Sirf lowercase letters/numbers. Link apne aap banega: <b>?v=shyamrasoi</b></div></div>
+        <div class="form-group"><label>Vendor Slug — sirf chhota naam, poora URL nahi</label><input type="text" id="svId" placeholder="shyamrasoi"><div style="font-size:10.5px;color:var(--muted);margin-top:4px;">Sirf naam likho — jaise <b>shyamrasoi</b>. (<b>?v=</b> mat likhna, wo apne aap lagta hai)</div></div>
         <div class="form-group"><label>Google Sheet ID</label><input type="text" id="svSheetId" placeholder="1T6tTy_I-C8VH8JKOsB8...."><div style="font-size:10.5px;color:var(--muted);margin-top:4px;">Sheet URL me <b>/d/</b> aur <b>/edit</b> ke beech ka lamba code. Nayi sheet: apni sheet → File → Make a copy</div></div>
         <div class="form-group"><label>Apps Script URL — <span style="color:var(--ok);">optional, khaali chhod do</span></label><input type="text" id="svScriptUrl" placeholder="khaali = shared deployment (theek hai)"><div style="font-size:10.5px;color:var(--muted);margin-top:4px;">Sirf tab bharo jab is vendor ka apna alag deployment ho (25+ vendors ke baad zaroori hota hai).</div></div>
         <div class="form-group"><label>Admin Username</label><input type="text" id="svAdminUser"></div>
@@ -2345,6 +2345,9 @@
     if(!noViewVisible()) return;
     let target = lastGoodView;
     if(!target){ try{ target = storeGet('fbt_view'); }catch(e){} }
+    // Super Admin mode me customer landing pe mat phenko
+    let isSuper=false; try{ isSuper = new URLSearchParams(location.search).get('superadmin')==='1'; }catch(e){}
+    if(isSuper){ showView(superCreds ? 'superPanel' : 'superLogin'); return; }
     if(!target || ALL_VIEWS.indexOf(target)<0) target = isLoggedIn() ? 'homeView' : 'pubView';
     showView(target);
     // Boot loader agar atka reh gaya ho to usko bhi hatao
@@ -3897,12 +3900,26 @@
         <div style="font-size:9.5px;font-weight:900;padding:3px 8px;border-radius:9px;flex:0 0 auto;${v.status==='Active'?'background:var(--okbg);color:var(--ok);':'background:var(--line);color:var(--muted);'}">${v.status||'Active'}</div>
       </div>`).join('');
   }
+  // User aksar poora URL ya "?v=slug" paste kar deta hai — usme se sirf slug nikaalo
+  function cleanSlug(v){
+    let x=String(v||'').trim().toLowerCase();
+    const m=x.match(/[?&]v=([a-z0-9]+)/);            // "...?v=shyamrasoi"
+    if(m) return m[1];
+    x=x.replace(/^https?:\/\/[^?]*\??/,'');         // bacha hua URL hissa
+    return x.replace(/[^a-z0-9]/g,'');               // space, ?, =, / sab hata do
+  }
+  // Sheet URL paste ho jaye to usme se ID nikaalo
+  function cleanSheetId(v){
+    const x=String(v||'').trim();
+    const m=x.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    return m ? m[1] : x;
+  }
   function saveVendorFE(){
     if(!superCreds)return;
     const d={ action:'savevendor', user:superCreds.user, pass:superCreds.pass,
       name:document.getElementById('svName').value.trim(),
-      vendorId:document.getElementById('svId').value.trim().toLowerCase(),
-      sheetId:document.getElementById('svSheetId').value.trim(),
+      vendorId:cleanSlug(document.getElementById('svId').value),
+      sheetId:cleanSheetId(document.getElementById('svSheetId').value),
       adminUser:document.getElementById('svAdminUser').value.trim(),
       adminPass:document.getElementById('svAdminPass').value.trim(),
       notifyEmail:document.getElementById('svEmail').value.trim(),
@@ -4507,7 +4524,11 @@
     try{
       if(new URLSearchParams(location.search).get('superadmin')==='1'){
         const __bl=document.getElementById('bootLoader'); if(__bl){ __bl.classList.add('gone'); setTimeout(()=>__bl.remove(),400); }
-        if(!restoreSuperAdmin()) showView('superLogin');
+        // Pehle turant login screen dikhao — restoreSuperAdmin() ka jawab async aata hai,
+        // us beech me screen khaali reh jaati thi aur guard customer page dikha deta tha.
+        // Pehle se logged-in ho to seedha panel (login form flash na ho)
+        showView(storeGet('fbt_super') ? 'superPanel' : 'superLogin');
+        restoreSuperAdmin();
         return;
       }
     }catch(e){}
