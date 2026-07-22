@@ -4369,7 +4369,15 @@
       // tha (page refresh ke baad). Ab kam se kam login screen dikhao taaki wapas aa sake.
       if(j.status!=='success'){ adminCreds=null; storeDel('fbt_admin'); showAdminLogin(); return; }
       enterAdminTheme(); showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminOpenLastTab(); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
-    }).catch(()=>{ /* offline: creds set, panel dikha do */ enterAdminTheme(); showView('adminPanel'); initMenuEditor(); initConfigEditor(); adminOpenLastTab(); });
+    }).catch(()=>{
+      // Offline/network-down: creds set hi rehte hain (dubara login na maange), panel
+      // dikha do — lekin recentList apne static "Loading..." pe hi fasa reh jaata tha
+      // (fillStats yahan kabhi call hi nahi hota tha), koi toast/message bhi nahi.
+      enterAdminTheme(); showView('adminPanel'); initMenuEditor(); initConfigEditor(); adminOpenLastTab();
+      showToast(t('errNetwork'),'error');
+      const rl=document.getElementById('recentList');
+      if(rl) rl.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px;padding:16px;">❌ Network error.<br><span style="color:var(--accent-dark);font-weight:800;cursor:pointer;" onclick="loadStats()">🔄 Retry</span></div>';
+    });
     return true;
   }
 
@@ -4395,13 +4403,22 @@
         showToast('❌ '+msg,'error');
         // Sirf tab kuch dikhane ko hi nahi hai tab "stuck Loading..." dikhna band karo —
         // agar pehle se list dikh rahi hai to use hataana galat hai, chupchaap fail ho jaane do.
-        if(!adminOrders.length) document.getElementById('ordersList').innerHTML='<div style="text-align:center;color:var(--danger);padding:20px;font-size:12.5px;">❌ '+esc(msg)+'<br><button class="admin-btn" style="margin-top:10px;width:auto;padding:6px 16px;" onclick="loadOrders()">🔄 Retry</button></div>';
+        // ⚠️ kitchenSummary bhi ordersList jaisa hi "Loading..." se start hota hai, aur
+        // wo sirf renderKitchen() (success path) se hi bharta hai — isse yahan bhool gaye
+        // the, isliye error ke baad bhi "Loading..." wahin ruka reh jaata tha.
+        if(!adminOrders.length){
+          document.getElementById('ordersList').innerHTML='<div style="text-align:center;color:var(--danger);padding:20px;font-size:12.5px;">❌ '+esc(msg)+'<br><button class="admin-btn" style="margin-top:10px;width:auto;padding:6px 16px;" onclick="loadOrders()">🔄 Retry</button></div>';
+          document.getElementById('kitchenSummary').innerHTML='<div style="text-align:center;color:var(--muted);padding:10px;font-size:12px;">Could not load.</div>';
+        }
         return;
       }
       adminOrders=j.orders||[]; fillSocFilter(); renderOrders(); renderKitchen();
     }).catch(()=>{
       showToast(t('errNetwork'),'error');
-      if(!adminOrders.length) document.getElementById('ordersList').innerHTML='<div style="text-align:center;color:var(--danger);padding:20px;font-size:12.5px;">❌ Network error.<br><button class="admin-btn" style="margin-top:10px;width:auto;padding:6px 16px;" onclick="loadOrders()">🔄 Retry</button></div>';
+      if(!adminOrders.length){
+        document.getElementById('ordersList').innerHTML='<div style="text-align:center;color:var(--danger);padding:20px;font-size:12.5px;">❌ Network error.<br><button class="admin-btn" style="margin-top:10px;width:auto;padding:6px 16px;" onclick="loadOrders()">🔄 Retry</button></div>';
+        document.getElementById('kitchenSummary').innerHTML='<div style="text-align:center;color:var(--muted);padding:10px;font-size:12px;">Could not load.</div>';
+      }
     });
   }
   function setOrderFilter(f){ orderFilter=f; const c=document.getElementById('filterChips').children; for(let i=0;i<c.length;i++)c[i].classList.toggle('sel',c[i].getAttribute('data-f')===f); renderOrders(); }
