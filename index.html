@@ -2258,7 +2258,7 @@
       dinner:{ qty:1, tiffinType:defaultVariantId('dinner'), sabzi:defaultSabzi('dinner'), butterRoti:false, extraRoti:0, dahi:false, extraSabzi:false, timeSlot:defaultTimeSlot('dinner') }
     };
   }
-  let cart = [];
+  window.cart = cart;
   // V2-1: cart restore (refresh/tab-kill pe cart wapas) — purani dates drop
   try{
     const __sc=storeGet('fbt_cart');
