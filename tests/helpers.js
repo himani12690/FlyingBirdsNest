@@ -65,6 +65,20 @@ function handleGet(state, url) {
     return token === SESSION.token ? { status:'success', sub:null }
                                    : { status:'invalid_session' };
 
+  // Discovery/marketplace (no ?v= vendor) — volume tests seed state.discoveryVendors;
+  // default [] keeps every existing test (which never sets it) unaffected.
+  if (action === 'areas') {
+    const vs = state.discoveryVendors || [];
+    const counts = {};
+    vs.forEach(v => (v.areas || []).forEach(a => { counts[a] = (counts[a] || 0) + 1; }));
+    return { status:'success', areas: Object.keys(counts).map(a => ({ area:a, count:counts[a] })) };
+  }
+  if (action === 'discover') {
+    const area = url.searchParams.get('area') || '';
+    const vs = (state.discoveryVendors || []).filter(v => !area || (v.areas || []).includes(area));
+    return { status:'success', vendors: vs };
+  }
+
   return { status:'success' };
 }
 
@@ -82,7 +96,10 @@ function handlePost(state, body) {
   if (action === 'listvendors') return superOK ? { status:'success', vendors:state.vendors } : denied;
   if (action === 'savevendor') {
     if (!superOK) return denied;
-    const id = String(p.vendorId || '').trim().toLowerCase();
+    // Real backend reads p.slug first (apiPost stamps p.vendorId with the CURRENT
+    // page's own VENDOR_ID, which clobbers the real target on the Super Admin page) —
+    // mock must match, else every save is silently misread as editing 'nestandnosh'.
+    const id = String(p.slug || p.vendorId || '').trim().toLowerCase();
     if (!id) return { status:'error', message:'Vendor ID zaroori hai' };
     if (!/^[a-z0-9]+$/.test(id)) return { status:'error', message:'Slug galat hai' };
     if (id === 'nestandnosh') return { status:'error', message:'default vendor ka slug hai' };

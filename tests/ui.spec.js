@@ -15,7 +15,7 @@ const SCREENS = ['land', 'menu', 'cart', 'orders', 'profile'];
 
 test.describe('App loads', () => {
   test('koi JS ya console error nahi', async ({ page }) => {
-    const errors = await openApp(page);
+    const { errors } = await openApp(page);
     for (const tab of SCREENS) await goTo(page, tab);
     expect(errors, 'Errors:\n' + errors.join('\n')).toEqual([]);
   });

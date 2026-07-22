@@ -6,15 +6,19 @@ const CONFIG = {
   societies: ['Vrindavan','Eden'],
   deliveryNear: 10, deliveryFar: 20, farSocieties: ['Eden'],
   closedDates: [], capacity: { breakfast:0, lunch:0, dinner:0 },
+  // ⚠️ Order matters — app ka defaultVariantId(m) hamesha variantsFor(m)[0] uthata hai
+  // (quickAdd isi se default tiffin decide karta hai). Real app me 'full' hamesha
+  // pehla hota hai (index.html defaultVariantsFE) — mock isi order ko match kare,
+  // warna quickAdd tests 'mini' pick karke galat total expect karte hain.
   variants: {
     breakfast: [{ id:'std', name:'Breakfast', price:30, items:['Poha','Chai'], img:'' }],
     lunch: [
-      { id:'mini', name:'Mini Tiffin', price:60, items:['Roti (4)','1 Sabzi'], img:'' },
-      { id:'full', name:'Full Tiffin', price:80, items:['Roti (5)','Daal','Chawal'], img:'' }
+      { id:'full', name:'Full Tiffin', price:80, items:['Roti (5)','Daal','Chawal'], img:'' },
+      { id:'mini', name:'Mini Tiffin', price:60, items:['Roti (4)','1 Sabzi'], img:'' }
     ],
     dinner: [
-      { id:'mini', name:'Mini Tiffin', price:60, items:['Roti (4)','1 Sabzi'], img:'' },
-      { id:'full', name:'Full Tiffin', price:80, items:['Roti (5)','Daal','Chawal'], img:'' }
+      { id:'full', name:'Full Tiffin', price:80, items:['Roti (5)','Daal','Chawal'], img:'' },
+      { id:'mini', name:'Mini Tiffin', price:60, items:['Roti (4)','1 Sabzi'], img:'' }
     ]
   },
   banners: { breakfast:'', lunch:'', dinner:'' },
