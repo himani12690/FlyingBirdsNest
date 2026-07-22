@@ -1679,6 +1679,16 @@
         <div class="more-item" id="adr-config" onclick="adminBnGo('config')"><span class="di-icon">⚙️</span><span>Setup</span></div>
         <div class="more-item" id="adr-variants" onclick="adminBnGo('variants')"><span class="di-icon">🍱</span><span>Variants</span></div>
         <div class="more-item" id="adr-promos" onclick="adminBnGo('promos')"><span class="di-icon">🎟️</span><span>Promos</span></div>
+        <div style="padding:10px 14px 4px;">
+          <div class="lp-sec-t">🌐 Language</div>
+          <select class="sh-select js-lang" id="langSelAdmin" onchange="setLangAdmin(this.value)"></select>
+          <div class="lp-sec-t" style="margin-top:10px;">🎨 Theme</div>
+          <select class="sh-select" id="themeSelAdmin" onchange="setThemeAdmin(this.value)">
+            <option value="system">📱 System Default</option>
+            <option value="light">☀️ Light</option>
+            <option value="dark">🌙 Dark</option>
+          </select>
+        </div>
         <div class="more-item danger" onclick="closeAdminMore();adminLogout()"><span class="di-icon">🚪</span><span>Logout</span></div>
       </div>
     </div>
@@ -2090,6 +2100,32 @@
     applyTheme(mode);
     const sel = document.getElementById('themeSelProfile'); if (sel) sel.value = mode;
   }
+  // Admin ka apna alag theme (customer theme se independent)
+  let __adminThemeActive=false;
+  function enterAdminTheme(){
+    __adminThemeActive=true;
+    const m = storeGet('fbt_theme_admin') || 'system';
+    applyTheme(m);
+    const sel=document.getElementById('themeSelAdmin'); if(sel) sel.value=m;
+    const la = storeGet('fbt_lang_admin'); if(la){ setLang(la); }
+    const ls=document.getElementById('langSelAdmin'); if(ls) ls.value = la || LANG;
+  }
+  function exitAdminTheme(){
+    __adminThemeActive=false;
+    applyTheme(storeGet('fbt_theme') || 'system');
+  }
+  function setThemeAdmin(mode){
+    if(['light','dark','system'].indexOf(mode)===-1) mode='system';
+    storeSet('fbt_theme_admin', mode);
+    applyTheme(mode);
+    const sel=document.getElementById('themeSelAdmin'); if(sel) sel.value=mode;
+  }
+  // Admin ka apna alag language
+  function setLangAdmin(l){
+    setLang(l);
+    try{ storeSet('fbt_lang_admin', l); }catch(e){}
+    const sel=document.getElementById('langSelAdmin'); if(sel) sel.value=l;
+  }
   function initTheme(){
     const saved = storeGet('fbt_theme') || 'system';
     applyTheme(saved);
@@ -2392,8 +2428,14 @@
   function closeAdminMore(){ document.getElementById('adminMoreOverlay').classList.add('hidden'); }
   let adminCurTab='orders';
   const ADMIN_BN_TABS=['orders','users','menu','stats'];   // ye 4 seedhe bottom nav mein; baaki "More" sheet mein
+  function adminOpenLastTab(){
+    let tab='orders';
+    try{ const s=storeGet('fbt_admin_tab'); if(s && ADMIN_SECTIONS[s]) tab=s; }catch(e){}
+    adminBnGo(tab);
+  }
   function adminBnGo(tab){
     adminCurTab=tab;
+    try{ storeSet('fbt_admin_tab', tab); }catch(e){}
     closeAdminMore();
     adminTab(tab);
     const t=document.getElementById('adminSectionTitle'); if(t) t.textContent=ADMIN_SECTIONS[tab]||'Admin';
@@ -2476,6 +2518,7 @@
     // Logged-in user ko landing/login mat dikhao — seedha app
     if(isLoggedIn()){ enterApp(); return; }
     showView('pubView');
+    const de=document.getElementById('dscEntry'); if(de) de.classList.toggle('hidden', HAS_VENDOR_PARAM);
     initGoogleButton();
     document.querySelectorAll('.fssai-line').forEach(e=>{ e.textContent = CFG.fssai ? ('FSSAI Reg. No: '+CFG.fssai) : ''; });
   }
@@ -2800,7 +2843,16 @@
   const FAB_HIDE_ON = ['profileView','qaView','authPage','pubView','adminLogin','adminPanel','superLogin','superPanel','dscView'];
   function updateFabVisibility(viewId){
     const f=document.getElementById('aiFab'); if(!f)return;
-    f.classList.toggle('hidden', FAB_HIDE_ON.indexOf(viewId)>=0);
+    const hide = FAB_HIDE_ON.indexOf(viewId)>=0;
+    f.classList.toggle('hidden', hide);
+    // Jab dikhana ho, position viewport ke andar clamp karo — warna pehle drag/rotate ke baad
+    // FAB screen se bahar reh sakta hai aur "gayab" lagta hai.
+    if(!hide){
+      const hasPos = f.style.left && f.style.left!=='auto';
+      if(hasPos){
+        applyFabPos(parseFloat(f.style.left)||0, parseFloat(f.style.top)||0);
+      }
+    }
   }
   function clampFab(x,y){
     const f=document.getElementById('aiFab'); const m=8;
@@ -4013,7 +4065,7 @@
   // ═══════ ADMIN ═══════
   let adminCreds=null, adminMenuWorking=null, adminPrevDay='monday', adminOrders=[], adminUsers=[], orderFilter='All';
   function showAdminLogin(){ showView('adminLogin'); }
-  function hideAdmin(){ isLoggedIn()?showLanding():showPublic(); }
+  function hideAdmin(){ exitAdminTheme(); if(storeGet('fbt_lang')) setLang(storeGet('fbt_lang')); isLoggedIn()?showLanding():showPublic(); }
   function adminLogout(){ adminCreds=null; storeDel('fbt_admin'); stopAlertPolling(); stopRing(); hideAdmin(); }
   function adminTab(tb){ ['orders','users','menu','config','stats','variants','promos'].forEach(x=>{ const v=document.getElementById('aview-'+x); const b=document.getElementById('atab-'+x); if(v)v.classList.toggle('hidden',x!==tb); if(b)b.classList.toggle('active',x===tb); }); if(tb==='variants') openVariantsEditor(); if(tb==='promos') loadPromos(); }
 
@@ -4223,7 +4275,7 @@
       btn.textContent='🔓 Login'; btn.disabled=false;
       if(j.status!=='success'){ showToast('❌ Invalid username or password.','error'); return; }
       adminCreds={user:u,pass:p}; storeSet('fbt_admin',adminCreds);
-      showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminBnGo('orders'); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
+      enterAdminTheme(); showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminBnGo('orders'); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
     }).catch(()=>{ btn.textContent='🔓 Login'; btn.disabled=false; showToast(t('errNetwork'),'error'); });
   }
   // Refresh ke baad admin panel tabhi restore karo jab refresh se pehle admin panel hi khula tha.
@@ -4233,8 +4285,8 @@
     if(storeGet('fbt_view')!=='adminPanel') return false;   // customer/public page par tha => admin mat kholo
     apiPost({action:'stats', user:a.user, pass:a.pass}).then(j=>{
       if(j.status!=='success'){ adminCreds=null; storeDel('fbt_admin'); return; }
-      showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminBnGo('orders'); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
-    }).catch(()=>{ /* offline: creds set, panel dikha do */ showView('adminPanel'); initMenuEditor(); initConfigEditor(); adminBnGo('orders'); });
+      enterAdminTheme(); showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminOpenLastTab(); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
+    }).catch(()=>{ /* offline: creds set, panel dikha do */ enterAdminTheme(); showView('adminPanel'); initMenuEditor(); initConfigEditor(); adminOpenLastTab(); });
     return true;
   }
 
@@ -4851,6 +4903,7 @@
           .catch(()=>{ /* network error — session localStorage me hai, andar rehne do */ }));
       }
     }
+    else if(!HAS_VENDOR_PARAM){ openDiscovery(); }   // platform ka main link → pehle discovery
     else showPublic();
 
     // Admin drawer hata diya gaya (ab bottom nav hai) — is liye edge-swipe gesture
