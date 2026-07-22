@@ -1839,22 +1839,12 @@
 
   // Dynamic config (admin editable, synced from backend)
   function defaultVariantsFE(){
-    const mk=(id,name,price,items)=>({id:id,name:name,price:price,items:items,img:''});
-    const ld=[ mk('mini','Mini Tiffin',60,['🫓 Roti (4)','🍛 1 Sabzi','🥗 Salad']),
-               mk('full','Full Tiffin',80,['🫓 Roti (5)','🍛 1 Sabzi','🍲 Daal','🍚 Chawal','🥛 Chaas','🥒 Achar','🥗 Salad','🍬 Sweet']) ];
-    return { breakfast:[mk('std','Breakfast',80,['🍚 Poha / Paratha (daily varies)','🍵 Chai'])],
-             lunch:JSON.parse(JSON.stringify(ld)), dinner:JSON.parse(JSON.stringify(ld)) };
-  }
-  let CFG = {
-    prices: { breakfast:30, lunch:80, dinner:80, tiffinMini:60, extraRotiPlain:12, extraRotiButter:16, dahi:20, extraSabzi:30 },
-    deliveryNear:10, deliveryFar:20, farSocieties:[],
-    township: 'Godrej Garden City',
-    societies: ['Vrindavan','Eden'],
-    closedDates: [], capacity: { breakfast:0, lunch:0, dinner:0 },
-    variants: defaultVariantsFE(),
-    banners: { breakfast:'', lunch:'', dinner:'' },
-    upiId: '', upiName: 'Nest & Nosh', fssai: ''
-  };
+  const mk=(id,name,price,items)=>({id:id,name:name,price:price,items:items,img:''});
+  const ld=[ mk('full','Full Tiffin',80,['🫓 Roti (5)','🍛 1 Sabzi','🍲 Daal','🍚 Chawal','🥛 Chaas','🥒 Achar','🥗 Salad','🍬 Sweet']),
+             mk('mini','Mini Tiffin',60,['🫓 Roti (4)','🍛 1 Sabzi','🥗 Salad']) ];
+  return { breakfast:[mk('std','Breakfast',80,['🍚 Poha / Paratha (daily varies)','🍵 Chai'])],
+           lunch:JSON.parse(JSON.stringify(ld)), dinner:JSON.parse(JSON.stringify(ld)) };
+}
   // Variant helpers
   function variantsFor(m){ return (CFG.variants&&CFG.variants[m]&&CFG.variants[m].length)?CFG.variants[m]:defaultVariantsFE()[m]; }
   function findVariant(m,id){ const vs=variantsFor(m); return vs.find(v=>v.id===id)||vs[0]; }
