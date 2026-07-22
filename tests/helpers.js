@@ -1,6 +1,6 @@
 const { CONFIG, MENU, PROMOS, SESSION } = require('./fixtures');
 
-const APP_URL = process.env.APP_URL || 'https://himani12690.github.io/';
+const APP_URL = process.env.APP_URL || 'http://localhost:8080/index.html';
 const SCRIPT_HOST = 'script.google.com';
 
 // ── Mutable server state — har test se pehle reset ──
@@ -346,7 +346,7 @@ async function openApp(page, opts = {}) {
        loggedIn: opts.loggedIn !== false,
        addr: opts.addr || { deliveryType:'home', society:'Vrindavan', flatNo:'D-706' } });
 
-  await page.goto(opts.url || APP_URL);
+  await page.goto(APP_URL);
   await page.waitForSelector('#bootLoader.gone', { timeout:15000 }).catch(() => {});
   return { errors, state };
 }
