@@ -6,10 +6,19 @@
     let cart = [];
     window.cart = cart;
     const ALL_VIEWS = ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel','superLogin','superPanel','qaView','dscView'];
-    // Theme flash-prevent — page paint se pehle hi sahi theme laga do
+    // Theme flash-prevent — page paint se pehle hi sahi theme laga do.
+    // ⚠️ Theme per-vendor namespaced key me save hoti hai (storeGet/storeSet ka
+    // nsKey() — VENDOR_ID+'_fbt_theme' non-default vendors ke liye). Ye script poore
+    // main script se PEHLE chalta hai (VENDOR_ID abhi define nahi hua), isliye wahi
+    // ?v= parsing yahan bhi duplicate karni padi — warna plain 'fbt_theme' key kabhi
+    // match hi nahi karti (sirf default vendor ke liye karti thi), aur dark/light
+    // hamesha OS preference se decide hota, phir kuch der baad sahi theme pe flip ho jaata.
     (function(){
       try {
-        var m = localStorage.getItem('fbt_theme');
+        var q = new URLSearchParams(location.search).get('v');
+        var vendorId = (q && q.trim()) ? q.trim().toLowerCase() : 'nestandnosh';
+        var key = (vendorId === 'nestandnosh') ? 'fbt_theme' : (vendorId + '_fbt_theme');
+        var m = localStorage.getItem(key);
         m = m ? JSON.parse(m) : 'system';
         var dark = (m === 'dark') || (m === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
         document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
@@ -68,6 +77,11 @@
     #homeMealRow { max-width:100%; scrollbar-width:none; }
     #homeMealRow::-webkit-scrollbar { display:none; }
     .container { max-width:480px; margin:0 auto; background:var(--bg); min-height:100vh; position:relative; }
+    /* Vendor logo <img> ka default 'logo-round.png' HTML parse hote hi paint ho jaata
+       hai (JS chalne se pehle) — real vendor logo aane tak chhupa do, warna galat
+       (generic) logo ek pal ke liye dikh ke phir sahi logo se replace hota dikhta hai. */
+    .vbrand-logo { opacity:0; transition:opacity .18s ease; }
+    .vbrand-logo.vb-ready { opacity:1; }
 
     /* HERO — clean flat header with proper top-left back button */
     .hero { background:var(--card); padding:20px 20px 18px; text-align:center; color:var(--ink); position:relative; border-bottom:1px solid var(--line); }
@@ -1213,6 +1227,15 @@
   <!-- ══════ SUBSCRIPTION VIEW ══════ -->
   <!-- ══════ DISCOVERY — apne area ki kitchens ══════ -->
   <div id="dscView" class="hidden">
+    <div class="pub-tb">
+      <div class="pub-br"><img class="brand-ic vbrand-logo" src="logo-round.png" alt=""><span class="vbrand-name">Nest &amp; Nosh</span></div>
+      <div class="pub-tr"><select id="langSelDsc" class="js-lang" onchange="setLang(this.value)"></select></div>
+    </div>
+    <div class="pub-hero" style="padding-bottom:6px;">
+      <div class="pub-logo"><img class="vbrand-logo" src="logo-round.png" alt=""></div>
+      <h1 style="font-size:19px;">Ghar jaisa khana, seedha aapke area mein</h1>
+      <p>Apne area ki tiffin kitchens browse karo — rating, menu aur price sab ek jagah.</p>
+    </div>
     <div class="dsc-loc">
       <span style="font-size:20px;">📍</span>
       <div><div class="dl1">Delivering to</div><div class="dl2" id="dscCity">Ahmedabad</div></div>
@@ -1222,8 +1245,16 @@
       <div style="font-size:11.5px;color:var(--muted);margin-top:3px;">Us area ki saari tiffin services dikhengi</div>
     </div>
     <div class="dsc-areas" id="dscAreas"></div>
-    <div class="section" style="padding-top:12px;padding-bottom:90px;">
+    <div class="section" style="padding-top:12px;padding-bottom:4px;">
       <div id="dscList"></div>
+    </div>
+    <div class="section" style="padding-top:2px;padding-bottom:90px;">
+      <div class="pub-hook" style="padding-top:8px;">
+        <div class="ph-ic">🍱</div>
+        <div class="ph-q" style="font-size:14.5px;">Kyun tiffin service?</div>
+        <div class="ph-a" style="font-size:12px;color:var(--muted);margin-top:4px;">Ghar jaisa, roz ka fresh khana — packaged delivery-app food jaisa nahi.</div>
+      </div>
+      <div class="pub-foot"><span class="vbrand-name">Nest &amp; Nosh</span> · Tiffin Marketplace<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
     </div>
   </div>
 
@@ -3600,7 +3631,7 @@
           }
           else if(j.status==='duplicate') { dup++; results.push({dstr,dup:true}); }
           else if(j.status==='invalid_session') { sessionDead=true; break; }
-          else { fail++; results.push({dstr,fail:true}); }
+          else { fail++; results.push({dstr,fail:true,msg:j.message}); }
         }catch(e){ fail++; results.push({dstr,fail:true}); }
       }
       if(sessionDead){ forceLogout(); return; }
@@ -3643,7 +3674,12 @@
       } else {
         btn.textContent=t('placeOrder'); btn.disabled=false;
         if(dup && !fail) showToast('⚠️ '+t('dupMsg'),'warning');
-        else showToast(t('orderFailed'),'error');
+        else{
+          // Backend jo bhi specific reason bhejta hai (capacity, delivery window,
+          // office/home off, etc.) wo dikhao — generic "try again" se pata nahi chalta kya galat hai.
+          const specificMsg=results.find(r=>r.fail&&r.msg)?.msg;
+          showToast(specificMsg?('❌ '+specificMsg):t('orderFailed'),'error');
+        }
       }
     })();
   }
@@ -4328,7 +4364,10 @@
     adminCreds=a;                                  // creds cached — password dobara nahi maangega
     if(storeGet('fbt_view')!=='adminPanel') return false;   // customer/public page par tha => admin mat kholo
     apiPost({action:'stats', user:a.user, pass:a.pass}).then(j=>{
-      if(j.status!=='success'){ adminCreds=null; storeDel('fbt_admin'); return; }
+      // ⚠️ Pehle yahan status!=='success' pe koi bhi screen nahi dikhti thi — na admin
+      // panel, na login — user "Loading..." screen pe hi hamesha ke liye fasa reh jaata
+      // tha (page refresh ke baad). Ab kam se kam login screen dikhao taaki wapas aa sake.
+      if(j.status!=='success'){ adminCreds=null; storeDel('fbt_admin'); showAdminLogin(); return; }
       enterAdminTheme(); showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminOpenLastTab(); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
     }).catch(()=>{ /* offline: creds set, panel dikha do */ enterAdminTheme(); showView('adminPanel'); initMenuEditor(); initConfigEditor(); adminOpenLastTab(); });
     return true;
@@ -4346,8 +4385,25 @@
   }
   function loadOrders(){ if(!adminCreds)return; adminDateLabels(); fillSocFilter();
     const dateStr=fmtYMD(dateWithOffset(adminDateOffset));
-    document.getElementById('ordersList').innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;">Loading...</div>';
-    apiPost({action:'orders', date:dateStr, user:adminCreds.user, pass:adminCreds.pass}).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminOrders=j.orders||[]; fillSocFilter(); renderOrders(); renderKitchen(); }).catch(()=>showToast(t('errNetwork'),'error')); }
+    // Pehle se data hai (tab switch / date change) to wahi turant dikhao, "Loading..."
+    // flash mat karo — background me fresh data aate hi silently update ho jayega.
+    if(adminOrders.length){ renderOrders(); renderKitchen(); }
+    else document.getElementById('ordersList').innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;">Loading...</div>';
+    apiPost({action:'orders', date:dateStr, user:adminCreds.user, pass:adminCreds.pass}).then(j=>{
+      if(j.status!=='success'){
+        const msg=j.message||'Load failed';
+        showToast('❌ '+msg,'error');
+        // Sirf tab kuch dikhane ko hi nahi hai tab "stuck Loading..." dikhna band karo —
+        // agar pehle se list dikh rahi hai to use hataana galat hai, chupchaap fail ho jaane do.
+        if(!adminOrders.length) document.getElementById('ordersList').innerHTML='<div style="text-align:center;color:var(--danger);padding:20px;font-size:12.5px;">❌ '+esc(msg)+'<br><button class="admin-btn" style="margin-top:10px;width:auto;padding:6px 16px;" onclick="loadOrders()">🔄 Retry</button></div>';
+        return;
+      }
+      adminOrders=j.orders||[]; fillSocFilter(); renderOrders(); renderKitchen();
+    }).catch(()=>{
+      showToast(t('errNetwork'),'error');
+      if(!adminOrders.length) document.getElementById('ordersList').innerHTML='<div style="text-align:center;color:var(--danger);padding:20px;font-size:12.5px;">❌ Network error.<br><button class="admin-btn" style="margin-top:10px;width:auto;padding:6px 16px;" onclick="loadOrders()">🔄 Retry</button></div>';
+    });
+  }
   function setOrderFilter(f){ orderFilter=f; const c=document.getElementById('filterChips').children; for(let i=0;i<c.length;i++)c[i].classList.toggle('sel',c[i].getAttribute('data-f')===f); renderOrders(); }
   let socFilter='All';
   function fillSocFilter(){
@@ -4589,8 +4645,22 @@
     renderOrders(); renderKitchen();
     apiPost({action:'setStatus',user:adminCreds.user,pass:adminCreds.pass,row:row,phone:o.phone,status:status}).then(j=>{ if(j.status!=='success'){ o.status=old; o.mealStatus=oldMs; renderOrders(); renderKitchen(); showToast('❌ '+(j.message||'Update failed'),'error'); } }).catch(()=>{ o.status=old; o.mealStatus=oldMs; renderOrders(); renderKitchen(); showToast(t('errNetwork'),'error'); }); }
 
-  function loadUsers(){ if(!adminCreds)return; document.getElementById('usersList').innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;">Loading...</div>';
-    apiPost({action:'users', user:adminCreds.user, pass:adminCreds.pass}).then(j=>{ if(j.status!=='success'){ showToast('❌ '+(j.message||'Load failed'),'error'); return; } adminUsers=j.users||[]; renderUsers(); }).catch(()=>showToast(t('errNetwork'),'error')); }
+  function loadUsers(){ if(!adminCreds)return;
+    if(adminUsers.length) renderUsers();
+    else document.getElementById('usersList').innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;">Loading...</div>';
+    apiPost({action:'users', user:adminCreds.user, pass:adminCreds.pass}).then(j=>{
+      if(j.status!=='success'){
+        const msg=j.message||'Load failed';
+        showToast('❌ '+msg,'error');
+        if(!adminUsers.length) document.getElementById('usersList').innerHTML='<div style="text-align:center;color:var(--danger);padding:20px;font-size:12.5px;">❌ '+esc(msg)+'<br><button class="admin-btn" style="margin-top:10px;width:auto;padding:6px 16px;" onclick="loadUsers()">🔄 Retry</button></div>';
+        return;
+      }
+      adminUsers=j.users||[]; renderUsers();
+    }).catch(()=>{
+      showToast(t('errNetwork'),'error');
+      if(!adminUsers.length) document.getElementById('usersList').innerHTML='<div style="text-align:center;color:var(--danger);padding:20px;font-size:12.5px;">❌ Network error.<br><button class="admin-btn" style="margin-top:10px;width:auto;padding:6px 16px;" onclick="loadUsers()">🔄 Retry</button></div>';
+    });
+  }
   function renderUsers(){
     const q=(document.getElementById('userSearch').value||'').toLowerCase().trim();
     const sort=document.getElementById('userSort').value;
@@ -4647,7 +4717,7 @@
   function toggleUserBlock(phone,ns){ if(!adminCreds)return; if(!confirm((ns==='Blocked'?'Block':'Unblock')+' '+phone+'?'))return;
     apiPost({action:'setUserStatus',user:adminCreds.user,pass:adminCreds.pass,phone:phone,status:ns}).then(j=>{ if(j.status==='success'){ const u=adminUsers.find(x=>x.phone===phone); if(u)u.status=ns; renderUsers(); showToast('✅ Updated.','success'); } else showToast('❌ '+(j.message||'Failed'),'error'); }).catch(()=>showToast(t('errNetwork'),'error')); }
 
-  function loadStats(){ if(!adminCreds)return; apiPost({action:'stats', user:adminCreds.user, pass:adminCreds.pass}).then(j=>{ if(j.status==='success'){ fillStats(j); showToast('🔄 Refreshed.','success'); } }).catch(()=>showToast('❌ Refresh failed.','error')); }
+  function loadStats(){ if(!adminCreds)return; apiPost({action:'stats', user:adminCreds.user, pass:adminCreds.pass}).then(j=>{ if(j.status==='success'){ fillStats(j); showToast('🔄 Refreshed.','success'); } else showToast('❌ '+(j.message||'Refresh failed.'),'error'); }).catch(()=>showToast('❌ Refresh failed.','error')); }
   function fillStats(j){ document.getElementById('st-todayCount').textContent=j.today.count; document.getElementById('st-todayRev').textContent='₹'+j.today.revenue; document.getElementById('st-weekCount').textContent=j.week.count; document.getElementById('st-totalCount').textContent=j.total.count;
     const banner=document.getElementById('statsPendingBanner');
     const pendingCount=(j.recent||[]).filter(o=>o.status==='Pending').length;
@@ -4955,10 +5025,13 @@
   function applyVendorBrand(){
     const name=VENDOR_BRAND.name||'Nest & Nosh', logo=VENDOR_BRAND.logo||'';
     document.querySelectorAll('.vbrand-name').forEach(e=>{ e.textContent=name; });
-    document.querySelectorAll('.vbrand-logo').forEach(img=>{ img.src = logo || 'logo-round.png'; img.alt = name; });
+    document.querySelectorAll('.vbrand-logo').forEach(img=>{ img.src = logo || 'logo-round.png'; img.alt = name; img.classList.add('vb-ready'); });
     document.title = name + ' — Fresh Homemade Tiffin';
     const am=document.querySelector('meta[name="apple-mobile-web-app-title"]'); if(am) am.setAttribute('content', name);
   }
+  // Failsafe: agar 1.2 sec me bhi asli vendor branding nahi aayi (slow/dead network),
+  // to bhi logo dikha do (default hi rahega) — hamesha ke liye chhupa nahi rehna chahiye.
+  setTimeout(()=>{ document.querySelectorAll('.vbrand-logo:not(.vb-ready)').forEach(img=>{ img.classList.add('vb-ready'); }); }, 1200);
 
   // ═══════ INIT ═══════
   (function init(){
