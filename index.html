@@ -5,6 +5,7 @@
   <script>
     let cart = [];
     window.cart = cart;
+    const ALL_VIEWS = ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel','superLogin','superPanel','qaView','dscView'];
     // Theme flash-prevent — page paint se pehle hi sahi theme laga do
     (function(){
       try {
@@ -2449,7 +2450,7 @@
   function closeAllPopups(){
     ['mealSheet','orderModal','limitModal','modeModal'].forEach(x=>{ const e=document.getElementById(x); if(e) e.classList.add('hidden'); });
   }
-  const ALL_VIEWS = ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel','superLogin','superPanel','qaView','dscView'];
+  
   let lastGoodView = null;
   function showView(id){
     // Agar koi galat/unknown id aa jaye to SAB views hide ho jaate the → blank white page.
