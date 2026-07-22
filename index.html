@@ -933,8 +933,8 @@
   <symbol id="ic-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
   <symbol id="ic-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5V11"/><path d="M12 7.6h.01"/></symbol>
 </svg>
-<div id="bootLoader"><div class="bl-logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div><div class="bl-spin"></div><div class="bl-t">Loading…</div></div>
-<div id="authTransition" class="hidden"><div class="bl-logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div><div class="bl-spin"></div><div class="bl-t" id="authTransitionText">Signing in…</div></div>
+<div id="bootLoader"><div class="bl-logo"><img class="vbrand-logo" src="logo-round.png" alt="Nest &amp; Nosh"></div><div class="bl-spin"></div><div class="bl-t">Loading…</div></div>
+<div id="authTransition" class="hidden"><div class="bl-logo"><img class="vbrand-logo" src="logo-round.png" alt="Nest &amp; Nosh"></div><div class="bl-spin"></div><div class="bl-t" id="authTransitionText">Signing in…</div></div>
 <div class="container">
 
   <!-- ══════ ADMIN DRAWER ══════ -->
@@ -950,14 +950,14 @@
       <span style="font-size:18px;color:var(--accent-dark);">›</span>
     </div>
     <div class="pub-tb">
-      <div class="pub-br"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div>
+      <div class="pub-br"><img class="brand-ic vbrand-logo" src="logo-round.png" alt=""><span class="vbrand-name">Nest &amp; Nosh</span></div>
       <div class="pub-tr">
         <select id="langSelPub" class="js-lang" onchange="setLang(this.value)"></select>
         <button class="pub-login" onclick="showAuth()" data-i="pubLogin"></button>
       </div>
     </div>
     <div class="pub-hero">
-      <div class="pub-logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div>
+      <div class="pub-logo"><img class="vbrand-logo" src="logo-round.png" alt="Nest &amp; Nosh"></div>
       <p data-i="lpTagline"></p>
       <button class="pub-cta" onclick="goOrderNow()" data-i="pubCta"></button>
       <div class="pub-price" id="pubPrice"></div>
@@ -971,7 +971,7 @@
       </div>
       <div class="cmp">
         <div class="cmp-head">
-          <div class="ch-us"><span class="cmp-ic usi"><img src="logo-round.png" alt=""></span><div class="cmp-nm" data-i="cmpUs"></div></div>
+          <div class="ch-us"><span class="cmp-ic usi"><img class="vbrand-logo" src="logo-round.png" alt=""></span><div class="cmp-nm" data-i="cmpUs"></div></div>
           <div class="ch-th"><span class="cmp-ic thi">🛵</span><span class="cmp-ic thi">📱</span><div class="cmp-nm" data-i="cmpThem"></div></div>
         </div>
         <div class="cmp-row"><div class="cr-u" data-i="cmpU1"></div><div class="cr-t" data-i="cmpT1"></div></div>
@@ -982,7 +982,7 @@
       <div class="pub-close">
         <span class="pub-chip" data-i="cmpChip"></span>
       </div>
-      <div class="pub-foot">Nest &amp; Nosh · 📞 70434 91481<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
+      <div class="pub-foot"><span class="vbrand-name">Nest &amp; Nosh</span> · 📞 70434 91481<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
     </div>
     <div class="pub-sticky">
       <div class="ps-txt" data-i-html="pubCutoffLine"></div>
@@ -993,7 +993,7 @@
   <div id="authPage" class="hidden">
     <div class="hero">
       <div class="lang-switch"><select id="langSelAuth" class="js-lang" onchange="setLang(this.value)"></select></div>
-      <div class="logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div>
+      <div class="logo"><img class="vbrand-logo" src="logo-round.png" alt="Nest &amp; Nosh"></div>
       <p class="tagline" data-i="tagline"></p>
       <span class="hero-badge" data-i="secureLogin"></span>
     </div>
@@ -1104,7 +1104,7 @@
       </div>
 
     </div>
-    <div class="footer"><div class="f-line1">Nest & Nosh · Ahmedabad</div><div class="f-links"><span class="admin-link" onclick="showAboutPage()" data-i="navAbout"></span><span class="admin-link" onclick="showAdminLogin()">Admin</span></div></div>
+    <div class="footer"><div class="f-line1"><span class="vbrand-name">Nest & Nosh</span> · Ahmedabad</div><div class="f-links"><span class="admin-link" onclick="showAboutPage()" data-i="navAbout"></span><span class="admin-link" onclick="showAdminLogin()">Admin</span></div></div>
   </div>
 
   <!-- ══════ HOME LANDING ══════ -->
@@ -1112,7 +1112,7 @@
     <div class="lp-hero">
       <div class="lp-top"></div>
       <div class="lp-greet" id="lpGreet"></div>
-      <div class="lp-logo"><img src="logo-round.png" alt="Nest &amp; Nosh"></div>
+      <div class="lp-logo"><img class="vbrand-logo" src="logo-round.png" alt="Nest &amp; Nosh"></div>
       <p class="lp-tag" data-i="lpTagline"></p>
       <div class="lp-loc">📍 <span class="loc-place">Ahmedabad</span><button class="loc-refresh hidden" onclick="refreshLocation(event)" title="Location refresh karein">↻</button> · Home &amp; Office delivery <span class="fssai-line" style="font-size:10px;"></span></div>
     </div>
@@ -1134,7 +1134,7 @@
     <div class="menu-topbar">
       
       <div class="mt-title">
-        <div class="mt-name"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div>
+        <div class="mt-name"><img class="brand-ic vbrand-logo" src="logo-round.png" alt=""><span class="vbrand-name">Nest &amp; Nosh</span></div>
         <div class="mt-user" id="profileName" style="display:none;"></div>
       </div>
       
@@ -1194,7 +1194,7 @@
   <!-- ══════ CART VIEW ══════ -->
   <div id="cartView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
+      <div class="sub-tb"><div class="sub-brand"><img class="brand-ic vbrand-logo" src="logo-round.png" alt=""><span class="vbrand-name">Nest &amp; Nosh</span></div></div>
       <h1 style="font-size:20px;" data-i="yourCart"></h1>
     </div>
     <div class="section pad-sticky">
@@ -1251,7 +1251,7 @@
 
   <div id="subView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
+      <div class="sub-tb"><div class="sub-brand"><img class="brand-ic vbrand-logo" src="logo-round.png" alt=""><span class="vbrand-name">Nest &amp; Nosh</span></div></div>
       <h1 style="font-size:20px;" data-i="subTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="subSub"></p>
     </div>
@@ -1259,13 +1259,13 @@
       <div id="subActiveBox"></div>
       <div id="subFormBox"></div>
     </div>
-    <div class="footer">Nest & Nosh · Ahmedabad<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
+    <div class="footer"><span class="vbrand-name">Nest & Nosh</span> · Ahmedabad<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
   </div>
 
   <!-- ══════ MY ORDERS VIEW ══════ -->
   <div id="ordersView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
+      <div class="sub-tb"><div class="sub-brand"><img class="brand-ic vbrand-logo" src="logo-round.png" alt=""><span class="vbrand-name">Nest &amp; Nosh</span></div></div>
       <h1 style="font-size:20px;" data-i="myOrders"></h1>
     </div>
     <div class="section">
@@ -1286,7 +1286,7 @@
   <!-- ══════ ABOUT + CONTACT (merged) ══════ -->
   <div id="aboutView" class="hidden">
     <div class="hero sub-hero">
-      <div class="sub-tb"><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div>
+      <div class="sub-tb"><div class="sub-brand"><img class="brand-ic vbrand-logo" src="logo-round.png" alt=""><span class="vbrand-name">Nest &amp; Nosh</span></div></div>
       <h1 style="font-size:20px;" data-i="aboutTitle"></h1>
       <p class="tagline" style="margin:0;" data-i="aboutSub"></p>
     </div>
@@ -1306,7 +1306,7 @@
       <div class="cust-row"><span>🏘️ <span data-i="contactAreaLbl"></span></span><span style="font-weight:800;" id="ctArea"></span></div>
       <div class="cust-row"><span>🕐 <span data-i="contactHoursLbl"></span></span><span style="font-weight:800;text-align:right;">🌅 7–10 AM · ☀️ 12–2 PM · 🌙 7–9 PM</span></div>
     </div>
-    <div class="footer">Nest & Nosh · Ahmedabad · 📞 70434 91481<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
+    <div class="footer"><span class="vbrand-name">Nest & Nosh</span> · Ahmedabad · 📞 70434 91481<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
   </div>
 
   <!-- ══════ BOTTOM NAVIGATION (customer screens) ══════ -->
@@ -1405,7 +1405,7 @@
       <a class="wa-fallback" id="waFallback" target="_blank" data-i="waFallback"></a>
     </div>
 
-    <div class="footer">📞 7043491481 · Nest & Nosh<div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
+    <div class="footer">📞 7043491481 · <span class="vbrand-name">Nest & Nosh</span><div class="fssai-line" style="font-size:10px;margin-top:3px;"></div></div>
 
     <div class="sticky-bar no-nav" id="page2Bar">
       <div class="bar-total">
@@ -1419,7 +1419,7 @@
   <!-- ══════ ADMIN LOGIN ══════ -->
   <!-- ══════ PROFILE ══════ -->
   <div id="profileView" class="hidden">
-    <div class="hero sub-hero no-title"><div class="sub-tb"><div class="sub-brand"><img class="brand-ic" src="logo-round.png" alt="">Nest &amp; Nosh</div></div></div>
+    <div class="hero sub-hero no-title"><div class="sub-tb"><div class="sub-brand"><img class="brand-ic vbrand-logo" src="logo-round.png" alt=""><span class="vbrand-name">Nest &amp; Nosh</span></div></div></div>
     <div class="section">
       <div class="pf-card">
         <div class="pf-avwrap disabled" id="pfAvaWrap">
@@ -1506,7 +1506,16 @@
         <div class="form-group"><label>WhatsApp (optional)</label><input type="text" id="svWhatsapp" placeholder="9XXXXXXXXX"></div>
         <div class="form-group"><label>📍 Areas — discovery me yahi dikhega</label><input type="text" id="svAreas" placeholder="Gota, Chandkheda, Vastrapur"><div style="font-size:10.5px;color:var(--muted);margin-top:4px;">Comma se alag karo. Customer isi se apne area ki kitchens dhoondega.</div></div>
         <div class="form-group"><label>🍽️ Cuisine (optional)</label><input type="text" id="svCuisine" placeholder="Gujarati, Punjabi, Home-style"></div>
-        <div class="form-group"><label>🖼️ Logo URL (optional)</label><input type="text" id="svLogo" placeholder="https://.../logo.png"></div>
+        <div class="form-group">
+          <label>🖼️ Vendor Icon/Logo (optional)</label>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <img id="svLogoPreview" src="logo-round.png" alt="" style="width:48px;height:48px;border-radius:10px;object-fit:cover;border:1px solid var(--line);flex:0 0 auto;">
+            <button type="button" class="admin-btn" style="flex:0 0 auto;width:auto;padding:8px 14px;" onclick="pickVendorLogo()">📤 Upload Icon</button>
+            <span id="svLogoStatus" style="font-size:11px;color:var(--muted);"></span>
+          </div>
+          <input type="hidden" id="svLogo">
+          <div style="font-size:10.5px;color:var(--muted);margin-top:4px;">JPG/PNG/WebP — automatically compressed to ~400-500KB.</div>
+        </div>
         <div class="form-group"><label>💰 Min Order ₹ (optional)</label><input type="number" id="svMinOrder" placeholder="150"></div>
         <button class="admin-btn" id="svSaveBtn" onclick="saveVendorFE()">✅ Vendor Create Karo</button>
       </div>
@@ -1675,7 +1684,7 @@
         <div id="promoList"><p style="text-align:center;color:var(--muted);font-size:12px;">Loading…</p></div>
       </div>
     </div>
-    <div class="footer">⚙️ Admin · Nest & Nosh</div>
+    <div class="footer">⚙️ Admin · <span class="vbrand-name">Nest & Nosh</span></div>
 
     <div class="sheet-overlay hidden" id="adminMoreOverlay" onclick="if(event.target===this)closeAdminMore()">
       <div class="admin-more-sheet" id="adminMoreSheet">
@@ -1862,6 +1871,8 @@
     promos: [],
     banners: {}
   };
+  // Har vendor ka apna naam/logo — backend se aata hai, refresh hone tak yehi default dikhta hai.
+  let VENDOR_BRAND = { name:'Nest & Nosh', logo:'' };
   function defaultVariantsFE(){
   const mk=(id,name,price,items)=>({id:id,name:name,price:price,items:items,img:''});
   const ld=[ mk('full','Full Tiffin',80,['🫓 Roti (5)','🍛 1 Sabzi','🍲 Daal','🍚 Chawal','🥛 Chaas','🥒 Achar','🥗 Salad','🍬 Sweet']),
@@ -4230,6 +4241,8 @@
     document.getElementById('svAreas').value=v.areas||'';
     document.getElementById('svCuisine').value=v.cuisine||'';
     document.getElementById('svLogo').value=v.logo||'';
+    document.getElementById('svLogoPreview').src=v.logo||'logo-round.png';
+    document.getElementById('svLogoStatus').textContent='';
     document.getElementById('svMinOrder').value=v.minOrder||'';
     document.getElementById('svAdminPass').value='';   // khaali = purana password rahega
     document.getElementById('svSaveBtn').textContent='💾 Changes Save Karo';
@@ -4290,6 +4303,8 @@
       if(j.status==='success'){
         superVendors=j.vendors||superVendors; renderSuperVendorList();
         ['svName','svId','svSheetId','svScriptUrl','svAdminUser','svAdminPass','svEmail','svWhatsapp','svAreas','svCuisine','svLogo','svMinOrder'].forEach(id=>document.getElementById(id).value='');
+        document.getElementById('svLogoPreview').src='logo-round.png';
+        document.getElementById('svLogoStatus').textContent='';
         document.getElementById('svSaveBtn').textContent='✅ Vendor Create Karo';
         showToast('✅ Save ho gaya','success');
       } else showToast('❌ '+(j.message||'Failed'),'error');
@@ -4516,7 +4531,8 @@
   function waUpdate(row){
     const o=adminOrders.find(x=>x.row===row); if(!o)return;
     const dt=fmtDateStr(o.deliveryDate);
-    const msgs={Pending:'Your order for '+dt+' has been received. — Nest & Nosh',Preparing:'Your order for '+dt+' is being prepared and will be delivered in your selected time slot. — Nest & Nosh',Delivered:'Your order for '+dt+' has been delivered. Thank you for ordering with Nest & Nosh!'};
+    const bn=VENDOR_BRAND.name||'Nest & Nosh';
+    const msgs={Pending:'Your order for '+dt+' has been received. — '+bn,Preparing:'Your order for '+dt+' is being prepared and will be delivered in your selected time slot. — '+bn,Delivered:'Your order for '+dt+' has been delivered. Thank you for ordering with '+bn+'!'};
     window.open('https://wa.me/91'+o.phone+'?text='+encodeURIComponent(msgs[o.status]||msgs.Pending),'_blank');
   }
 
@@ -4779,6 +4795,62 @@
     reader.onerror=()=>{ if(st)st.textContent='❌ Could not read file'; };
     reader.readAsDataURL(file);
   }
+  // Super Admin: vendor icon/logo — same compress-then-upload pattern as variant
+  // photos, just a smaller target (400-500KB, icon nahi to itni badi photo ki zaroorat nahi).
+  const LOGO_TARGET_KB=450;
+  function pickVendorLogo(){
+    const inp=document.createElement('input');
+    inp.type='file'; inp.accept='image/jpeg,image/png,image/webp';
+    inp.onchange=()=>{
+      const f=inp.files[0]; if(!f) return;
+      if(ALLOWED_IMG.indexOf(f.type)<0){ showToast('⚠️ Only JPG, PNG or WebP images are allowed.','warning'); return; }
+      const mb=f.size/(1024*1024);
+      if(mb>MAX_UPLOAD_MB){ showToast('⚠️ Image is '+mb.toFixed(1)+'MB — please use one under '+MAX_UPLOAD_MB+'MB.','warning'); return; }
+      compressAndUploadVendorLogo(f);
+    };
+    inp.click();
+  }
+  function compressAndUploadVendorLogo(file){
+    if(!superCreds)return;
+    const st=document.getElementById('svLogoStatus'); if(st)st.textContent='⏳ Compressing…';
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        function encode(mx,q){
+          let w=img.width,h=img.height;
+          if(w>h && w>mx){ h=Math.round(h*mx/w); w=mx; }
+          else if(h>mx){ w=Math.round(w*mx/h); h=mx; }
+          const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+          cv.getContext('2d').drawImage(img,0,0,w,h);
+          return cv.toDataURL('image/jpeg',q);
+        }
+        const dims=[600,480,360], qs=[0.8,0.7,0.6,0.5];
+        let dataUrl=null;
+        outer:
+        for(const mx of dims){ for(const q of qs){ dataUrl=encode(mx,q); if(dataUrlKB(dataUrl)<=LOGO_TARGET_KB) break outer; } }
+        if(dataUrlKB(dataUrl)>1000){
+          if(st)st.textContent='❌ Too complex to compress — try a smaller/simpler image.';
+          showToast('⚠️ Ye icon compress karne ke baad bhi bahut bada hai. Kripya chhoti/simple image try karo.','warning');
+          return;
+        }
+        if(st)st.textContent='⏳ Uploading… ('+dataUrlKB(dataUrl)+'KB)';
+        apiPost({ action:'uploadvendorlogo', user:superCreds.user, pass:superCreds.pass, dataUrl:dataUrl, name:'vendorlogo' })
+          .then(j=>{
+            if(j.status==='success'){
+              document.getElementById('svLogo').value=j.url;
+              const pv=document.getElementById('svLogoPreview'); if(pv)pv.src=j.url;
+              if(st)st.textContent='✅ Uploaded';
+            } else { if(st)st.textContent='❌ '+(j.message||'Upload failed'); }
+          })
+          .catch(()=>{ if(st)st.textContent='❌ Network error'; });
+      };
+      img.onerror=()=>{ if(st)st.textContent='❌ Invalid image'; };
+      img.src=e.target.result;
+    };
+    reader.onerror=()=>{ if(st)st.textContent='❌ Could not read file'; };
+    reader.readAsDataURL(file);
+  }
   function saveVariants(){
     if(!varDraft)return;
     const btn=document.getElementById('saveVarBtn'); const old=btn.textContent; btn.textContent='⏳ Saving…'; btn.disabled=true;
@@ -4878,6 +4950,16 @@
     document.querySelectorAll('.fssai-line').forEach(e=>{ e.textContent = CFG.fssai ? ('FSSAI Reg. No: '+CFG.fssai) : ''; });
   }
 
+  // Logo/naam pehle sab jagah "Nest & Nosh" hardcoded tha — ab jo vendor (?v=slug)
+  // load hua hai, uska apna naam/logo har jagah laga do (header, footer, login, boot loader).
+  function applyVendorBrand(){
+    const name=VENDOR_BRAND.name||'Nest & Nosh', logo=VENDOR_BRAND.logo||'';
+    document.querySelectorAll('.vbrand-name').forEach(e=>{ e.textContent=name; });
+    document.querySelectorAll('.vbrand-logo').forEach(img=>{ img.src = logo || 'logo-round.png'; img.alt = name; });
+    document.title = name + ' — Fresh Homemade Tiffin';
+    const am=document.querySelector('meta[name="apple-mobile-web-app-title"]'); if(am) am.setAttribute('content', name);
+  }
+
   // ═══════ INIT ═══════
   (function init(){
     // Boot failsafe: 7 sec me bhi kuch na dikhe (network atka, koi error) to
@@ -4911,6 +4993,7 @@
     const cm=storeGet('fbt_menu'); if(cm&&cm.monday)MENU=cm;
     const savedAddr=storeGet('fbt_addr'); if(savedAddr&&(savedAddr.deliveryType==='home'||savedAddr.deliveryType==='office')) deliveryType=savedAddr.deliveryType;
     const cc=storeGet('fbt_cfg'); if(cc&&cc.prices)CFG=cc;
+    const cb=storeGet('fbt_brand'); if(cb&&cb.name){ VENDOR_BRAND=cb; applyVendorBrand(); }
 
     initLangSelectors();
     preloadImgs();
@@ -4981,7 +5064,7 @@
     loadVendorEndpoint().then(()=>{
     if(GOOGLE_SCRIPT_URL.indexOf('http')===0){
       fetch(GOOGLE_SCRIPT_URL+'?action=bootstrap&vendorId='+VENDOR_ID).then(r=>r.json()).then(j=>{
-        if(j.status==='success'){ if(j.menu&&j.menu.monday){ MENU=j.menu; storeSet('fbt_menu',MENU); } if(j.config&&j.config.prices){ CFG=j.config; CFG.promos=j.promos||[]; storeSet('fbt_cfg',CFG); applyConfigToUI(); preloadImgs(); } else if(j.promos){ CFG.promos=j.promos; storeSet('fbt_cfg',CFG); } const pg=document.getElementById('page1'); if(pg&&!pg.classList.contains('hidden')){ renderMenuDateTime&&renderMenuDateTime(); renderMealPanel(); } const hv=document.getElementById('homeView'); if(hv&&!hv.classList.contains('hidden')) renderHome(); if(!document.getElementById('cartView').classList.contains('hidden')) renderCart(); }
+        if(j.status==='success'){ if(j.menu&&j.menu.monday){ MENU=j.menu; storeSet('fbt_menu',MENU); } if(j.config&&j.config.prices){ CFG=j.config; CFG.promos=j.promos||[]; storeSet('fbt_cfg',CFG); applyConfigToUI(); preloadImgs(); } else if(j.promos){ CFG.promos=j.promos; storeSet('fbt_cfg',CFG); } if(j.vendor&&j.vendor.name){ VENDOR_BRAND=j.vendor; storeSet('fbt_brand',VENDOR_BRAND); applyVendorBrand(); } const pg=document.getElementById('page1'); if(pg&&!pg.classList.contains('hidden')){ renderMenuDateTime&&renderMenuDateTime(); renderMealPanel(); } const hv=document.getElementById('homeView'); if(hv&&!hv.classList.contains('hidden')) renderHome(); if(!document.getElementById('cartView').classList.contains('hidden')) renderCart(); }
       }).catch(()=>{});
     }
     });
@@ -5007,6 +5090,9 @@
           CFG=j.config; CFG.promos=j.promos||[]; storeSet('fbt_cfg',CFG);
           if(old!==nw) changed=true;
           applyConfigToUI();
+        }
+        if(j.vendor&&j.vendor.name&&(j.vendor.name!==VENDOR_BRAND.name||j.vendor.logo!==VENDOR_BRAND.logo)){
+          VENDOR_BRAND=j.vendor; storeSet('fbt_brand',VENDOR_BRAND); applyVendorBrand();
         }
         if(!changed) return;
         // Jo screen khuli hai use turant naye daam ke saath dobara bana do
