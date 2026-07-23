@@ -5,7 +5,7 @@
   <script>
     let cart = [];
     window.cart = cart;
-    const ALL_VIEWS = ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','adminLogin','adminPanel','superLogin','superPanel','qaView','dscView'];
+    const ALL_VIEWS = ['pubView','authPage','homeView','page1','page2','cartView','ordersView','subView','aboutView','profileView','c','adminPanel','superLogin','superPanel','qaView','dscView'];
     // Theme flash-prevent — page paint se pehle hi sahi theme laga do.
     // ⚠️ Theme per-vendor namespaced key me save hoti hai (storeGet/storeSet ka
     // nsKey() — VENDOR_ID+'_fbt_theme' non-default vendors ke liye). Ye script poore
@@ -24,6 +24,8 @@
         document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
       } catch(e){}
     })();
+
+    
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -4347,17 +4349,49 @@
     }).catch(()=>{ btn.disabled=false; btn.textContent='✅ Vendor Create Karo'; showToast(t('errNetwork'),'error'); });
   }
 
-  function adminLogin(){
-    const u=document.getElementById('adminUser').value.trim(), p=document.getElementById('adminPass').value;
-    if(!u||!p){ showToast('⚠️ Enter username and password.','warning'); return; }
-    const btn=document.getElementById('loginBtn'); btn.textContent='⏳ ...'; btn.disabled=true;
-    apiPost({action:'stats', user:u, pass:p}).then(j=>{
-      btn.textContent='🔓 Login'; btn.disabled=false;
-      if(j.status!=='success'){ showToast('❌ Invalid username or password.','error'); return; }
-      adminCreds={user:u,pass:p}; storeSet('fbt_admin',adminCreds);
-      enterAdminTheme(); showView('adminPanel'); fillStats(j); initMenuEditor(); initConfigEditor(); adminBnGo('orders'); loadOrders(); loadUsers(); updateAlertToggleUI(); startAlertPolling(); checkNewOrders();
-    }).catch(()=>{ btn.textContent='🔓 Login'; btn.disabled=false; showToast(t('errNetwork'),'error'); });
-  }
+  function adminLogin() {
+  const u = document.getElementById('adminUser').value.trim();
+  const p = document.getElementById('adminPass').value;
+  if (!u || !p) { showToast('⚠️ Enter username and password.', 'warning'); return; }
+  
+  const btn = document.getElementById('loginBtn');
+  btn.textContent = '⏳ ...';
+  btn.disabled = true;
+  
+  // STEP 1: Validate credentials first (lightweight)
+  apiPost({ action: 'validate', user: u, pass: p })
+    .then(j => {
+      if (j.status !== 'success') {
+        btn.textContent = '🔓 Login';
+        btn.disabled = false;
+        showToast('❌ Invalid username or password.', 'error');
+        return;
+      }
+      
+      // STEP 2: Save credentials IMMEDIATELY
+      adminCreds = { user: u, pass: p };
+      storeSet('fbt_admin', adminCreds);
+      
+      // STEP 3: Show admin panel UI first (fast)
+      enterAdminTheme();
+      showView('adminPanel');
+      initMenuEditor();
+      initConfigEditor();
+      adminOpenLastTab();
+      
+      btn.textContent = '🔓 Login';
+      btn.disabled = false;
+      
+      // STEP 4: Load data in background with retry
+      showToast('📊 Loading dashboard data...', '');
+      loadAdminDataWithRetry(3);
+    })
+    .catch(() => {
+      btn.textContent = '🔓 Login';
+      btn.disabled = false;
+      showToast('❌ ' + t('errNetwork'), 'error');
+    });
+}
   // Refresh ke baad admin panel tabhi restore karo jab refresh se pehle admin panel hi khula tha.
   function restoreAdmin(){
     const a=storeGet('fbt_admin'); if(!a||!a.user||!a.pass) return false;
