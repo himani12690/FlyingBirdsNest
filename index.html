@@ -4348,7 +4348,44 @@
       } else showToast('❌ '+(j.message||'Failed'),'error');
     }).catch(()=>{ btn.disabled=false; btn.textContent='✅ Vendor Create Karo'; showToast(t('errNetwork'),'error'); });
   }
-
+function loadAdminDataWithRetry(retryCount) {
+  if (retryCount <= 0) {
+    showToast('⚠️ Failed to load data. Please click Refresh button.', 'warning');
+    const ordersList = document.getElementById('ordersList');
+    if (ordersList) {
+      ordersList.innerHTML = `
+        <div style="text-align:center;padding:30px 20px;color:var(--muted);">
+          <div style="font-size:38px;margin-bottom:10px;">🔄</div>
+          <div style="font-size:14px;font-weight:800;color:var(--ink);">Could not load orders</div>
+          <div style="font-size:12px;margin-top:4px;">Click the refresh button above to retry</div>
+        </div>
+      `;
+    }
+    return;
+  }
+  
+  apiPost({ action: 'stats', user: adminCreds.user, pass: adminCreds.pass })
+    .then(j => {
+      if (j.status !== 'success') {
+        showToast('❌ ' + (j.message || 'Failed to load stats.'), 'error');
+        return;
+      }
+      
+      fillStats(j);
+      loadOrders();
+      loadUsers();
+      updateAlertToggleUI();
+      startAlertPolling();
+      checkNewOrders();
+      showToast('✅ Dashboard ready!', 'success');
+    })
+    .catch(() => {
+      showToast(🔄 Retrying data load... (${retryCount - 1} attempts left), 'warning');
+      setTimeout(() => {
+        loadAdminDataWithRetry(retryCount - 1);
+      }, 1500);
+    });
+}
   function adminLogin() {
   const u = document.getElementById('adminUser').value.trim();
   const p = document.getElementById('adminPass').value;
